@@ -21,6 +21,12 @@ Toy chess game and ruby final project for TOP
 ### questions to look into
 * how can I produce the tiled chess board affect? how do I overlay a piece on top of a shaded tile?
   * See [this example](https://stackoverflow.com/questions/1489183/how-can-i-use-ruby-to-colorize-the-text-output-to-a-terminal) 
+  * 8 x 8 board
+  * columns numbered
+  * rows letters
+  * white king on black, black king on white
+* board representation?
+  * nested list filled populated with chess piece objects
 * how should I check for valid moves?
   * hash of valid relative movements for each piece
   * check if each viable move is inside the board
@@ -32,10 +38,18 @@ Toy chess game and ruby final project for TOP
     * statelmate (maybe skip for now)
   * Castling
   * Swapping peices
+  * Cannot make a move that jeapordizes the king, i.e. puts it in check/check mate(maybe skip for now)
 * what system for moving pieces around?
-  * Specify coordinates? piece at A1 -> B2
+  * Specify coordinates? Start and end?
+  * Given valid start, list viable/feasible end coordinates
+  * A1 -> B2
 * how do i want to save the state of the game? 
   * Marshall
 * classes
   * game, player, board, piece, ai, serializer
-
+* what kind of tests?
+  * test for check
+  * test for mate
+  * test for valid moves
+  * test for piece movement
+  * test for board update
