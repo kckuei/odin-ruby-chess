@@ -53,3 +53,52 @@ Toy chess game and ruby final project for TOP
   * test for valid moves
   * test for piece movement
   * test for board update
+
+### classes and methods
+* game
+  * for general game logic
+  * intro, turns, winner declaration, new game, saving/loading game
+* player
+  * for players
+  * attributes
+    * pointers to pieces??
+  * methods
+    * color
+    * name
+* board
+  * for chess board
+  * attributes
+    * board
+    * pieces???
+  * methods
+    * make_board
+    * initialize_pieces
+    * scramble_pieces
+    * reset_board
+    * draw_board
+    * move_piece/update_board(piece)
+    * check?(player)
+        * player must and can move out of harms way
+    * checkmate?(player)
+        * player cannot move out king out of harms way
+    * stalmate?(player)
+    * castle(player)
+    * valid_moves(piece)
+        * it's only a valid move if it's a subset of piece valid move, inside the board, and doesn't put the king in harms way
+    * save_board
+* piece
+  * for chess pieces
+  * attributes
+    * player
+    * location
+    * color
+  * methods
+    * valid_move?(board)
+    * set_color(color)
+* log
+  * keeps track of chess history
+  * e.g. 'Black Queen A5 => B2: Takes White Pond' (look at official notation rules)
+* ai
+  * AI algorithm
+* serializer
+  * for saving the game

@@ -1,3 +1,6 @@
+# frozen_string_literal: false
+
+# Extends class String for formatting text color.
 class String
   def black
     "\e[30m#{self}\e[0m"
