@@ -36,3 +36,7 @@ p knight.search_moves_diag_SW(knight)
 p knight.search_moves_diag_NE(knight)
 p knight.search_moves_diag_NW(knight)
 p knight.search_moves_diag_SE(knight)
+
+king = game.piece_at(:e7)
+puts king
+king.print_valid_moves(king.find_next_valid_moves)

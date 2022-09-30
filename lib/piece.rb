@@ -248,7 +248,7 @@ module ChessPiece
   # Prints all the valid moves for the current position.
   # @board is an instance variable.
   def print_valid_moves(valid_moves)
-    puts "Valid moves from #{@board.hash_point(@pos)}:"
+    puts "Valid moves from #{@board.hash_point(@pos)} (#{@piece}):"
     moves = valid_moves.map { |move| @board.hash_point(move) }
     puts moves.sort.join(', ')
   end
@@ -285,12 +285,14 @@ end
 
 # Pond class for representing the pond chess piece.
 #
-# A pond move forward 1 square, or 2 squares if it is the first
-# move, or diaganolly if attacking.
+# A pond may move forward 1 tile, 2 squares only if it's the first
+# move, or diaganolly 1 tile to attack a combatant.
 class Pond
   attr_reader :player, :piece, :avatar, :pos, :first_move
 
   include ChessPiece
+  include OrthoSearch
+  include DiagSearch
 
   # Initializes a Pond instance.
   def initialize(player, board, position, style = :solid)
@@ -304,18 +306,22 @@ class Pond
 
   # Finds the next valid moves.
   def find_next_valid_moves
-    # x, y = @position
-    # get the sign based on player
-    # player 1 (red, top)   - positive sign (move down)
-    # player 2 (blue, bott) - negative sign (move up)
-    # initialize moves = []
-    #
+    moves = []
+    # If player 1 (red, top),
+    #  result = use move_down but exclude enemy pieces
+    #  if self.first_move?
+    #     result = result + filter within 2 tiles
+    #  end
+    #  result.concat(use move_SW + filter within 1 tile)
+    #  result.concat(use move_SE + filter within 1 tile)
 
-    # basic move set is
-    # [[0, sign],[-1, sign],[1, sign]]
-
-    # extra move
-    # moves << [x, y + sign * 2] if first_move?
+    # If player 2 (blue, bottom),
+    #  result = use move_up but exclude enemy pieces
+    #  if self.move_up?
+    #     result = result + filter within 2 tiles
+    #  end
+    #  result.concat(use move_NW + filter within 1 tile)
+    #  result.concat(use move_NE + filter within 1 tile)
 
     filter_friendly(filter_inside_board(moves))
   end

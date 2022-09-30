@@ -36,8 +36,12 @@ bishop = game.piece_at(:f7)
 puts bishop
 bishop.print_valid_moves(bishop.find_next_valid_moves)
 
-
 king = game.piece_at(:e7)
 puts king
 king.print_valid_moves(king.find_next_valid_moves)
 
+queen = game.piece_at(:d7)
+puts queen
+game.force_move('d7', 'd3')
+game.draw_board
+queen.print_valid_moves(queen.find_next_valid_moves)

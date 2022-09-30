@@ -4,7 +4,7 @@
 class Intro
   def initialize
     @title = "\e[91m
-    An Odin Production
+    An Odin Production, Ruby Final Project
      ██████╗██╗  ██╗███████╗███████╗███████╗
     ██╔════╝██║  ██║██╔════╝██╔════╝██╔════╝
     ██║     ███████║█████╗  ███████╗███████╗
