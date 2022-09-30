@@ -1,6 +1,10 @@
 # frozen_string_literal: false
 
 # Extends class String for formatting text color.
+#
+# These methods are important for creating the background tiling
+# effect on the chessboard, colorizing chess pieces, and syntax
+# highlighting.
 class String
   def black
     "\e[30m#{self}\e[0m"
@@ -14,7 +18,7 @@ class String
     "\e[32m#{self}\e[0m"
   end
 
-  def brown
+  def yellow
     "\e[33m#{self}\e[0m"
   end
 

@@ -8,7 +8,7 @@ require_relative './lib/chess'
 # board = ChessBoard.new
 # board.draw_board
 
-# board.make_pieces
+# board.setup_standard_game
 # board.draw_board
 
 game = ChessGame.new
@@ -55,3 +55,8 @@ puts pond2
 game.force_move('g1', 'g4')
 game.draw_board
 pond2.print_valid_moves(pond2.find_next_valid_moves)
+
+# game.board.make_player_pieces_std(1)
+# game.board.make_player_pieces_std(2)
+# game.board.pieces[:p1].each { |key, value| puts "#{key}:#{value}" }
+# game.board.pieces[:p2].each { |key, value| puts "#{key}:#{value}" }

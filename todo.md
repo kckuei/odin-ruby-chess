@@ -4,9 +4,15 @@
   * colorize moves that are combative
 * Move movement modules to seperate files [DONE]
 * Implement castle pattern [DONE]
-* Implement player class
-* Implement game loop mechanism
-* Implement check/checkmate conditions
+* Add a hashes for each player of all pieces [DONE]
+  * need for enumerating over all possible moves
+* Implement check []
+  * enumerate over all pieces, save to set, is king in set?
+  * use hash to quick ref king
+* Update castle to use hash []
+* Implement game loop mechanism []
+* Implement player class []
+* Implment checkmate []
 * Implement stalemate condition
 * A move is not valid if it puts the king in jeopardy
 * Implement logger

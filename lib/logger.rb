@@ -1,18 +1,22 @@
 # frozen_string_literal: false
 
 # Logger class for storing move history.
+#
+# https://en.wikipedia.org/wiki/Algebraic_notation_(chess)#:~:text=Each%20piece%20type%20(other%20than,a%20silent%20letter%20in%20knight).
 class Logger
+  # Initialize Logger instance.
   def initialize
     @log = clear
   end
 
+  # Clear the log
   def clear
     @log = []
   end
 
+  # Print the log.
   def print_log
-    # Eventually probably want to do a pretty print of the log.
-    # Colorized by player (blue or red) and piece (yellow), attacking or not (green).
+    # Modify for pretty print.
     @log.each { |move| puts move }
   end
 end

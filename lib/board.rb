@@ -9,13 +9,14 @@ require_relative './piece'
 # The chess pieces store a pointer to the board to help them decide
 # whether moves are valid by checking adjacent chess objects.
 class ChessBoard
-  attr_reader :rows, :columns, :board, :code_hash, :point_hash
+  attr_reader :rows, :columns, :board, :pieces, :code_hash, :point_hash
 
   # Initializes a ChessBoard instance.
   def initialize
     @rows =  8
     @columns = 8
     @board = make_gameboard
+    @pieces = {} # Becomes { p1: {}, p2: {}, ... }
     @code_hash, @point_hash = make_hashmaps
   end
 
@@ -27,10 +28,11 @@ class ChessBoard
     board
   end
 
-  # Sets up a new game.
+  # Sets up for new game.
   def new_game
     @board = make_gameboard
-    make_pieces
+    @pieces = {}
+    setup_standard_game
   end
 
   # Creates a hashmap of the tile code to index coordinates.
@@ -47,23 +49,75 @@ class ChessBoard
     [hash_to_point, hash_to_code]
   end
 
-  # Initializes player 1 and 2 gameboard with ChessPieces.
-  def make_pieces
-    # Player 1 (top position, red default color)
-    @columns.times { |i| @board[1][i] = Pond.new(1, self, [1, i]) }
-    [0, 7].each { |i| @board[0][i] = Rook.new(1, self, [0, i]) }
-    [1, 6].each { |i| @board[0][i] = Knight.new(1, self, [0, i]) }
-    [2, 5].each { |i| @board[0][i] = Bishop.new(1, self, [0, i]) }
-    @board[0][4] = Queen.new(1, self, [0, 4])
-    @board[0][3] = King.new(1, self, [0, 3])
+  # Sets up the standard chess game by initializing player pieces and
+  # assigning them to the board.
+  def setup_standard_game
+    # Creates the pieces for player 1 and 2.
+    [1, 2].each { |player| make_player_pieces_std(player) }
 
+    # Assigns player 1 pieces to board.
+    @pieces[:p1].each do |_key, piece|
+      i, j = piece.pos
+      @board[i][j] = piece
+    end
+
+    # Assigns player 2 pieces to board.
+    @pieces[:p2].each do |_key, piece|
+      i, j = piece.pos
+      @board[i][j] = piece
+    end
+  end
+
+  # Makes & saves player pieces to the @piece hash before they get assigned to the board.
+  #
+  # It should get called twice (once for each player) for the standard game. The importance of
+  # this step is that later we will enumerate over @pieces for validating check & checkmate conditions.
+  # player : an integer representing the player number, 1 or 2
+  def make_player_pieces_std(player)
+    case player
+    # Player 1 (top position, red default color)
+    when 1
+      player_sym = :p1
+      player_id = 1
+      row_p = 1
+      row_v = 0
+      col_q = 4
+      col_k = 3
     # Player 2 (bottom position, blue default color)
-    @columns.times { |i| @board[6][i] = Pond.new(2, self, [6, i]) }
-    [0, 7].each { |i| @board[7][i] = Rook.new(2, self, [7, i]) }
-    [1, 6].each { |i| @board[7][i] = Knight.new(2, self, [7, i]) }
-    [2, 5].each { |i| @board[7][i] = Bishop.new(2, self, [7, i]) }
-    @board[7][3] = Queen.new(2, self, [7, 3])
-    @board[7][4] = King.new(2, self, [7, 4])
+    when 2
+      player_sym = :p2
+      player_id = 2
+      row_p = 6
+      row_v = 7
+      col_q = 3
+      col_k = 4
+    end
+    # Defines creation schedule.
+    create_hash = {
+      p1: [Pond, [row_p, 0]],
+      p2: [Pond, [row_p, 1]],
+      p3: [Pond, [row_p, 2]],
+      p4: [Pond, [row_p, 3]],
+      p5: [Pond, [row_p, 4]],
+      p6: [Pond, [row_p, 5]],
+      p7: [Pond, [row_p, 6]],
+      p8: [Pond, [row_p, 7]],
+      r1: [Rook, [row_v, 0]],
+      r2: [Rook, [row_v, 7]],
+      n1: [Knight, [row_v, 1]],
+      n2: [Knight, [row_v, 6]],
+      b1: [Bishop, [row_v, 2]],
+      b2: [Bishop, [row_v, 5]],
+      q: [Queen, [row_v, col_q]],
+      k: [King, [row_v, col_k]]
+    }
+    # Create a hash for the player
+    @pieces[player_sym] = {}
+    # Then populate it with the chess pieces using the creation hash
+    create_hash.each do |sym, obj_tile|
+      obj, loc = obj_tile
+      @pieces[player_sym][sym] = obj.new(player_id, self, loc)
+    end
   end
 
   # Forcefully moves a piece from one tile to another, overwriting any object if it exists.
@@ -90,8 +144,13 @@ class ChessBoard
   end
 
   def check?(player)
-    # check for check condition
-    # if any opposing pieces valid moves contains the kings position.
+    # validate check condition
+    # if any opposing pieces valid moves contains the kings position, he's in danger
+
+    # for given player (symbol), enumerate over his pieces
+    # create a set of all valid moves
+    # is the opposing king inside there?
+    #
   end
 
   def checkmate?(player)

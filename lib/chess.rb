@@ -44,7 +44,7 @@ class ChessGame
 
   # Inits/populates the chess board with pieces.
   def setup
-    @board.make_pieces
+    @board.setup_standard_game
   end
 
   # Clears the board and log for a new game.
