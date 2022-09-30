@@ -3,7 +3,11 @@
 require_relative './string'
 require_relative './piece'
 
-# ChessBoard class.
+# ChessBoard class representing a chess board with chess pieces.
+#
+# Chess piece objects are instantiated and stored on the 8x8 chess board.
+# The chess pieces store a pointer to the board to help them decide
+# whether moves are valid by checking adjacent chess objects.
 class ChessBoard
   attr_reader :board, :code_hash, :point_hash
 
