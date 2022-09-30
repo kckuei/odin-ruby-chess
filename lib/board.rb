@@ -125,7 +125,7 @@ class ChessBoard
   # object if it exists.
   #
   # Does not check if the move is valid for the piece.
-  # Updates the position of the piece but not the first_move attribute.
+  # Updates the piece @pos and @first_move attributes.
   # If the ending location is occupied by another piece, it gets destroyed,
   # and the @pieces hash is updated to reflect this. This is important so
   # that check/checkmate only consider pieces on the board.
@@ -136,13 +136,16 @@ class ChessBoard
     return if start_tile.empty? || end_tile.empty? || start_tile == end_tile
     return unless inside?(start_tile) && inside?(end_tile)
 
-    # dereference/remove the piece at the end tile from the @pieces hash
+    # Dereference/remove the piece at the end tile from the @pieces hash.
     piece_at_end = @board[end_tile[0]][end_tile[1]]
     @pieces.delete(piece_at_end.to_sym) unless piece_at_end.empty?
 
+    # Updates the piece @pos and @first_move attributes.
     piece = @board[start_tile[0]][start_tile[1]]
     piece.update_position(end_tile)
+    piece.update_first_move
 
+    # Updates the board.
     @board[end_tile[0]][end_tile[1]] = piece
     @board[start_tile[0]][start_tile[1]] = ''
   end

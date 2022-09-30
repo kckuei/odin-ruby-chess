@@ -52,6 +52,10 @@ module ChessPiece
     @pos = tile
   end
 
+  def update_first_move
+    @first_move = false
+  end
+
   # Checks if a specified move is valid.
   # move : an array representing the next move/tile position, e.g. [0, 2]
   # valid_moves : a nested array representing all valid moves, e.g. [[0,2],[1,1]]

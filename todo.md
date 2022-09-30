@@ -9,16 +9,15 @@
 * Implement check [DONE]
   * enumerate over all pieces, save to set, is king in set?
   * use hash to quick ref king
-* Implment checkmate []
+* Implment checkmate [DONE]
   * Issue: I should only iterate over pieces that are ON the board when doing check/chekmate.
   * Undecided:
     * should i remove the keys/values in @pieces once the pieces have been killed/are no longer on the board?..yes
     * will this interfere with checkmate logic?..no it won't because we're directly manipulating the board, not using force_move.
   * maybe add the key to the pieces as well, so I can reference them easily.
-
-* force_move should update first_move as well.
-
+* force_move should update first_move as well. [DONE]
 * Implement player class [DONE_ALREADY]
+
 * Update castle to use hash []
 * Implement game loop mechanism []
 
