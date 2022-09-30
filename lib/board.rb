@@ -117,16 +117,28 @@ class ChessBoard
     # Then populate it with the chess pieces using the creation hash
     create_hash.each do |sym, obj_tile|
       obj, loc = obj_tile
-      @pieces[player_sym][sym] = obj.new(player_id, self, loc)
+      @pieces[player_sym][sym] = obj.new(player_id, self, loc, sym)
     end
   end
 
-  # Forcefully moves a piece from one tile to another, overwriting any object if it exists.
+  # Forcefully moves a piece from one tile to another, overwriting any
+  # object if it exists.
+  #
   # Does not check if the move is valid for the piece.
   # Updates the position of the piece but not the first_move attribute.
+  # If the ending location is occupied by another piece, it gets destroyed,
+  # and the @pieces hash is updated to reflect this. This is important so
+  # that check/checkmate only consider pieces on the board.
+  #
+  # start_tile: an array representing the starting coordinates
+  # end_tile: an array representing the ending coordinates
   def force_move(start_tile, end_tile)
     return if start_tile.empty? || end_tile.empty? || start_tile == end_tile
     return unless inside?(start_tile) && inside?(end_tile)
+
+    # dereference/remove the piece at the end tile from the @pieces hash
+    piece_at_end = @board[end_tile[0]][end_tile[1]]
+    @pieces.delete(piece_at_end.to_sym) unless piece_at_end.empty?
 
     piece = @board[start_tile[0]][start_tile[1]]
     piece.update_position(end_tile)
@@ -149,26 +161,78 @@ class ChessBoard
   # Validates the condition by enumerating over all opponent pieces and
   # forming a set of all their possible moves. The king is in danger if
   # it's position coincides with the set of possible opponent moves.
-  # player_sym : symbol representing the player, :p1 or :p2
-  def check?(player_sym)
-    # Gets the possible moves of the player opposing player_sym as a set.
-    opposing_sym = player_sym == :p1 ? :p2 : :p1
-    moves = Set.new
-    @pieces[opposing_sym].each_value do |piece|
-      piece.find_next_valid_moves.each { |move| moves.add(move) }
+  # player : symbol representing the player, :p1 or :p2
+  def check?(player)
+    # Gets the possible moves of the opposing player as a set.
+    opposing = player == :p1 ? :p2 : :p1
+    set = Set.new
+    @pieces[opposing].each_value do |piece|
+      moves = piece.find_next_valid_moves
+      moves.each { |m| set.add(m) }
     end
 
     # Then checks in the king's position coincides with the set.
-    king = @pieces[player_sym][:k]
-    return true if moves.include?(king.pos)
+    king = @pieces[player][:k]
+    return true if set.include?(king.pos)
 
     false
   end
 
+  # Checks if a player is checkmated.
+  #
+  # Assuming the player is checked, enumerates over all possible moves
+  # of the player to determine if one of the moves can break the check
+  # condition. Two major necessities in the implementation are:
+  # 1. The piece attribute, @pos must be updated during the move so that
+  # the instance method #find_next_valid_moves yields correct values,
+  # since it uses @pos for making this determination.
+  # 2. The board attribute, @pieces must be updated if a opposing piece
+  # is capture (the key must be deleted from the opposing player hash),
+  # since the hash is used for making the check? determination.
+  # player : symbol representing the player, :p1 or :p2
   def checkmate?(player)
-    # check for checkmate condition
-    # if any opposing pieces valid moves contains the king position
-    # AND
+    # Check is a necessary condition of checkmate.
+    return unless check?(player)
+
+    opposing = player == :p1 ? :p2 : :p1
+
+    # Enumerates over all player pieces and valid moves.
+    @pieces[player].each_value do |piece|
+      moves = piece.find_next_valid_moves
+      moves.each do |move|
+        # Save pointers to objects at start and move.
+        i, j = piece.pos
+        temp_start = @board[i][j]
+        temp_final = @board[move[0]][move[1]]
+
+        # Save the start position.
+        temp_pos_start = [i, j]
+
+        # Temporarily, update position, and play the move.
+        # If enemy piece is captured, temporarily remove it from opposing @pieces hash.
+        temp_start.update_position(move)
+        @board[move[0]][move[1]] = temp_start
+        @board[i][j] = ''
+        @pieces[opposing].delete(temp_final.key) unless temp_final.empty?
+
+        # If player no longer in check, then there exists a viable move.
+        unless check?(player)
+
+          # Then undo the move and changes, and return false.
+          temp_start.update_position(temp_pos_start)
+          @board[i][j] = temp_start
+          @board[move[0]][move[1]] = temp_final
+          @pieces[opposing][temp_final.key] = temp_final unless temp_final.empty?
+          return false
+        end
+        # Otherwise, undo the move and changes, and continue.
+        temp_start.update_position(temp_pos_start)
+        @board[i][j] = temp_start
+        @board[move[0]][move[1]] = temp_final
+        @pieces[opposing][temp_final.key] = temp_final unless temp_final.empty?
+      end
+    end
+    true
   end
 
   # Checks if player can castle.
@@ -224,8 +288,8 @@ class ChessBoard
     end
   end
 
-  def trade(player)
-    # trade piece, if applicable
+  def promote_pawn(player)
+    # promote a piece, if applicable
   end
 
   # Draw the board and pieces.

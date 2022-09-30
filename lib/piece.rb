@@ -34,6 +34,12 @@ module ChessPiece
     end
   end
 
+  # Returns the a symbol.
+  # @key is an instance variable.
+  def to_sym
+    @key
+  end
+
   # So that a chess piece instance renders correctly in Board#draw_tile.
   def empty?
     false
@@ -73,10 +79,10 @@ module ChessPiece
   # moves : nested list of coordinates.
   # @board is an instance variable.
   def filter_combatant(moves)
-    obj = @board.board[@pos[0]][@pos[1]]
+    current = @board.board[@pos[0]][@pos[1]]
     moves.filter do |move|
       nxt = @board.board[move[0]][move[1]]
-      nxt.empty? || nxt.player != obj.player
+      nxt.empty? || nxt.player != current.player
     end
   end
 
@@ -104,15 +110,16 @@ end
 # A pond may move forward 1 tile, 2 squares only if it's the first
 # move, or diaganolly 1 tile to attack a combatant.
 class Pond
-  attr_reader :player, :piece, :avatar, :pos, :first_move
+  attr_reader :player, :piece, :avatar, :pos, :key, :first_move
 
   include ChessPiece
 
   # Initializes a Pond instance.
-  def initialize(player, board, position, style = :solid)
+  def initialize(player, board, position, key, style = :solid)
     @player = player
     @board = board
     @pos = position
+    @key = key
     @first_move = true
     @piece = :pond
     @avatar = style == :solid ? '♟' : '♙'
@@ -153,15 +160,16 @@ end
 #
 # A knight can move/attack in an L pattern relative to its position.
 class Knight
-  attr_reader :player, :piece, :avatar, :pos, :first_move
+  attr_reader :player, :piece, :avatar, :pos, :key, :first_move
 
   include ChessPiece
 
   # Initializes a Knight instance.
-  def initialize(player, board, position, style = :solid)
+  def initialize(player, board, position, key, style = :solid)
     @player = player
     @board = board
     @pos = position
+    @key = key
     @first_move = true
     @piece = :knight
     @avatar = style == :solid ? '♞' : '♘'
@@ -183,16 +191,17 @@ end
 #
 # A bishop can move in any diaganol direction, and distance.
 class Bishop
-  attr_reader :player, :piece, :avatar, :pos, :first_move
+  attr_reader :player, :piece, :avatar, :pos, :key, :first_move
 
   include ChessPiece
   include DiagSearch
 
   # Initializes a Bishop instance.
-  def initialize(player, board, position, style = :solid)
+  def initialize(player, board, position, key, style = :solid)
     @player = player
     @board = board
     @pos = position
+    @key = key
     @first_move = true
     @piece = :bishop
     @avatar = style == :solid ? '♝' : '♗'
@@ -211,16 +220,17 @@ end
 # A rook can castle with the adjacent king if it is both their first move
 # and there are no pieces in-between.
 class Rook
-  attr_reader :player, :piece, :avatar, :pos, :first_move
+  attr_reader :player, :piece, :avatar, :pos, :key, :first_move
 
   include ChessPiece
   include OrthoSearch
 
   # Initializes a Rook instance.
-  def initialize(player, board, position, style = :solid)
+  def initialize(player, board, position, key, style = :solid)
     @player = player
     @board = board
     @pos = position
+    @key = key
     @first_move = true
     @piece = :rook
     @avatar = style == :solid ? '♜' : '♖'
@@ -238,17 +248,18 @@ end
 # A queen can move in any direction: horizontal, vertical,
 # diaganol, and through any distance
 class Queen
-  attr_reader :player, :piece, :avatar, :pos, :first_move
+  attr_reader :player, :piece, :avatar, :pos, :key, :first_move
 
   include ChessPiece
   include OrthoSearch
   include DiagSearch
 
   # Initializes a Queen instance.
-  def initialize(player, board, position, style = :solid)
+  def initialize(player, board, position, key, style = :solid)
     @player = player
     @board = board
     @pos = position
+    @key = key
     @first_move = true
     @piece = :queen
     @avatar = style == :solid ? '♛' : '♕'
@@ -268,17 +279,18 @@ end
 # A king can castle with the adjacent rook if it is both their first move
 # and there are no pieces in-between.
 class King
-  attr_reader :player, :piece, :avatar, :pos, :first_move
+  attr_reader :player, :piece, :avatar, :pos, :key, :first_move
 
   include ChessPiece
   include OrthoSearch
   include DiagSearch
 
   # Initializes a King instance.
-  def initialize(player, board, position, style = :solid)
+  def initialize(player, board, position, key, style = :solid)
     @player = player
     @board = board
     @pos = position
+    @key = key
     @first_move = true
     @piece = :king
     @avatar = style == :solid ? '♚' : '♔'

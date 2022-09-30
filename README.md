@@ -176,3 +176,19 @@ Toy chess game and ruby final project for TOP
 # 1 method to search horizontal/vertical
 # an option limit argument can be included to make it applicable for king
 # These will be used king, queen, rook, bishop
+
+# checkmate notes
+# PROBLEM
+# -----------------------------------
+# Problem is: check?
+# It uses: @piece.find_next_valid_moves
+#
+# Dependent on:
+# @pieces
+#   if @pieces is not updated, for a piece that has been 'temp'
+#   removed, check? will still attempt to find_next_valid_moves
+#      problematic if we kill a piece because it will still be considered in check?
+#      we need to remove it from the hash @piece temporarily
+# find_next_valid_moves, @pos
+#   if @pos is not updated, the valid moves are incorrect
+#      remedy by updating the position as well

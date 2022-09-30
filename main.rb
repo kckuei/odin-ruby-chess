@@ -61,9 +61,46 @@ pond2.print_valid_moves(pond2.find_next_valid_moves)
 # game.board.pieces[:p1].each { |key, value| puts "#{key}:#{value}" }
 # game.board.pieces[:p2].each { |key, value| puts "#{key}:#{value}" }
 
+puts 'check test p1- should return false'
 puts game.board.check?(:p1)
+puts 'check test p2- should return false'
 puts game.board.check?(:p2)
 game.force_move('e0', 'd7')
 game.draw_board
+puts 'check test- should return false'
 puts game.board.check?(:p1)
+puts 'check test- should return true'
 puts game.board.check?(:p2)
+
+# puts 'checkmate test p2- should return false'
+# puts game.board.checkmate?(:p2)
+# puts 'checkmate test p1- should return nil (because not checked)'
+# puts game.board.checkmate?(:p1)
+
+game.force_move('d7', 'c7')
+game.force_move('c7', 'a7')
+game.force_move('c5', 'a4')
+game.force_move('e7', 'c7')
+game.draw_board
+
+queen = game.piece_at(:a7)
+puts queen
+p queen.pos
+queen.print_valid_moves(queen.find_next_valid_moves)
+
+king = game.piece_at(:c7)
+puts king
+p king.pos
+king.print_valid_moves(king.find_next_valid_moves)
+
+p3 = game.piece_at(:b6)
+p3.print_valid_moves(p3.find_next_valid_moves)
+
+puts 'check test p2- should return true'
+puts game.board.check?(:p2)
+
+puts 'checkmate test p1- should return nil'
+puts game.board.checkmate?(:p1)
+
+puts 'checkmate test p2- should return true'
+puts game.board.checkmate?(:p2)

@@ -3,7 +3,6 @@
 require_relative './intro'
 require_relative './board'
 require_relative './logger'
-require 'set'
 
 # ChessGame class.
 class ChessGame
