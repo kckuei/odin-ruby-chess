@@ -26,3 +26,13 @@ game.force_move('g0', 'f2')
 game.draw_board
 
 knight.print_valid_moves(knight.find_next_valid_moves)
+
+p knight.search_moves_left(knight)
+p knight.search_moves_right(knight)
+p knight.search_moves_up(knight)
+p knight.search_moves_down(knight)
+
+p knight.search_moves_diag_SW(knight)
+p knight.search_moves_diag_NE(knight)
+p knight.search_moves_diag_NW(knight)
+p knight.search_moves_diag_SE(knight)

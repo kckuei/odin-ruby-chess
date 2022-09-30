@@ -1,19 +1,14 @@
 # frozen_string_literal: false
 
-# Should MoveSearch be specific to King, Queen, Rook, Bishop, or should
-# all pieces have access?
-# Maybe change to omni-direction search
-
-# MoveSearch module containing general methods for orthgonal, and diaganol
-# next move search/identification.
+# OrthoSearch module containing general methods for orthgonal next move
+# search/identification.
 #
-# These methods will be included with the ChessPiece module, and hence
-# the specific chess piece classes.
-# To help King, Queen, Rook, and Bishop pieces identify next valid moves.
+# This modules will be included with chess pieces that can move orthgonally
+# such as King, Queen, and Rook to help identify next valid moves.
 # All methods accept the instance variable (self) as the input.
 # Valid moves are identified as those empty spaces in a given direction,
 # including the first combatant piece.
-module MoveSearch
+module OrthoSearch
   # Search for next valid moves to the left relative to piece (self).
   def search_moves_left(piece)
     i, j = @pos
@@ -85,7 +80,17 @@ module MoveSearch
     end
     moves
   end
+end
 
+# DiagSearch module containing general methods for diaganol next move
+# search/identification.
+#
+# This modules will be included with chess pieces that can move diaganolly
+# such as King, Queen, and Bishop to help identify next valid moves.
+# All methods accept the instance variable (self) as the input.
+# Valid moves are identified as those empty spaces in a given direction,
+# including the first combatant piece.
+module DiagSearch
   # Search for next valid moves in NW direction relative to piece (self).
   def search_moves_diag_NW(piece)
     i, j = @pos
@@ -112,7 +117,7 @@ module MoveSearch
     moves = []
     m = i + 1
     n = j + 1
-    while m >= @board.rows && n < @board.columns
+    while m < @board.rows && n < @board.columns
       nxt = @board.board[m][n]
       if nxt.empty?
         moves << [m, n]
@@ -175,8 +180,6 @@ end
 # Rook, Knight, Bishop, King, Queen, nad Pond.
 # A mixin approach is used rather than direct class inheritance.
 module ChessPiece
-  include MoveSearch
-
   # Returns a chess piece avatar given the piece name and style.
   # piece : symbol of the piece name
   # style : symbol of the style name
@@ -324,6 +327,7 @@ class Bishop
   attr_reader :player, :piece, :avatar, :pos, :first_move
 
   include ChessPiece
+  include DiagSearch
 
   # Initializes a Bishop instance.
   def initialize(player, board, position, style = :solid)
@@ -337,11 +341,12 @@ class Bishop
 
   # Finds the next valid moves.
   def find_next_valid_moves
-    # To do this
-    # start from the bishop position
-    # look on all 4 diaganols
-    # keep adding moves until we hit find a piece.
-    # if the piece is also a combatant, then we can include it in the move
+    moves = []
+    moves.concat(search_moves_diag_NW(self))
+    moves.concat(search_moves_diag_SE(self))
+    moves.concat(search_moves_diag_SW(self))
+    moves.concat(search_moves_diag_NE(self))
+    filter_combatant(filter_inside_board(moves))
   end
 end
 
