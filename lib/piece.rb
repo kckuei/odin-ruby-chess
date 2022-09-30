@@ -254,7 +254,7 @@ module ChessPiece
   end
 
   # Filters out tiles where a friendly piece currently sits.
-  # moves is a nested list of coordinates.
+  # moves : nested list of coordinates.
   # @board is an instance variable.
   def filter_combatant(moves)
     obj = @board.board[@pos[0]][@pos[1]]
@@ -265,10 +265,21 @@ module ChessPiece
   end
 
   # Filters out tiles residing outside the board.
-  # moves is a nested list of coordinates.
+  # moves : nested list of coordinates.
   # @board is an instance variable.
   def filter_inside_board(moves)
     moves.filter { |val| @board.inside?(val) }
+  end
+
+  # Filters out moves that more than 1 tile away.
+  # moves : nested list of coordinates.
+  # @pos is an instane variable.
+  def filter_more_than_one_away(moves)
+    x, y = @pos
+    moves.filter do |move|
+      xm, ym = move
+      true if xm <= x + 1 && xm >= x - 1 && ym <= y + 1 && ym >= y - 1
+    end
   end
 end
 
@@ -435,6 +446,8 @@ class King
   attr_reader :player, :piece, :avatar, :pos, :first_move
 
   include ChessPiece
+  include OrthoSearch
+  include DiagSearch
 
   # Initializes a King instance.
   def initialize(player, board, position, style = :solid)
@@ -451,6 +464,6 @@ class King
     moves = []
     moves.concat(search_moves_ortho(self))
     moves.concat(search_moves_diag(self))
-    filter_combatant(filter_inside_board(moves))
+    filter_more_than_one_away(filter_combatant(filter_inside_board(moves)))
   end
 end

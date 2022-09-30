@@ -82,6 +82,7 @@ class ChessBoard
   # point : an array representing a point
   def inside?(point)
     return false if point.nil? || point.empty?
+
     x, y = point
     x >= 0 && x < @columns && y >= 0 && y < @rows
   end

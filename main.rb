@@ -35,3 +35,9 @@ knight.print_valid_moves(knight.find_next_valid_moves)
 bishop = game.piece_at(:f7)
 puts bishop
 bishop.print_valid_moves(bishop.find_next_valid_moves)
+
+
+king = game.piece_at(:e7)
+puts king
+king.print_valid_moves(king.find_next_valid_moves)
+
