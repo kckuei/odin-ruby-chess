@@ -35,3 +35,8 @@ p knight.search_moves_left(knight)
 p knight.search_moves_right(knight)
 p knight.search_moves_up(knight)
 p knight.search_moves_down(knight)
+
+p knight.search_moves_diag_SW(knight)
+p knight.search_moves_diag_NE(knight)
+p knight.search_moves_diag_NW(knight)
+p knight.search_moves_diag_SE(knight)

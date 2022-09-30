@@ -168,3 +168,11 @@ Toy chess game and ruby final project for TOP
 
 # was easier to use mixins vs inheritance
 # favor general chesspiece module methods to specific pieces
+
+
+
+# Need to write two methods that can be part of the ChessPieceModule
+# 1 method to search diaganols
+# 1 method to search horizontal/vertical
+# an option limit argument can be included to make it applicable for king
+# These will be used king, queen, rook, bishop

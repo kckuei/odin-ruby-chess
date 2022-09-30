@@ -1,10 +1,8 @@
 # frozen_string_literal: false
 
-# Need to write two methods that can be part of the ChessPieceModule
-# 1 method to search diaganols
-# 1 method to search horizontal/vertical
-# an option limit argument can be included to make it applicable for king
-# These will be used king, queen, rook, bishop
+# Should MoveSearch be specific to King, Queen, Rook, Bishop, or should
+# all pieces have access?
+# Maybe change to omni-direction search
 
 # MoveSearch module containing general methods for orthgonal, and diaganol
 # next move search/identification.
@@ -12,7 +10,11 @@
 # These methods will be included with the ChessPiece module, and hence
 # the specific chess piece classes.
 # To help King, Queen, Rook, and Bishop pieces identify next valid moves.
+# All methods accept the instance variable (self) as the input.
+# Valid moves are identified as those empty spaces in a given direction,
+# including the first combatant piece.
 module MoveSearch
+  # Search for next valid moves to the left relative to piece (self).
   def search_moves_left(piece)
     i, j = @pos
     moves = []
@@ -30,6 +32,7 @@ module MoveSearch
     moves
   end
 
+  # Search for next valid moves to the right relative to piece (self).
   def search_moves_right(piece)
     i, j = @pos
     moves = []
@@ -47,6 +50,7 @@ module MoveSearch
     moves
   end
 
+  # Search for next valid moves in downward direction relative to piece (self).
   def search_moves_down(piece)
     i, j = @pos
     moves = []
@@ -64,6 +68,7 @@ module MoveSearch
     moves
   end
 
+  # Search for next valid moves in upward direction relative to piece (self).
   def search_moves_up(piece)
     i, j = @pos
     moves = []
@@ -77,6 +82,86 @@ module MoveSearch
         break
       end
       k -= 1
+    end
+    moves
+  end
+
+  # Search for next valid moves in NW direction relative to piece (self).
+  def search_moves_diag_NW(piece)
+    i, j = @pos
+    moves = []
+    m = i - 1
+    n = j - 1
+    while m >= 0 && n >= 0
+      nxt = @board.board[m][n]
+      if nxt.empty?
+        moves << [m, n]
+      else
+        moves << [m, n] if nxt.player != piece.player
+        break
+      end
+      m -= 1
+      n -= 1
+    end
+    moves
+  end
+
+  # Search for next valid moves in SE direction relative to piece (self).
+  def search_moves_diag_SE(piece)
+    i, j = @pos
+    moves = []
+    m = i + 1
+    n = j + 1
+    while m >= @board.rows && n < @board.columns
+      nxt = @board.board[m][n]
+      if nxt.empty?
+        moves << [m, n]
+      else
+        moves << [m, n] if nxt.player != piece.player
+        break
+      end
+      m += 1
+      n += 1
+    end
+    moves
+  end
+
+  # Search for next valid moves in SW direction relative to piece (self).
+  def search_moves_diag_SW(piece)
+    i, j = @pos
+    moves = []
+    m = i + 1
+    n = j - 1
+    while m < @board.rows && n >= 0
+      nxt = @board.board[m][n]
+      if nxt.empty?
+        moves << [m, n]
+      else
+        moves << [m, n] if nxt.player != piece.player
+        break
+      end
+      m += 1
+      n -= 1
+    end
+    moves
+  end
+
+  # Search for next valid moves in NE direction relative to piece (self).
+  def search_moves_diag_NE(piece)
+    i, j = @pos
+    moves = []
+    m = i - 1
+    n = j + 1
+    while m >= 0 && n < @board.columns
+      nxt = @board.board[m][n]
+      if nxt.empty?
+        moves << [m, n]
+      else
+        moves << [m, n] if nxt.player != piece.player
+        break
+      end
+      m -= 1
+      n += 1
     end
     moves
   end
