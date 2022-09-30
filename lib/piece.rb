@@ -249,8 +249,14 @@ module ChessPiece
   # @board is an instance variable.
   def print_valid_moves(valid_moves)
     puts "Valid moves from #{@board.hash_point(@pos)} (#{@piece}):"
-    moves = valid_moves.map { |move| @board.hash_point(move) }
-    puts moves.sort.join(', ')
+    # moves = valid_moves.map { |move| @board.hash_point(move) }
+    # puts moves.sort.join(', ')
+    moves = valid_moves.map { |move| @board.hash_point(move) }.sort
+    moves = moves.map do |move|
+      pnt = @board.hash_move(move.to_sym)
+      @board.board[pnt[0]][pnt[1]].empty? ? move.green : move.red
+    end
+    puts moves.join(', ')
   end
 
   # Filters out tiles where a friendly piece currently sits.

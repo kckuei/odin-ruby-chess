@@ -1,6 +1,6 @@
 ## To do
 * Implement pond movements [DONE]
-* Valid moves print pretty prints
+* Valid moves print pretty prints [DONE]
   * colorize moves that are combative
 * Implement castle pattern for rook and king
 * Move movement modules to seperate files

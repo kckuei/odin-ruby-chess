@@ -161,4 +161,11 @@ class ChessBoard
 
     @point_hash[string]
   end
+
+  # Returns the chess object at the tile location.
+  # tile : a symbol representing the tile at a particular location
+  def piece_at(tile)
+    i, j = @board.hash_move(tile)
+    @board[i][j]
+  end
 end
