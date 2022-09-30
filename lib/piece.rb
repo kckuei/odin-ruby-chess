@@ -372,11 +372,12 @@ class Rook
 
   # Finds the next valid moves.
   def find_next_valid_moves
-    # To do this
-    # start from the rook position
-    # look to the left, right, top, and bottom
-    # keep adding moves until we hit find a piece.
-    # if the piece is also a combatant, then we can include it in the move
+    moves = []
+    moves.concat(search_moves_up(self))
+    moves.concat(search_moves_down(self))
+    moves.concat(search_moves_left(self))
+    moves.concat(search_moves_right(self))
+    filter_combatant(filter_inside_board(moves))
   end
 end
 
@@ -401,11 +402,30 @@ class Queen
 
   # Finds the next valid moves.
   def find_next_valid_moves
-    # To do this
-    # start from the queen position
-    # look on all 4 diaganols, and all 4 horizontal/vertical directions
-    # keep adding moves until we hit find a piece.
-    # if the piece is also a combatant, then we can include it in the move
+    moves = []
+    moves.concat(find_next_ortho_moves)
+    moves.cocat(find_next_diag_moves)
+    filter_combatant(filter_inside_board(moves))
+  end
+
+  # Gets the orthogonal movements.
+  def find_next_ortho_moves
+    moves = []
+    moves.concat(search_moves_up(self))
+    moves.concat(search_moves_down(self))
+    moves.concat(search_moves_left(self))
+    moves.concat(search_moves_right(self))
+    moves
+  end
+
+  # Gets the diaganol movements.
+  def find_next_diag_moves
+    moves = []
+    moves.concat(search_moves_diag_NW(self))
+    moves.concat(search_moves_diag_SE(self))
+    moves.concat(search_moves_diag_SW(self))
+    moves.concat(search_moves_diag_NE(self))
+    moves
   end
 end
 
