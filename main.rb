@@ -60,3 +60,10 @@ pond2.print_valid_moves(pond2.find_next_valid_moves)
 # game.board.make_player_pieces_std(2)
 # game.board.pieces[:p1].each { |key, value| puts "#{key}:#{value}" }
 # game.board.pieces[:p2].each { |key, value| puts "#{key}:#{value}" }
+
+puts game.board.check?(:p1)
+puts game.board.check?(:p2)
+game.force_move('e0', 'd7')
+game.draw_board
+puts game.board.check?(:p1)
+puts game.board.check?(:p2)

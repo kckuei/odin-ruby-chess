@@ -2,6 +2,7 @@
 
 require_relative './string'
 require_relative './piece'
+require 'set'
 
 # ChessBoard class representing a chess board with chess pieces.
 #
@@ -56,13 +57,13 @@ class ChessBoard
     [1, 2].each { |player| make_player_pieces_std(player) }
 
     # Assigns player 1 pieces to board.
-    @pieces[:p1].each do |_key, piece|
+    @pieces[:p1].each_value do |piece|
       i, j = piece.pos
       @board[i][j] = piece
     end
 
     # Assigns player 2 pieces to board.
-    @pieces[:p2].each do |_key, piece|
+    @pieces[:p2].each_value do |piece|
       i, j = piece.pos
       @board[i][j] = piece
     end
@@ -143,14 +144,25 @@ class ChessBoard
     x >= 0 && x < @columns && y >= 0 && y < @rows
   end
 
-  def check?(player)
-    # validate check condition
-    # if any opposing pieces valid moves contains the kings position, he's in danger
+  # Checks if a player's king is checked.
+  #
+  # Validates the condition by enumerating over all opponent pieces and
+  # forming a set of all their possible moves. The king is in danger if
+  # it's position coincides with the set of possible opponent moves.
+  # player_sym : symbol representing the player, :p1 or :p2
+  def check?(player_sym)
+    # Gets the possible moves of the player opposing player_sym as a set.
+    opposing_sym = player_sym == :p1 ? :p2 : :p1
+    moves = Set.new
+    @pieces[opposing_sym].each_value do |piece|
+      piece.find_next_valid_moves.each { |move| moves.add(move) }
+    end
 
-    # for given player (symbol), enumerate over his pieces
-    # create a set of all valid moves
-    # is the opposing king inside there?
-    #
+    # Then checks in the king's position coincides with the set.
+    king = @pieces[player_sym][:k]
+    return true if moves.include?(king.pos)
+
+    false
   end
 
   def checkmate?(player)
