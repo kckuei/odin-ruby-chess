@@ -9,6 +9,16 @@
 # Valid moves are identified as those empty spaces in a given direction,
 # including the first combatant piece.
 module OrthoSearch
+  # Gets the orthogonal movements.
+  def search_moves_ortho(piece)
+    moves = []
+    moves.concat(search_moves_up(piece))
+    moves.concat(search_moves_down(piece))
+    moves.concat(search_moves_left(piece))
+    moves.concat(search_moves_right(piece))
+    moves
+  end
+
   # Search for next valid moves to the left relative to piece (self).
   def search_moves_left(piece)
     i, j = @pos
@@ -91,6 +101,16 @@ end
 # Valid moves are identified as those empty spaces in a given direction,
 # including the first combatant piece.
 module DiagSearch
+  # Gets the diaganol movements.
+  def search_moves_diag(piece)
+    moves = []
+    moves.concat(search_moves_diag_NW(piece))
+    moves.concat(search_moves_diag_SE(piece))
+    moves.concat(search_moves_diag_SW(piece))
+    moves.concat(search_moves_diag_NE(piece))
+    moves
+  end
+
   # Search for next valid moves in NW direction relative to piece (self).
   def search_moves_diag_NW(piece)
     i, j = @pos
@@ -342,10 +362,7 @@ class Bishop
   # Finds the next valid moves.
   def find_next_valid_moves
     moves = []
-    moves.concat(search_moves_diag_NW(self))
-    moves.concat(search_moves_diag_SE(self))
-    moves.concat(search_moves_diag_SW(self))
-    moves.concat(search_moves_diag_NE(self))
+    moves.concat(search_moves_diag(self))
     filter_combatant(filter_inside_board(moves))
   end
 end
@@ -359,6 +376,7 @@ class Rook
   attr_reader :player, :piece, :avatar, :pos, :first_move
 
   include ChessPiece
+  include OrthoSearch
 
   # Initializes a Rook instance.
   def initialize(player, board, position, style = :solid)
@@ -373,10 +391,7 @@ class Rook
   # Finds the next valid moves.
   def find_next_valid_moves
     moves = []
-    moves.concat(search_moves_up(self))
-    moves.concat(search_moves_down(self))
-    moves.concat(search_moves_left(self))
-    moves.concat(search_moves_right(self))
+    moves.concat(search_moves_ortho(self))
     filter_combatant(filter_inside_board(moves))
   end
 end
@@ -389,6 +404,8 @@ class Queen
   attr_reader :player, :piece, :avatar, :pos, :first_move
 
   include ChessPiece
+  include OrthoSearch
+  include DiagSearch
 
   # Initializes a Queen instance.
   def initialize(player, board, position, style = :solid)
@@ -403,29 +420,9 @@ class Queen
   # Finds the next valid moves.
   def find_next_valid_moves
     moves = []
-    moves.concat(find_next_ortho_moves)
-    moves.cocat(find_next_diag_moves)
+    moves.concat(search_moves_ortho(self))
+    moves.concat(search_moves_diag(self))
     filter_combatant(filter_inside_board(moves))
-  end
-
-  # Gets the orthogonal movements.
-  def find_next_ortho_moves
-    moves = []
-    moves.concat(search_moves_up(self))
-    moves.concat(search_moves_down(self))
-    moves.concat(search_moves_left(self))
-    moves.concat(search_moves_right(self))
-    moves
-  end
-
-  # Gets the diaganol movements.
-  def find_next_diag_moves
-    moves = []
-    moves.concat(search_moves_diag_NW(self))
-    moves.concat(search_moves_diag_SE(self))
-    moves.concat(search_moves_diag_SW(self))
-    moves.concat(search_moves_diag_NE(self))
-    moves
   end
 end
 
@@ -447,5 +444,13 @@ class King
     @first_move = true
     @piece = :king
     @avatar = style == :solid ? '♚' : '♔'
+  end
+
+  # Finds the next valid moves.
+  def find_next_valid_moves
+    moves = []
+    moves.concat(search_moves_ortho(self))
+    moves.concat(search_moves_diag(self))
+    filter_combatant(filter_inside_board(moves))
   end
 end
