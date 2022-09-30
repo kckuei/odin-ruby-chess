@@ -45,3 +45,13 @@ puts queen
 game.force_move('d7', 'd3')
 game.draw_board
 queen.print_valid_moves(queen.find_next_valid_moves)
+
+pond = game.piece_at(:g6)
+puts pond
+pond.print_valid_moves(pond.find_next_valid_moves)
+
+pond2 = game.piece_at(:g1)
+puts pond2
+game.force_move('g1', 'g4')
+game.draw_board
+pond2.print_valid_moves(pond2.find_next_valid_moves)

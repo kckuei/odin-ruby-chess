@@ -1,5 +1,5 @@
 ## To do
-* Implement pond movements
+* Implement pond movements [DONE]
 * Valid moves print pretty prints
   * colorize moves that are combative
 * Implement castle pattern for rook and king

@@ -291,8 +291,6 @@ class Pond
   attr_reader :player, :piece, :avatar, :pos, :first_move
 
   include ChessPiece
-  include OrthoSearch
-  include DiagSearch
 
   # Initializes a Pond instance.
   def initialize(player, board, position, style = :solid)
@@ -306,24 +304,32 @@ class Pond
 
   # Finds the next valid moves.
   def find_next_valid_moves
+    i, j = @pos
     moves = []
-    # If player 1 (red, top),
-    #  result = use move_down but exclude enemy pieces
-    #  if self.first_move?
-    #     result = result + filter within 2 tiles
-    #  end
-    #  result.concat(use move_SW + filter within 1 tile)
-    #  result.concat(use move_SE + filter within 1 tile)
+    case @player
+    # If belongs to player 1 (top position, red default)
+    when 1
+      # It can move forward down to two tiles
+      moves << [i + 1, j] if @board.inside?([i + 1, j]) && @board.board[i + 1][j].empty?
+      moves << [i + 2, j] if @board.inside?([i + 2, j]) && @board.board[i + 2][j].empty?
+      # But the pond may only move 1 tile if its not the first move
+      moves = filter_more_than_one_away(moves) unless @first_move
+      # Or attack diaganolly to the left or right 1 tile
+      moves << [i + 1, j - 1] if @board.inside?([i + 1, j - 1]) && !@board.board[i + 1][j - 1].empty?
+      moves << [i + 1, j + 1] if @board.inside?([i + 1, j + 1]) && !@board.board[i + 1][j + 1].empty?
+    # If player 2 (bottom, blue default)
+    when 2
+      # It can move forward up to two tiles
+      moves << [i - 1, j] if @board.inside?([i - 1, j]) && @board.board[i - 1][j].empty?
+      moves << [i - 2, j] if @board.inside?([i - 2, j]) && @board.board[i - 2][j].empty?
+      # But the pond may only move 1 tile if its not the first move
+      moves = filter_more_than_one_away(moves) unless @first_move
+      # Or attack diaganolly to the left or right 1 tile
+      moves << [i - 1, j - 1] if @board.inside?([i - 1, j - 1]) && !@board.board[i - 1][j - 1].empty?
+      moves << [i - 1, j + 1] if @board.inside?([i - 1, j + 1]) && !@board.board[i - 1][j + 1].empty?
+    end
 
-    # If player 2 (blue, bottom),
-    #  result = use move_up but exclude enemy pieces
-    #  if self.move_up?
-    #     result = result + filter within 2 tiles
-    #  end
-    #  result.concat(use move_NW + filter within 1 tile)
-    #  result.concat(use move_NE + filter within 1 tile)
-
-    filter_friendly(filter_inside_board(moves))
+    filter_combatant(filter_inside_board(moves))
   end
 end
 
@@ -378,8 +384,7 @@ class Bishop
 
   # Finds the next valid moves.
   def find_next_valid_moves
-    moves = []
-    moves.concat(search_moves_diag(self))
+    moves = search_moves_diag(self)
     filter_combatant(filter_inside_board(moves))
   end
 end
@@ -407,8 +412,7 @@ class Rook
 
   # Finds the next valid moves.
   def find_next_valid_moves
-    moves = []
-    moves.concat(search_moves_ortho(self))
+    moves = search_moves_ortho(self)
     filter_combatant(filter_inside_board(moves))
   end
 end
@@ -436,8 +440,7 @@ class Queen
 
   # Finds the next valid moves.
   def find_next_valid_moves
-    moves = []
-    moves.concat(search_moves_ortho(self))
+    moves = search_moves_ortho(self)
     moves.concat(search_moves_diag(self))
     filter_combatant(filter_inside_board(moves))
   end
@@ -467,8 +470,7 @@ class King
 
   # Finds the next valid moves.
   def find_next_valid_moves
-    moves = []
-    moves.concat(search_moves_ortho(self))
+    moves = search_moves_ortho(self)
     moves.concat(search_moves_diag(self))
     filter_more_than_one_away(filter_combatant(filter_inside_board(moves)))
   end
