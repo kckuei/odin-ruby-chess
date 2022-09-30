@@ -5,14 +5,14 @@ require_relative './piece'
 
 # ChessBoard class.
 class ChessBoard
-  attr_reader :board, :hash
+  attr_reader :board, :code_hash, :point_hash
 
   # Initializes a ChessBoard instance.
   def initialize
     @rows =  8
     @columns = 8
     @board = make_gameboard
-    @hash = make_tile_hashmap
+    @code_hash, @point_hash = make_hashmaps
   end
 
   # Initializes and returns an empty chess board.
@@ -31,41 +31,47 @@ class ChessBoard
 
   # Creates a hashmap of the tile code to index coordinates.
   # The keys use symbols, e.g., :a0 => [0][0], :f4 => [4][5].
-  def make_tile_hashmap
-    hash = {}
+  def make_hashmaps
+    hash_to_point = {}
+    hash_to_code = {}
     ('a'..'h').each_with_index do |c, j|
       8.times do |i|
-        hash[(c + i.to_s).to_sym] = [i, j]
+        hash_to_point[(c + i.to_s).to_sym] = [i, j]
+        hash_to_code["#{i}#{j}"] = (c + i.to_s)
       end
     end
-    hash
+    [hash_to_point, hash_to_code]
   end
 
   # Initializes player 1 and 2 gameboard with ChessPieces.
   def make_pieces
-    @columns.times { |i| @board[1][i] = ChessPiece.new(1, :pond, :solid) }
-    [0, 7].each { |i| @board[0][i] = ChessPiece.new(1, :rook, :solid) }
-    [1, 6].each { |i| @board[0][i] = ChessPiece.new(1, :knight, :solid) }
-    [2, 5].each { |i| @board[0][i] = ChessPiece.new(1, :bishop, :solid) }
-    @board[0][4] = ChessPiece.new(1, :queen, :solid)
-    @board[0][3] = ChessPiece.new(1, :king, :solid)
+    @columns.times { |i| @board[1][i] = Pond.new(1, self, [1, i]) }
+    [0, 7].each { |i| @board[0][i] = Rook.new(1, self, [0, i]) }
+    [1, 6].each { |i| @board[0][i] = Knight.new(1, self, [0, i]) }
+    [2, 5].each { |i| @board[0][i] = Bishop.new(1, self, [0, i]) }
+    @board[0][4] = Queen.new(1, self, [0, 4])
+    @board[0][3] = King.new(1, self, [0, 3])
 
-    @columns.times { |i| @board[6][i] = ChessPiece.new(2, :pond, :solid) }
-    [0, 7].each { |i| @board[7][i] = ChessPiece.new(2, :rook, :solid) }
-    [1, 6].each { |i| @board[7][i] = ChessPiece.new(2, :knight, :solid) }
-    [2, 5].each { |i| @board[7][i] = ChessPiece.new(2, :bishop, :solid) }
-    @board[7][3] = ChessPiece.new(2, :queen, :solid)
-    @board[7][4] = ChessPiece.new(2, :king, :solid)
+    @columns.times { |i| @board[6][i] = Pond.new(2, self, [6, i]) }
+    [0, 7].each { |i| @board[7][i] = Rook.new(2, self, [7, i]) }
+    [1, 6].each { |i| @board[7][i] = Knight.new(2, self, [7, i]) }
+    [2, 5].each { |i| @board[7][i] = Bishop.new(2, self, [7, i]) }
+    @board[7][3] = Queen.new(2, self, [7, 3])
+    @board[7][4] = King.new(2, self, [7, 4])
   end
 
   # Forcefully moves a piece from one tile to another, overwriting any object if it exists.
   # Does not check if the move is valid for the piece.
-  def force_move(from, to)
-    return if from.empty? || to.empty? || from == to
-    return unless inside?(from) && inside?(to)
+  # Updates the position of the piece but not the first_move attribute.
+  def force_move(start_tile, end_tile)
+    return if start_tile.empty? || end_tile.empty? || start_tile == end_tile
+    return unless inside?(start_tile) && inside?(end_tile)
 
-    @board[to[0]][to[1]] = @board[from[0]][from[1]]
-    @board[from[0]][from[1]] = ''
+    piece = @board[start_tile[0]][start_tile[1]]
+    piece.update_position(end_tile)
+
+    @board[end_tile[0]][end_tile[1]] = piece
+    @board[start_tile[0]][start_tile[1]] = ''
   end
 
   # Check if a point is inside the board
@@ -122,5 +128,24 @@ class ChessBoard
   # Supports draw_board.
   def format(val, tile = '')
     tile == 'dark' ? val.to_s.center(2, ' ').bg_gray : val.to_s.center(2, ' ')
+  end
+
+  # Converts chess code move to coordinates
+  # Takes a symbol, returns an array of the coordinates.
+  # E.g. :a0 => [0,0]
+  def hash_move(symbol)
+    raise 'Invalid code hash key.' if @code_hash[symbol].nil?
+
+    @code_hash[symbol]
+  end
+
+  # Converts coordinates to chess code
+  # Takes a string, returns a string of the chess code.
+  # E.g. '71' => 'b7'
+  def hash_point(string)
+    string = string.join('') if string.instance_of?(Array)
+    raise 'Invalid point hash key.' if @point_hash[string].nil?
+
+    @point_hash[string]
   end
 end
