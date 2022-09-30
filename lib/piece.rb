@@ -1,5 +1,87 @@
 # frozen_string_literal: false
 
+# Need to write two methods that can be part of the ChessPieceModule
+# 1 method to search diaganols
+# 1 method to search horizontal/vertical
+# an option limit argument can be included to make it applicable for king
+# These will be used king, queen, rook, bishop
+
+# MoveSearch module containing general methods for orthgonal, and diaganol
+# next move search/identification.
+#
+# These methods will be included with the ChessPiece module, and hence
+# the specific chess piece classes.
+# To help King, Queen, Rook, and Bishop pieces identify next valid moves.
+module MoveSearch
+  def search_moves_left(piece)
+    i, j = @pos
+    moves = []
+    k = j - 1
+    while k >= 0
+      nxt = @board.board[i][k]
+      if nxt.empty?
+        moves << [i, k]
+      else
+        moves << [i, k] if nxt.player != piece.player
+        break
+      end
+      k -= 1
+    end
+    moves
+  end
+
+  def search_moves_right(piece)
+    i, j = @pos
+    moves = []
+    k = j + 1
+    while k < @board.columns
+      nxt = @board.board[i][k]
+      if nxt.empty?
+        moves << [i, k]
+      else
+        moves << [i, k] if nxt.player != piece.player
+        break
+      end
+      k += 1
+    end
+    moves
+  end
+
+  def search_moves_down(piece)
+    i, j = @pos
+    moves = []
+    k = i + 1
+    while k < @board.columns
+      nxt = @board.board[k][j]
+      if nxt.empty?
+        moves << [k, j]
+      else
+        moves << [k, j] if nxt.player != piece.player
+        break
+      end
+      k += 1
+    end
+    moves
+  end
+
+  def search_moves_up(piece)
+    i, j = @pos
+    moves = []
+    k = i - 1
+    while k >= 0
+      nxt = @board.board[k][j]
+      if nxt.empty?
+        moves << [k, j]
+      else
+        moves << [k, j] if nxt.player != piece.player
+        break
+      end
+      k -= 1
+    end
+    moves
+  end
+end
+
 # ChessPiece module containing common methods to all chess pieces.
 #
 # Seperates the more generic & common methods from class-specific
@@ -8,6 +90,8 @@
 # Rook, Knight, Bishop, King, Queen, nad Pond.
 # A mixin approach is used rather than direct class inheritance.
 module ChessPiece
+  include MoveSearch
+
   # Returns a chess piece avatar given the piece name and style.
   # piece : symbol of the piece name
   # style : symbol of the style name
@@ -165,11 +249,22 @@ class Bishop
     @piece = :bishop
     @avatar = style == :solid ? '♝' : '♗'
   end
+
+  # Finds the next valid moves.
+  def find_next_valid_moves
+    # To do this
+    # start from the bishop position
+    # look on all 4 diaganols
+    # keep adding moves until we hit find a piece.
+    # if the piece is also a combatant, then we can include it in the move
+  end
 end
 
 # Rook class for representing the rook chess piece.
 #
 # A rook can move in any vertical or horziontal direction, and distance.
+# A rook can castle with the adjacent king if it is both their first move
+# and there are no pieces in-between.
 class Rook
   attr_reader :player, :piece, :avatar, :pos, :first_move
 
@@ -184,26 +279,14 @@ class Rook
     @piece = :rook
     @avatar = style == :solid ? '♜' : '♖'
   end
-end
 
-# King class for representing the king chess piece.
-#
-# A king can move/attack in any direction within a 1 tile distance.
-# A king can castle if it is the king and adjacent rooks first move
-# and there are no pieces in-between.
-class King
-  attr_reader :player, :piece, :avatar, :pos, :first_move
-
-  include ChessPiece
-
-  # Initializes a King instance.
-  def initialize(player, board, position, style = :solid)
-    @player = player
-    @board = board
-    @pos = position
-    @first_move = true
-    @piece = :king
-    @avatar = style == :solid ? '♚' : '♔'
+  # Finds the next valid moves.
+  def find_next_valid_moves
+    # To do this
+    # start from the rook position
+    # look to the left, right, top, and bottom
+    # keep adding moves until we hit find a piece.
+    # if the piece is also a combatant, then we can include it in the move
   end
 end
 
@@ -224,5 +307,35 @@ class Queen
     @first_move = true
     @piece = :queen
     @avatar = style == :solid ? '♛' : '♕'
+  end
+
+  # Finds the next valid moves.
+  def find_next_valid_moves
+    # To do this
+    # start from the queen position
+    # look on all 4 diaganols, and all 4 horizontal/vertical directions
+    # keep adding moves until we hit find a piece.
+    # if the piece is also a combatant, then we can include it in the move
+  end
+end
+
+# King class for representing the king chess piece.
+#
+# A king can move/attack in any direction within a 1 tile distance.
+# A king can castle with the adjacent rook if it is both their first move
+# and there are no pieces in-between.
+class King
+  attr_reader :player, :piece, :avatar, :pos, :first_move
+
+  include ChessPiece
+
+  # Initializes a King instance.
+  def initialize(player, board, position, style = :solid)
+    @player = player
+    @board = board
+    @pos = position
+    @first_move = true
+    @piece = :king
+    @avatar = style == :solid ? '♚' : '♔'
   end
 end

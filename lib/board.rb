@@ -9,7 +9,7 @@ require_relative './piece'
 # The chess pieces store a pointer to the board to help them decide
 # whether moves are valid by checking adjacent chess objects.
 class ChessBoard
-  attr_reader :board, :code_hash, :point_hash
+  attr_reader :rows, :columns, :board, :code_hash, :point_hash
 
   # Initializes a ChessBoard instance.
   def initialize
@@ -86,10 +86,13 @@ class ChessBoard
 
   def check?(player)
     # check for check condition
+    # if any opposing pieces valid moves contains the kings position.
   end
 
   def checkmate?(player)
     # check for checkmate condition
+    # if any opposing pieces valid moves contains the king position
+    # AND
   end
 
   def castle?(player)
@@ -134,20 +137,23 @@ class ChessBoard
     tile == 'dark' ? val.to_s.center(2, ' ').bg_gray : val.to_s.center(2, ' ')
   end
 
-  # Converts chess code move to coordinates
-  # Takes a symbol, returns an array of the coordinates.
+  # Converts a chess code to a move, or takes a symbol,
+  # returns an array of the coordinates.
   # E.g. :a0 => [0,0]
+  # symbol : a symbol representing the chess code for a tile.
   def hash_move(symbol)
     raise 'Invalid code hash key.' if @code_hash[symbol].nil?
 
     @code_hash[symbol]
   end
 
-  # Converts coordinates to chess code
-  # Takes a string, returns a string of the chess code.
+  # Converts coordinates to chess code, or takes a string/list,
+  # and returns a string of the chess code.
+  # E.g. [7, 1] => 'b7'
   # E.g. '71' => 'b7'
-  def hash_point(string)
-    string = string.join('') if string.instance_of?(Array)
+  # coord : a string or array representing the chess tile coordinates
+  def hash_point(coord)
+    string = coord.join('') if coord.instance_of?(Array)
     raise 'Invalid point hash key.' if @point_hash[string].nil?
 
     @point_hash[string]
