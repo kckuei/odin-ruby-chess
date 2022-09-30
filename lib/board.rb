@@ -49,6 +49,7 @@ class ChessBoard
 
   # Initializes player 1 and 2 gameboard with ChessPieces.
   def make_pieces
+    # Player 1 (top position, red default color)
     @columns.times { |i| @board[1][i] = Pond.new(1, self, [1, i]) }
     [0, 7].each { |i| @board[0][i] = Rook.new(1, self, [0, i]) }
     [1, 6].each { |i| @board[0][i] = Knight.new(1, self, [0, i]) }
@@ -56,6 +57,7 @@ class ChessBoard
     @board[0][4] = Queen.new(1, self, [0, 4])
     @board[0][3] = King.new(1, self, [0, 3])
 
+    # Player 2 (bottom position, blue default color)
     @columns.times { |i| @board[6][i] = Pond.new(2, self, [6, i]) }
     [0, 7].each { |i| @board[7][i] = Rook.new(2, self, [7, i]) }
     [1, 6].each { |i| @board[7][i] = Knight.new(2, self, [7, i]) }
@@ -98,8 +100,57 @@ class ChessBoard
     # AND
   end
 
+  # Checks if player can castle.
+  # A player can castle if it is the king and adjacent rooks
+  # first move, and there are not pieces in-between them.
+  # player : integer representing the player number
   def castle?(player)
-    # castle, if feasible
+    case player
+    # If player 1 (top position)
+    when 1
+      obj1 = piece_at([0, 3]).piece
+      obj2 = piece_at([0, 0]).piece
+      if !obj1.empty? && !obj2.empty? &&
+         obj1.piece == 'king' && obj2.piece == 'rook' &&
+         obj1.first_move && obj2.first_move &&
+         piece_at([0, 1]).empty? && piece_at([0, 2]).empty?
+        return true
+      end
+    # If player 2 (bottom position)
+    when 2
+      obj1 = piece_at([7, 4]).piece
+      obj2 = piece_at([7, 7]).piece
+      if !obj1.empty? && !obj2.empty? &&
+         obj1.piece == 'king' && obj2.piece == 'rook' &&
+         obj1.first_move && obj2.first_move &&
+         piece_at([7, 5]).empty? && piece_at([7, 6]).empty?
+        return true
+      end
+    end
+    false
+  end
+
+  # If the player can castle, does so.
+  # A player can castle if it is the king and adjacent rooks
+  # first move, and there are not pieces in-between them.
+  # player : integer representing the player number
+  def castle(player)
+    return unless castle?(player)
+
+    case player
+    # If player 1 (top position)
+    when 1
+      king = piece_at([0, 3]).piece
+      rook = piece_at([0, 0]).piece
+      @board.board[0, 2] = king
+      @board.board[0, 1] = rook
+    # If player 2 (bottom position)
+    when 2
+      king = piece_at([7, 4]).piece
+      rook = piece_at([7, 7]).piece
+      @board.board[7, 6] = king
+      @board.board[7, 5] = rook
+    end
   end
 
   def trade(player)
@@ -165,7 +216,7 @@ class ChessBoard
   # Returns the chess object at the tile location.
   # tile : a symbol representing the tile at a particular location
   def piece_at(tile)
-    i, j = @board.hash_move(tile)
+    i, j = hash_move(tile)
     @board[i][j]
   end
 end

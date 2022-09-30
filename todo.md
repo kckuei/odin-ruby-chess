@@ -3,7 +3,7 @@
 * Valid moves print pretty prints [DONE]
   * colorize moves that are combative
 * Move movement modules to seperate files [DONE]
-* Implement castle pattern for rook and king
+* Implement castle pattern [DONE]
 * Implement player class
 * Implement game loop mechanism
 * Implement check/checkmate conditions

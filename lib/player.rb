@@ -2,10 +2,10 @@
 
 # Player class
 class Player
-  attr_reader id:, :name, :type
-  def initialize(id, name, type)
+  attr_reader :id, :name, :type
+
+  def initialize(id, type)
     @id = id
-    @name = name
     @type = type
   end
 end
