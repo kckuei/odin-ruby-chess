@@ -1,5 +1,5 @@
 # odin-ruby-chess
-Toy chess game and ruby final project for TOP
+Command line chess game implemented with `ruby`, and final project for TOP.
 
 ### requirements
 * properly constrained, prevent players from making illegal moves, and declare check or check mate in correct situations
@@ -14,47 +14,51 @@ Toy chess game and ruby final project for TOP
 * [illustrated rules of chess](http://www.chessvariants.org/d.chess/chess.html)
 * [chess notation](https://en.wikipedia.org/wiki/Chess_notation)
 * [chess unicode characters](https://en.wikipedia.org/wiki/Chess_symbols_in_Unicode)
+* [for colorizing text and shading tiles](https://stackoverflow.com/questions/1489183/how-can-i-use-ruby-to-colorize-the-text-output-to-a-terminal) 
 * [chess tutorial](http://rubyquiz.com/quiz35.html)
 * [ruby ai chess example](https://github.com/AlexanderRichey/RubyChess)
 * [alpha zero](https://en.wikipedia.org/wiki/AlphaZero)
 
-### questions to look into
-* how can I produce the tiled chess board affect? how do I overlay a piece on top of a shaded tile?
-  * See [this example](https://stackoverflow.com/questions/1489183/how-can-i-use-ruby-to-colorize-the-text-output-to-a-terminal) 
-  * 8 x 8 board
-  * columns numbered
-  * rows letters
-  * white king on black, black king on white
-* board representation?
-  * nested list filled populated with chess piece objects
-* how should I check for valid moves?
-  * hash of valid relative movements for each piece
-  * check if each viable move is inside the board
-  * each piece is an object with possible relative movements
-* Special rules/mechanics
-  * Winning condition
-    * check
-    * mate
-    * statelmate (maybe skip for now)
-  * Castling
-  * Swapping peices
-  * Cannot make a move that jeapordizes the king, i.e. puts it in check/check mate(maybe skip for now)
-* what system for moving pieces around?
-  * Specify coordinates? Start and end?
-  * Given valid start, list viable/feasible end coordinates
-  * A1 -> B2
-* how do i want to save the state of the game? 
-  * Marshall
+### initial approach/thought process
+* chess board representation: nested list of chess piece objects
+* move implementation
+  * check movement patterns relative to current position
+  * orhtongal, diaganol, 
+  * filter by distance, friendly/combatants
+  * jumping (knights, ponds)
+* special mechanics/rules:
+  * check, checkmate, stalemate, castling, pond promotion
+  * moves cannot jeapordize the king
+* move specification and display
+  * chess code, 'a1 -> b2'
+  * list feasible moves
+* serialization: Marshall
 * classes
-  * game, player, board, piece, ai, serializer
-* what kind of tests?
-  * test for check
-  * test for mate
-  * test for valid moves
-  * test for piece movement
-  * test for board update
+  * game, player, board, piece, ai, serializer, logger
+  * single responsibilitiy
+* types of tests
+  * check, checkmate, valid move?
+* basic movement patterns
+  * all pieces
+    * can move onto another piece only if opposing
+    * only if it doesn't put king in danger
+    * must remain in board
+  * pond
+    * can move forward 2 square if first move and no combatant
+    * else 1 square if no combatant
+    * diaganoly 1 tile only if attacking
+  * knight
+    * can move/attack in L pattern relative to pos
+  * king
+    * can move/attack ortho/diag within 1 tile
+  * queen
+    * can move/attack ortho/diag to first obstruction
+  * bishop
+    * can move/attack diag to first obstruction
+  * rook 
+    * can move/attack ortho to first obstruction
 
-### classes and methods
+### initial classes and methods outline
 * game
   * for general game logic
   * intro, turns, winner declaration, new game, saving/loading game
@@ -103,92 +107,23 @@ Toy chess game and ruby final project for TOP
 * serializer
   * for saving the game
 
-
-
-# Generate new classes for movement/attack patterns. E.g.,
-#
-# Each piece will have a copy of one of these classes based on its designation, and saved as an attribute.
-# In addition, the PieceClass will need another readable attribute, first_move?, which returns true if it is the first move of the piece.
-# Should have methods
-#   find_valid moves - finds the next immediate valid moves of a given piece given a gameboard
-#   translate_moves - translates the indice locations to valid chess moves, e.g. a0
-#
-#
-# all pieces
-# can move onto another piece only if opposing
-# only if it doesn't put the king in check
-# must remain inside the board
-#
-# pond
-# can move forward
-#   2 squares if first move (only if no oposing piece at the location)
-#   else 1 square (only if no opposing piece at the location)
-# diaganol if attacking
-#
-# knight
-# can move/attack in L pattern relative to its position
-#
-# king
-# can move/attack in any direction 1 tile
-# can castle if it is the king and adjacent rooks first move and there are no piece in between
-#
-# bishop
-# can move in any diaganol direction, and distance
-#
-# rook
-# can move in any vertical or horziontal direction, and distance
-#
-# queen
-# can move in any direction, horizontal, vertical, diaganol, and any distance
-#
-
-
-# Generate new classes for movement/attack patterns. E.g.,
-#
-# Each piece will have a copy of one of these classes based on its designation, and saved as an attribute.
-# In addition, the PieceClass will need another readable attribute, first_move?, which returns true if it is the first move of the piece.
-# Should have methods
-#   find_valid moves - finds the next immediate valid moves of a given piece given a gameboard
-#   translate_moves - translates the indice locations to valid chess moves, e.g. a0
-#
-#
-# all pieces
-# can move onto another piece only if opposing
-# only if it doesn't put the king in check
-# must remain inside the board
-
-# begin/rescues, faily gracefully when invalid input
-
-# Loop options:
-# [1] Enter a move
-# [2] List valid moves of a chess piece
-# [3] Save game
-# [4] Quit
-
-
-# was easier to use mixins vs inheritance
-# favor general chesspiece module methods to specific pieces
-
-
-
-# Need to write two methods that can be part of the ChessPieceModule
-# 1 method to search diaganols
-# 1 method to search horizontal/vertical
-# an option limit argument can be included to make it applicable for king
-# These will be used king, queen, rook, bishop
-
-# checkmate notes
-# PROBLEM
-# -----------------------------------
-# Problem is: check?
-# It uses: @piece.find_next_valid_moves
-#
-# Dependent on:
-# @pieces
-#   if @pieces is not updated, for a piece that has been 'temp'
-#   removed, check? will still attempt to find_next_valid_moves
-#      problematic if we kill a piece because it will still be considered in check?
-#      we need to remove it from the hash @piece temporarily
-# find_next_valid_moves, @pos
-#   if @pos is not updated, the valid moves are incorrect
-#      remedy by updating the position as well
+### design decisions
+* pieces should store a pointer to the board
+* whether to use inheritance with superclasses vs proxy for multi-inheritance with mixins
+  * mixins ended up being easier to use
+  * there came a point when i wanted general methods in the superclass to reference methods in the subclass. I couldn't achieve this with inheritance, but modules provide a workaround.
+  * favor general chess piece module for storing common methods, that are included to specific chess pieces versus chess piece super class
+  * mixins also made it easier to include diag or ortho search methods for valid moves as needed. e.g. bishop needs to include diag methods, rook ortho methods, queen ortho and diag methods
+* initially only stored pieces on the board
+  * eventually added a hash with the chess piece object keys so the the board can reference pieces easier
+  * also added a pointer to the chess board on the chess pieces so they could more easily check for valid moves
+* check?
+  * create a hash of all the pieces on the board, then cycle through all of them for a set of all possible moves. 
+  * if the possible moves encompass opposing king, then they are checked.
+* checkmate?
+  * check if there is some move that can be made to get the king out of check
+  * then enumerate over all pieces and possible moves, and evaluate check? until false
+  * possible to create a deep copy of the board for each possible scenario, but wanted to avoid this and use the original board.
+  * when, implementing, it was very important when simulating the possible move with the original board (vs making copying the board), to 1) remove combatant pieces from the board opponent pieces hash, and 2) to update the positions of the pieces themselves.
+    * this is because check? uses the hash for checking all possible moves
+    * valid_moves on the pieces also relies on the piece pos to compute new valid moves

@@ -53,3 +53,9 @@ class ChessGame
     @log = Logger.new
   end
 end
+
+# Loop options:
+# [1] Enter a move
+# [2] List valid moves of a chess piece
+# [3] Save game
+# [4] Quit
