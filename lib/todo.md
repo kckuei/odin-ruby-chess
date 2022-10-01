@@ -36,14 +36,15 @@
 * Implement end game selection [DONE]
   * new game
   * log output
-  
+
+* Implement logger []
+  * stored as game attribute
+  * passed start, end move
 * Implement serializer, and save game methods []
   * mkdir
   * time/date
   * note/memo
-* Implement logger []
-  * stored as game attribute
-  * passed start, end move
+
 
 * Implement en passant []
 * Implement pawn promotion []

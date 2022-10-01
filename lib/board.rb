@@ -82,16 +82,12 @@ class ChessBoard
       player_id = 1
       row_p = 1
       row_v = 0
-      col_q = 4
-      col_k = 3
     # Player 2 (bottom position, blue default color)
     when 2
       player_sym = :p2
       player_id = 2
       row_p = 6
       row_v = 7
-      col_q = 3
-      col_k = 4
     end
     # Defines creation schedule.
     create_hash = {
@@ -109,8 +105,8 @@ class ChessBoard
       n2: [Knight, [row_v, 6]],
       b1: [Bishop, [row_v, 2]],
       b2: [Bishop, [row_v, 5]],
-      q: [Queen, [row_v, col_q]],
-      k: [King, [row_v, col_k]]
+      q: [Queen, [row_v, 3]],
+      k: [King, [row_v, 4]]
     }
     # Create a hash for the player
     @pieces[player_sym] = {}

@@ -76,7 +76,7 @@ class ChessGame
 
   # Prints the gameloop menu navigation
   def print_gameloop_menu
-    puts "Move a piece by selecting a tile, e.g. #{'b0'.bold}, or make a selection:\n".yellow +
+    puts "Move a piece by selecting a tile, e.g. #{'b7'.bold}, or make a selection:\n".yellow +
          "\e[32m[1]\e[0m Save game \e[32m[2]\e[0m Load game \e[32m[3]\e[0m Exit"
   end
 
@@ -218,11 +218,21 @@ class ChessGame
       switch_players
 
       # Check end game conditions here, and return if checkmate or stalemate.
-      # could add a code for exit condition
       return if @board.checkmate?(:p1) || @board.checkmate?(:p2)
 
       gameloop_menu
     end
+  end
+
+  # Declares the winner
+  def declare_winner
+    if @board.checkmate?(:p1)
+      puts "\nCheckmate! Player 1 wins!".bold.red
+    elsif @board.checkmate?(:p2)
+      puts "\nCheckmate! Player 2 wins".bold.blue
+    end
+    puts 'Press any key to continue.'
+    gets
   end
 
   # Toggles/switches the player turn attribute
@@ -235,6 +245,7 @@ class ChessGame
     setup
     draw_board
     gameloop_menu
+    declare_winner
     reset
     start_menu
   end
