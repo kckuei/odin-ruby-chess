@@ -21,19 +21,19 @@
 * Implement safe method [DONE]
   * A move is not valid if it puts the king in jeopardy
   * similar to checkmate logic, check if a move will result in check
-
-* Implement basic game loop mechanism []
-* Game loop selection
+* Game loop selection [DONE]
   * save game
   * move piece
   * show valid moves for piece
   * exit
-* Implement menu selection
+* Implement menu selection [DONE]
   * new game
   * load game
   * rules
   * color settings possibly
   * computer opponent possibly
+
+* Implement basic game loop mechanism []
 * Implement end game selection
   * new game
   * log output

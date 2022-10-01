@@ -348,6 +348,7 @@ class ChessBoard
   # Draw the board and pieces.
   def draw_board
     k = 0
+    puts ' ' * 3 << %w[a b c d e f g h].join(' ')
     puts '  ╔════════════════╗'
     (0..@rows - 1).each do |i|
       print "#{i} ║"
@@ -355,7 +356,7 @@ class ChessBoard
       (0..@columns - 1).each do |j|
         k += 1
         draw_tile(@board[i][j].to_s, k + inc)
-        puts '║' if j == @columns - 1
+        puts "║ #{i}" if j == @columns - 1
       end
     end
     puts '  ╚════════════════╝'
