@@ -2,6 +2,7 @@
 
 require_relative './intro'
 require_relative './board'
+require_relative './player'
 require_relative './logger'
 require 'set'
 
@@ -13,9 +14,13 @@ class ChessGame
   def initialize
     @intro = Intro.new
     @board = ChessBoard.new
+    @player1 = Player.new(1, 'human')
+    @player2 = Player.new(2, 'human')
+    @current_player = @player1
     @log = Logger.new
     @options = { move_suggest: true }
     @goodbye = ['Hasta luego!', 'бакат!', 'Tschüß!', 'さようなら!', 'See ya next time!']
+    @valid = valid_input
   end
 
   # Displays the game intro screen.
@@ -57,7 +62,7 @@ class ChessGame
   end
 
   def print_start_menu
-    puts "\nMake a selection:
+    puts "Make a selection:
     \e[32m[1]\e[0m New game
     \e[32m[2]\e[0m Load saved game
     \e[32m[3]\e[0m How to play
@@ -67,7 +72,7 @@ class ChessGame
   end
 
   def print_gameloop_menu
-    puts "\nMake a selection:
+    puts "Make a selection:
     \e[32m[1]\e[0m Enter a move
     \e[32m[2]\e[0m Save game
     \e[32m[3]\e[0m Quit
@@ -80,6 +85,11 @@ class ChessGame
     \e[33m[1]\e[0m https://www.chess.com/lessons/playing-the-game
     \e[33m[2]\e[0m https://en.wikipedia.org/wiki/Rules_of_chess
     "
+  end
+
+  def print_player_turn
+    colorized = @current_player.id == 1 ? 'Player 1 turn'.blue : 'Player 2 turn'.red
+    puts "\n#{colorized}"
   end
 
   def start_menu
@@ -114,6 +124,7 @@ class ChessGame
   end
 
   def gameloop_menu
+    print_player_turn
     valid = Set.new(1..3)
     print_gameloop_menu
     input = gets.chomp.to_i
@@ -127,14 +138,48 @@ class ChessGame
   end
 
   def eval_loop_menu_selection(input)
-    # Print player turn
+    # This needs a bit of work to streamline
+    #
+    # get input....
+    #
+    # If 1...save game, loop back to start (without incrementing player turn)
+    # If 2...exit the game
+    # otherwise attemp to validate the input
+    #    -> belongs to @valid?   (invalid input)
+    #    -> tile is not empty    (no piece there)
+    #    -> piece belongs to player    (belongs to other player)
+    #    -> valid moves is not empty    (that piece can't be moved)
+    #
+    # return back to start if any are false (can't move that piece)
+    #
+    # otherwise, input is valid.
+    # print possible valid moves
+    # wait for a valid selection
+    #   must be one of the valid moves or go back
+    #   if go back loop back to the start
+    #
+    # otherwise
+    # get the pointer to the piece via piece hash or piece_at method
+    # force update the board
+    #
+    # report a success, update the logger
+    # draw the board
+
     case input
     when 1
       # Get current player move
+      input = gets.chomp
+      loop do
+        break if @valid.include?(input)
+
+        input = gets.chomp
+      end
       #
       # Pick a piece to move, e.g. 'b7'
       # Validate the move
-      #
+      # Query until valid
+      # Make move
+      draw_board
     when 2
       # Save the game, then...
       puts "I should have saved your game but didn't because I haven't been implemented yet."
@@ -143,15 +188,22 @@ class ChessGame
       puts @goodbye.sample(1)[0].yellow
       exit
     end
-    # Toggle the active player
+    toggle_current
+    gameloop_menu
+  end
+
+  # Toggle the player turn attribute
+  def toggle_current
+    @current_player = @current_player == @player1 ? @player2 : @player1
   end
 
   def new_game
     setup
     draw_board
     gameloop_menu
-    # end game message
-    # view log, or any key to continue to new game
+    # If we've made it this far, the game is over
+    # present the end game message
+    # give option to view log, or any key to continue to new game
     reset
     start_menu
   end
@@ -161,12 +213,11 @@ class ChessGame
     intro_screen
     start_menu
   end
-end
 
-# Parse user input
-# Is it in the board? Is there a piece there? Does it belong to the player?
-# If not, query again.
-# If yes, get the valid moves, and print them.
-#   Query for next move
-#   Loop until valid move or to go back
-#   If go back flag, then
+  # Returns a set of strings corresponding to all tile locations
+  def valid_input
+    set = Set.new
+    ('a'..'h').each { |c| 8.times { |i| set.add(c + i.to_s) } }
+    set
+  end
+end

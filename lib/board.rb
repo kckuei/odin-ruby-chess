@@ -195,7 +195,7 @@ class ChessBoard
   # player : symbol representing the player, :p1 or :p2
   def checkmate?(player)
     # Check is a necessary condition of checkmate.
-    return unless check?(player)
+    return false unless check?(player)
 
     opposing = player == :p1 ? :p2 : :p1
 
@@ -235,6 +235,56 @@ class ChessBoard
         @pieces[opposing][temp_final.key] = temp_final unless temp_final.empty?
       end
     end
+    true
+  end
+
+  # Checks if a move is safe, i.e., does not put the king in danger (check).
+  #
+  # start : a string or array representing the start chess tile coordinates
+  # move : a string or array representingt the end chess tile coordinates
+  # E.g. [7, 1] => 'b7'
+  # E.g. '71' => 'b7'
+  def safe?(start, move)
+    # Converts start and move to consistent array format, e.g. [7, 1]
+    start = start.instance_of?(String) ? hash_move(start.to_sym) : start
+    move = move.instance_of?(String) ? hash_move(move.to_sym) : move
+
+    return unless inside?(start) && inside?(move)
+
+    # Get the piece and player
+    piece = piece_at(hash_point(start).to_sym)
+    player = piece.player == 1 ? :p1 : :p2
+
+    # Save pointers to objects at start and move.
+    i, j = piece.pos
+    temp_start = @board[i][j]
+    temp_final = @board[move[0]][move[1]]
+
+    # Save the start position.
+    temp_pos_start = [i, j]
+
+    # Temporarily, update position, and play the move.
+    # If enemy piece is captured, temporarily remove it from opposing @pieces hash.
+    temp_start.update_position(move)
+    @board[move[0]][move[1]] = temp_start
+    @board[i][j] = ''
+    @pieces[opposing].delete(temp_final.key) unless temp_final.empty?
+
+    # If player in check, it is not a safe move and puts king in jeapordy.
+    if check?(player)
+
+      # Then undo the move and changes, and return false.
+      temp_start.update_position(temp_pos_start)
+      @board[i][j] = temp_start
+      @board[move[0]][move[1]] = temp_final
+      @pieces[opposing][temp_final.key] = temp_final unless temp_final.empty?
+      return false
+    end
+    # Otherwise, undo the move and changes, and continue.
+    temp_start.update_position(temp_pos_start)
+    @board[i][j] = temp_start
+    @board[move[0]][move[1]] = temp_final
+    @pieces[opposing][temp_final.key] = temp_final unless temp_final.empty?
     true
   end
 
@@ -331,8 +381,8 @@ class ChessBoard
 
   # Converts a chess code to a move, or takes a symbol,
   # returns an array of the coordinates.
-  # E.g. :a0 => [0,0]
   # symbol : a symbol representing the chess code for a tile.
+  # E.g. :a0 => [0,0]
   def hash_move(symbol)
     raise 'Invalid code hash key.' if @code_hash[symbol].nil?
 
@@ -341,11 +391,11 @@ class ChessBoard
 
   # Converts coordinates to chess code, or takes a string/list,
   # and returns a string of the chess code.
+  # coord : a string or array representing the chess tile coordinates
   # E.g. [7, 1] => 'b7'
   # E.g. '71' => 'b7'
-  # coord : a string or array representing the chess tile coordinates
   def hash_point(coord)
-    string = coord.join('') if coord.instance_of?(Array)
+    string = coord.instance_of?(Array) ? coord.join('') : coord
     raise 'Invalid point hash key.' if @point_hash[string].nil?
 
     @point_hash[string]
@@ -353,6 +403,7 @@ class ChessBoard
 
   # Returns the chess object at the tile location.
   # tile : a symbol representing the tile at a particular location
+  # E.g. :a0 => piece
   def piece_at(tile)
     i, j = hash_move(tile)
     @board[i][j]
