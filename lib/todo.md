@@ -47,6 +47,8 @@
 
 * fix piece, pond dependency on 1 on player 1 or 2, or should be defined based on player orientation/board assignment works, but pieces move in wront direction otherwise
 
+* check that my stack isn't getting to deep in the gameloop, and properly exiting before calling new frame
+
 * Implement en passant []
 * Implement pawn promotion []
   * the @pieces hash will need to be updated accordingly to remove old / add new
@@ -62,26 +64,37 @@
 # checkmate 1
 1
 r: f6 f5
-b: e6 e4
-r: g1 g3
-b: d7 h3
+b: e1 e3
+r: g6 g4
+b: d0 h4
+works
 
 # checkmate 2
 1
-e1 e3
-f6 f5
-d1 d3
-g6 g4
-d0 h4
+e6 e4
+f1 f2
+d6 d4
+g1 g3
+d7 h3
+works
 
 # checkmate 3
 1 
-g1 g3
-e6 e4
-f1 f3
-d7 h3
+g6 g4
+e1 e3
+f6 f4
+d0 h4
+works
 
 # checkmate 4
 1
-d1 d3
-f6 f4
+d6 d4
+f1 f3
+c7 g3
+h1 h2
+g3 h4
+g1 g3
+e6 e4
+g3 h4
+d7 h3
+got an error, but should be checkmate.
