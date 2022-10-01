@@ -105,8 +105,8 @@ class ChessBoard
       n2: [Knight, [row_v, 6]],
       b1: [Bishop, [row_v, 2]],
       b2: [Bishop, [row_v, 5]],
-      q: [Queen, [row_v, 4]],
-      k: [King, [row_v, 3]]
+      q: [Queen, [row_v, 3]],
+      k: [King, [row_v, 4]]
     }
     # Create a hash for the player
     @pieces[player_sym] = {}

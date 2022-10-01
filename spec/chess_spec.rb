@@ -160,10 +160,10 @@ describe Queen do
         game.force_move('g0', 'f2')
       end
       it 'should return e6' do
-        queen = game.piece_at(:e7)
+        queen = game.piece_at(:d7)
         valid = queen.find_next_valid_moves
         game.draw_board
-        expect(queen.valid_moves_testing(valid)).to eq 'e5, e6'
+        expect(queen.valid_moves_testing(valid)).to eq 'e6'
       end
     end
 
@@ -176,7 +176,7 @@ describe Queen do
         game.force_move('e1', 'e3')
         game.force_move('g7', 'f5')
         game.force_move('g0', 'f2')
-        game.force_move('e7', 'd3')
+        game.force_move('d7', 'd3')
       end
       it 'should return a3, b3, b5, c2, c3, c4, d1, d2, d4, d5, e2, e3, f1' do
         queen = game.piece_at(:d3)
@@ -252,7 +252,7 @@ describe ChessBoard do
         game.force_move('g0', 'f2')
         game.force_move('e7', 'd3')
         game.force_move('g1', 'g4')
-        game.force_move('e0', 'e7')
+        game.force_move('d0', 'd7')
       end
       it 'should return true for player 1' do
         game.draw_board
@@ -275,12 +275,12 @@ describe ChessBoard do
         game.force_move('e1', 'e3')
         game.force_move('g7', 'f5')
         game.force_move('g0', 'f2')
-        game.force_move('e7', 'd3')
+        game.force_move('d7', 'd3')
         game.force_move('g1', 'g4')
-        game.force_move('e0', 'c7')
+        game.force_move('d0', 'c7')
         game.force_move('c7', 'a7')
         game.force_move('c5', 'a4')
-        game.force_move('d7', 'c7')
+        game.force_move('e7', 'c7')
       end
       it 'should return true for player 1' do
         game.draw_board
@@ -305,7 +305,7 @@ describe ChessBoard do
         game.force_move('g0', 'f2')
         game.force_move('d7', 'd3')
         game.force_move('g1', 'g4')
-        game.force_move('e0', 'd7')
+        game.force_move('d0', 'd7')
         game.force_move('d7', 'c7')
         game.force_move('c7', 'a7')
         game.force_move('c5', 'b7')

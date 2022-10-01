@@ -61,7 +61,7 @@
 
 # checkmate 1
 1
-r: f1 f2
+r: f6 f5
 b: e6 e4
 r: g1 g3
 b: d7 h3
