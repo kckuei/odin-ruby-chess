@@ -45,6 +45,7 @@
   * time/date
   * note/memo
 
+* fix piece, pond dependency on 1 on player 1 or 2, or should be defined based on player orientation/board assignment works, but pieces move in wront direction otherwise
 
 * Implement en passant []
 * Implement pawn promotion []
@@ -57,3 +58,30 @@
 * Tidy Readme
 * Optional implement simple AI [prolly skip]
 * Final Readme and demo page
+
+# checkmate 1
+1
+r: f1 f2
+b: e6 e4
+r: g1 g3
+b: d7 h3
+
+# checkmate 2
+1
+e1 e3
+f6 f5
+d1 d3
+g6 g4
+d0 h4
+
+# checkmate 3
+1 
+g1 g3
+e6 e4
+f1 f3
+d7 h3
+
+# checkmate 4
+1
+d1 d3
+f6 f4

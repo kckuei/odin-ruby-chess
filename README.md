@@ -15,6 +15,7 @@ Command line chess game for the TOP final `ruby` project.
 * [chess notation](https://en.wikipedia.org/wiki/Chess_notation)
 * [chess unicode characters](https://en.wikipedia.org/wiki/Chess_symbols_in_Unicode)
 * [for colorizing text and shading tiles](https://stackoverflow.com/questions/1489183/how-can-i-use-ruby-to-colorize-the-text-output-to-a-terminal)
+*[some fastest checkmates for testing](https://www.chess.com/article/view/fastest-chess-checkmates)
 
 ### Initial Brainstorm Notes
 * chess board representation: nested list of chess piece objects

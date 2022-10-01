@@ -62,6 +62,7 @@ class ChessGame
   def reset
     @board = ChessBoard.new
     @log = Logger.new
+    @current_player = @player1
   end
 
   # Prints the start menu navigation

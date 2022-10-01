@@ -138,18 +138,8 @@ class Pond
     i, j = @pos
     moves = []
     case @player
-    # If belongs to player 1 (top position, red default)
+    # If belongs to player 1 (bottom position, red default)
     when 1
-      # It can move forward down to two tiles
-      moves << [i + 1, j] if @board.inside?([i + 1, j]) && @board.board[i + 1][j].empty?
-      moves << [i + 2, j] if @board.inside?([i + 2, j]) && @board.board[i + 2][j].empty?
-      # But the pond may only move 1 tile if its not the first move
-      moves = filter_more_than_one_away(moves) unless @first_move
-      # Or attack diaganolly to the left or right 1 tile
-      moves << [i + 1, j - 1] if @board.inside?([i + 1, j - 1]) && !@board.board[i + 1][j - 1].empty?
-      moves << [i + 1, j + 1] if @board.inside?([i + 1, j + 1]) && !@board.board[i + 1][j + 1].empty?
-    # If player 2 (bottom, blue default)
-    when 2
       # It can move forward up to two tiles
       moves << [i - 1, j] if @board.inside?([i - 1, j]) && @board.board[i - 1][j].empty?
       moves << [i - 2, j] if @board.inside?([i - 2, j]) && @board.board[i - 2][j].empty?
@@ -158,6 +148,16 @@ class Pond
       # Or attack diaganolly to the left or right 1 tile
       moves << [i - 1, j - 1] if @board.inside?([i - 1, j - 1]) && !@board.board[i - 1][j - 1].empty?
       moves << [i - 1, j + 1] if @board.inside?([i - 1, j + 1]) && !@board.board[i - 1][j + 1].empty?
+    # If player 2 (top, blue default)
+    when 2
+      # It can move forward down to two tiles
+      moves << [i + 1, j] if @board.inside?([i + 1, j]) && @board.board[i + 1][j].empty?
+      moves << [i + 2, j] if @board.inside?([i + 2, j]) && @board.board[i + 2][j].empty?
+      # But the pond may only move 1 tile if its not the first move
+      moves = filter_more_than_one_away(moves) unless @first_move
+      # Or attack diaganolly to the left or right 1 tile
+      moves << [i + 1, j - 1] if @board.inside?([i + 1, j - 1]) && !@board.board[i + 1][j - 1].empty?
+      moves << [i + 1, j + 1] if @board.inside?([i + 1, j + 1]) && !@board.board[i + 1][j + 1].empty?
     end
 
     filter_combatant(filter_inside_board(moves))
