@@ -41,6 +41,7 @@
 * Implement logger []
 * Implement serializer, and save game methods []
 
+* Implement en passant
 * Implement pawn promotion []
   * the @pieces hash will need to be updated accordingly to remove old / add new
 

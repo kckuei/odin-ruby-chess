@@ -4,11 +4,14 @@ require_relative './intro'
 require_relative './board'
 require_relative './player'
 require_relative './logger'
+require_relative './rules'
 require 'set'
 
 # ChessGame class.
 class ChessGame
   attr_reader :board
+
+  include Rules
 
   # Initializes a Chess Game.
   def initialize
@@ -71,15 +74,18 @@ class ChessGame
   end
 
   def print_gameloop_menu
-    puts "Choose a tile (b7), specify a move (b7, c5), or make a selection:\n".yellow +
+    puts "Choose a piece by selecting a tile such as B7, or make a selection:\n".yellow +
          "\e[32m[1]\e[0m Save game \e[32m[2]\e[0m Load game \e[32m[3]\e[0m Exit"
   end
 
   def print_how_to_play
-    puts "\nChess - How to Play\n".yellow +
-         "Check out these guides:\n" +
-         "\e[33m[1]\e[0m https://www.chess.com/lessons/playing-the-game\n" +
-         "\e[33m[2]\e[0m https://en.wikipedia.org/wiki/Rules_of_chess"
+    puts "\nSummary: Chess How to Play\n".red
+    puts RULES_PIECES
+    puts RULES_CHECK
+    puts RULES_CASTLING
+    puts RULES_PASSANT
+    puts RULES_DRAWS
+    puts RULES_OTHERS
   end
 
   def print_player_turn
@@ -92,12 +98,12 @@ class ChessGame
   # menu: menu method
   def get_user_input(valid, menu)
     menu.call
-    input = gets.chomp
+    input = gets.chomp.downcase
     loop do
       break if valid.include?(input.to_i) || valid.include?(input)
 
       menu.call
-      input = gets.chomp
+      input = gets.chomp.downcase
     end
     input
   end
