@@ -18,20 +18,11 @@
 * force_move should update first_move as well. [DONE]
 * Implement player class [DONE_ALREADY]
 * Update castle to use hash [SKIP]
-
-* Implement basic game loop mechanism []
-* Implement safe method
+* Implement safe method [DONE]
   * A move is not valid if it puts the king in jeopardy
   * similar to checkmate logic, check if a move will result in check
 
-* Implement logger []
-* Implement serializer, and save game methods []
-
-* Implement pawn promotion []
-  * the @pieces hash will need to be updated accordingly to remove old / add new
-
-* Implement stalemate condition [HOW?]
-
+* Implement basic game loop mechanism []
 * Game loop selection
   * save game
   * move piece
@@ -46,6 +37,14 @@
 * Implement end game selection
   * new game
   * log output
+
+* Implement logger []
+* Implement serializer, and save game methods []
+
+* Implement pawn promotion []
+  * the @pieces hash will need to be updated accordingly to remove old / add new
+
+* Implement stalemate condition [HOW?]
 
 * Tidy/refine interface, user input and move UI scheme
 * Tidy Readme
