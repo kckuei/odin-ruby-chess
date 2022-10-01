@@ -33,16 +33,22 @@
   * color settings possibly
   * computer opponent possibly
 * Implement basic game loop mechanism [DONE]
-
-* Implement end game selection []
+* Implement end game selection [DONE]
   * new game
   * log output
+  
 * Implement serializer, and save game methods []
+  * mkdir
+  * time/date
+  * note/memo
 * Implement logger []
+  * stored as game attribute
+  * passed start, end move
 
-* Implement en passant
+* Implement en passant []
 * Implement pawn promotion []
   * the @pieces hash will need to be updated accordingly to remove old / add new
+* As valid move patterns.
 
 * Implement stalemate condition []
 

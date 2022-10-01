@@ -68,13 +68,13 @@ module ChessPiece
   # Pretty prints all the valid moves for the current position.
   # @board is an instance variable.
   def print_valid_moves(valid_moves)
-    puts "Valid moves from #{@board.hash_point(@pos).yellow} (#{@piece}):"
+    puts "Valid moves from #{@board.hash_point(@pos).yellow.bold} (#{@piece.to_s.yellow.bold}):"
     moves = valid_moves.map { |move| @board.hash_point(move) }.sort
     moves = moves.map do |move|
       pnt = @board.hash_move(move.to_sym)
-      @board.board[pnt[0]][pnt[1]].empty? ? move.green : move.red
+      @board.board[pnt[0]][pnt[1]].empty? ? move.green.bold : move.red.bold
     end
-    puts moves.join(', ')
+    print moves.join(', ')
   end
 
   # Returns the valid moves using chess code formatting, for testing.

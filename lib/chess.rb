@@ -76,7 +76,7 @@ class ChessGame
 
   # Prints the gameloop menu navigation
   def print_gameloop_menu
-    puts "Move a piece by selecting a tile such as B7, or make a selection:\n".yellow +
+    puts "Move a piece by selecting a tile, e.g. #{'b0'.bold}, or make a selection:\n".yellow +
          "\e[32m[1]\e[0m Save game \e[32m[2]\e[0m Load game \e[32m[3]\e[0m Exit"
   end
 
@@ -93,7 +93,7 @@ class ChessGame
 
   # Prints the current players turn
   def print_player_turn
-    colorized = @current_player.id == 1 ? 'Player 1 turn'.red : 'Player 2 turn'.blue
+    colorized = @current_player.id == 1 ? 'Player 1 turn'.red.bold : 'Player 2 turn'.blue.bold
     puts "\n#{colorized}"
   end
 
@@ -171,8 +171,8 @@ class ChessGame
       # Start over if the tile is empty or the piece belongs to the component.
       if nxt.empty? || nxt.player != @current_player.id
         draw_board
-        issue = nxt.empty? ? 'no piece at that location.' : 'piece does not belong to player.'
-        puts "Invalid input: #{@board.hash_point(point)}: #{issue}"
+        msg = nxt.empty? ? 'no piece at that location.' : 'piece does not belong to player.'
+        puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
         return gameloop_menu
       end
 
@@ -182,19 +182,26 @@ class ChessGame
 
       # If the piece can't be moved anywhere, start over.
       if moves.empty?
-        puts "The piece can't be moved anywhere piece."
-        return game_loop_menu
+        draw_board
+        msg = "The piece can't be moved anywhere."
+        puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
+        return gameloop_menu
       end
       # Otherwise show the valid moves
       nxt.print_valid_moves(moves)
+      puts ', back'.cyan.bold
 
       # Get the user input
       puts 'Select a move:'
       valid = moves.map { |move| @board.hash_point(move) }
-      # integrate option for going back/cancel (for a different piece)
+      valid << 'back'
       menu = -> {}
-      error = -> { puts 'Invalid selection. Select a move:' }
+      error = -> { puts 'Invalid selection. Select a different move:'.magenta.italic }
       input = get_user_input(valid, menu, error)
+      if input == 'back'
+        draw_board
+        return gameloop_menu
+      end
 
       # move the piece
       dest = @board.hash_move(input.to_sym)
@@ -202,7 +209,7 @@ class ChessGame
 
       # report success of move
       # should update logger
-      puts "Moved #{nxt.piece} from #{@board.hash_point(point)} to #{@board.hash_point(dest)}\n"
+      puts "Moved #{nxt.piece} from #{@board.hash_point(point).bold} to #{@board.hash_point(dest).bold}\n".green.italic
 
       # Render board.
       draw_board
@@ -228,8 +235,8 @@ class ChessGame
     setup
     draw_board
     gameloop_menu
-    # reset
-    # start_menu
+    reset
+    start_menu
   end
 
   # Start the game
