@@ -32,22 +32,21 @@
   * rules
   * color settings possibly
   * computer opponent possibly
+* Implement basic game loop mechanism [DONE]
 
-* Implement basic game loop mechanism []
-* Implement end game selection
+* Implement end game selection []
   * new game
   * log output
-
-* Implement logger []
 * Implement serializer, and save game methods []
+* Implement logger []
 
 * Implement en passant
 * Implement pawn promotion []
   * the @pieces hash will need to be updated accordingly to remove old / add new
 
-* Implement stalemate condition [HOW?]
+* Implement stalemate condition []
 
 * Tidy/refine interface, user input and move UI scheme
 * Tidy Readme
-* Optional implement simple AI
+* Optional implement simple AI [prolly skip]
 * Final Readme and demo page

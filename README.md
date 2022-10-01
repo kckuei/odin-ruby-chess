@@ -1,25 +1,22 @@
 # odin-ruby-chess
-Command line chess game implemented with `ruby`, and final project for TOP.
+Command line chess game for the TOP final `ruby` project.
 
-### requirements
-* properly constrained, prevent players from making illegal moves, and declare check or check mate in correct situations
+### Requirements
+* Properly constrained, prevent players from making illegal moves, and declare check or check mate in correct situations
 * Save board at any time
-* write tests for important parts (TDD not required)
-* keep classes modular and clean, methods each only do one thing; single responsibility principle
-* (optional) build a very simple AI computer player
-* (optional) chaos/fun mode that scrambles the pieces into ramble positions or enable pieces to do crazy/illegal moves
+* Write tests for important parts (TDD not required)
+* Keep classes modular and clean, methods each only do one thing; single responsibility principle
+* (Optional) Build a very simple AI computer player
+* (Optional my idea) Chaos/fun mode that scrambles the pieces into ramble positions or enable pieces to do crazy/illegal moves
 
-### resources
+### Resources
 * [chess wiki](https://en.wikipedia.org/wiki/Chess)
 * [illustrated rules of chess](http://www.chessvariants.org/d.chess/chess.html)
 * [chess notation](https://en.wikipedia.org/wiki/Chess_notation)
 * [chess unicode characters](https://en.wikipedia.org/wiki/Chess_symbols_in_Unicode)
-* [for colorizing text and shading tiles](https://stackoverflow.com/questions/1489183/how-can-i-use-ruby-to-colorize-the-text-output-to-a-terminal) 
-* [chess tutorial](http://rubyquiz.com/quiz35.html)
-* [ruby ai chess example](https://github.com/AlexanderRichey/RubyChess)
-* [alpha zero](https://en.wikipedia.org/wiki/AlphaZero)
+* [for colorizing text and shading tiles](https://stackoverflow.com/questions/1489183/how-can-i-use-ruby-to-colorize-the-text-output-to-a-terminal)
 
-### initial approach/thought process
+### Initial Brainstorm Notes
 * chess board representation: nested list of chess piece objects
 * move implementation
   * check movement patterns relative to current position
@@ -58,7 +55,7 @@ Command line chess game implemented with `ruby`, and final project for TOP.
   * rook 
     * can move/attack ortho to first obstruction
 
-### initial classes and methods outline
+### Initial Class and Methods Outline
 * game
   * for general game logic
   * intro, turns, winner declaration, new game, saving/loading game
@@ -107,7 +104,7 @@ Command line chess game implemented with `ruby`, and final project for TOP.
 * serializer
   * for saving the game
 
-### design decisions
+### Design Decision Notes
 * pieces should store a pointer to the board
 * whether to use inheritance with superclasses vs proxy for multi-inheritance with mixins
   * mixins ended up being easier to use

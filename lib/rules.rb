@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+# to do: pretty print methods for bulletizing, padding, marginizing, and colorizing text
+
 # Module containing strings of the rules for chess.
-# Rules from:  https :/ / www.chessstrategyonline.com / content / tutorials / how - to - play - chess - summary
+# Rules from:  https://www.chessstrategyonline.com/content/tutorials/how-to-play-chess-summary
 module Rules
   RULES_PIECES = "\e[31mThe Pieces\e[0m
 \e[33mPawns\e[0m   move one square forwards. Have the option of moving one or two squares

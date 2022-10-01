@@ -64,6 +64,7 @@ class ChessGame
     @log = Logger.new
   end
 
+  # Prints the start menu navigation
   def print_start_menu
     puts "\nMake a selection:\n".yellow +
          "\e[32m[1]\e[0m New game\n" +
@@ -73,11 +74,13 @@ class ChessGame
          "\e[32m[5]\e[0m Exit"
   end
 
+  # Prints the gameloop menu navigation
   def print_gameloop_menu
-    puts "Choose a piece by selecting a tile such as B7, or make a selection:\n".yellow +
+    puts "Move a piece by selecting a tile such as B7, or make a selection:\n".yellow +
          "\e[32m[1]\e[0m Save game \e[32m[2]\e[0m Load game \e[32m[3]\e[0m Exit"
   end
 
+  # Prints the rules
   def print_how_to_play
     puts "\nSummary: Chess How to Play\n".red
     puts RULES_PIECES
@@ -88,6 +91,7 @@ class ChessGame
     puts RULES_OTHERS
   end
 
+  # Prints the current players turn
   def print_player_turn
     colorized = @current_player.id == 1 ? 'Player 1 turn'.red : 'Player 2 turn'.blue
     puts "\n#{colorized}"
@@ -96,24 +100,28 @@ class ChessGame
   # Gets user input until matches one of the valid input
   # valid: a set or list of valid items
   # menu: menu method
-  def get_user_input(valid, menu)
+  # error_msg : error method, gets called on failure
+  def get_user_input(valid, menu, error = -> {})
     menu.call
     input = gets.chomp.downcase
     loop do
       break if valid.include?(input.to_i) || valid.include?(input)
 
+      error.call
       menu.call
       input = gets.chomp.downcase
     end
     input
   end
 
+  # Enters the start menu navigation
   def start_menu
     valid = Set.new(1..5)
     input = get_user_input(valid, method(:print_start_menu))
     eval_start_menu_selection(input)
   end
 
+  # Evaluates the start menu selection
   def eval_start_menu_selection(input)
     case input.to_i
     when 1
@@ -131,6 +139,7 @@ class ChessGame
     end
   end
 
+  # Enters the gameloop menu navigation
   def gameloop_menu
     print_player_turn
     valid = Set.new(1..3).merge(@valid)
@@ -138,8 +147,10 @@ class ChessGame
     eval_loop_menu_selection(input)
   end
 
+  # Evaluates the gameloop menu selection
   def eval_loop_menu_selection(input)
     case input.to_i
+    # Evaluate the numbered selections.
     when 1
       puts "Save game hasn't been implemented yet."
       gameloop_menu
@@ -149,71 +160,66 @@ class ChessGame
     when 3
       puts @goodbye.sample(1)[0].yellow
       exit
+    # Otherwise the user has selected a tile.
     else
 
+      # Get the tile, indices and contents.
       point = @board.hash_move(input.to_sym)
       i, j = point
       nxt = @board.board[i][j]
 
+      # Start over if the tile is empty or the piece belongs to the component.
       if nxt.empty? || nxt.player != @current_player.id
         draw_board
-        puts "Invalid input: #{@board.hash_point(point)}"
-        # be explicit about the reason for invalid
+        issue = nxt.empty? ? 'no piece at that location.' : 'piece does not belong to player.'
+        puts "Invalid input: #{@board.hash_point(point)}: #{issue}"
         return gameloop_menu
       end
 
+      # Otherwise it is a user piece, so get the valid moves.
+      # *need integrate, safe move logic.
       moves = nxt.find_next_valid_moves
+
+      # If the piece can't be moved anywhere, start over.
       if moves.empty?
-        puts "Can't move that piece."
+        puts "The piece can't be moved anywhere piece."
         return game_loop_menu
       end
+      # Otherwise show the valid moves
       nxt.print_valid_moves(moves)
 
-      puts 'Choose a move:'
+      # Get the user input
+      puts 'Select a move:'
       valid = moves.map { |move| @board.hash_point(move) }
-      # when invalid input, should give error, maybe reiterate...
       # integrate option for going back/cancel (for a different piece)
-      input = get_user_input(valid, -> {})
+      menu = -> {}
+      error = -> { puts 'Invalid selection. Select a move:' }
+      input = get_user_input(valid, menu, error)
 
+      # move the piece
       dest = @board.hash_move(input.to_sym)
       force_move(point, dest)
 
-      puts "Moved #{nxt.piece} from #{@board.hash_point(point)} to #{@board.hash_point(dest)}"
+      # report success of move
+      # should update logger
+      puts "Moved #{nxt.piece} from #{@board.hash_point(point)} to #{@board.hash_point(dest)}\n"
 
-      # get input....
-      #
-      # If 1...save game, loop back to start (without incrementing player turn)
-      # If 2...exit the game
-      # otherwise attemp to validate the input
-      #    -> belongs to @valid?   (invalid input)
-      #    -> tile is not empty    (no piece there)
-      #    -> piece belongs to player    (belongs to other player)
-      #    -> valid moves is not empty    (that piece can't be moved)
-      #
-      # return back to start if any are false (can't move that piece)
-      #
-      # otherwise, input is valid.
-      # print possible valid moves
-      # wait for a valid selection
-      #   must be one of the valid moves or go back
-      #   if go back loop back to the start
-      #
-      # otherwise
-      # get the pointer to the piece via piece hash or piece_at method
-      # force update the board
-      #
-      # report a success, update the logger
-      # draw the board
-
+      # Render board.
       draw_board
-      toggle_current
+
+      # Toggle current player attribute.
+      switch_players
+
+      # Check end game conditions here, and return if checkmate or stalemate.
+      # could add a code for exit condition
+      return if @board.checkmate?(:p1) || @board.checkmate?(:p2)
 
       gameloop_menu
     end
   end
 
-  # Toggle the player turn attribute
-  def toggle_current
+  # Toggles/switches the player turn attribute
+  def switch_players
     @current_player = @current_player == @player1 ? @player2 : @player1
   end
 
