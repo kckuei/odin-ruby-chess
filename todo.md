@@ -17,15 +17,14 @@
   * maybe add the key to the pieces as well, so I can reference them easily.
 * force_move should update first_move as well. [DONE]
 * Implement player class [DONE_ALREADY]
+* Update castle to use hash [SKIP]
 
-* Update castle to use hash []
-* Implement game loop mechanism []
+* Implement basic game loop mechanism []
+* Implement logger []
+* Implement serializer, and save game methods []
 
-* Implement pawn promotion
+* Implement pawn promotion []
   * the @pieces hash will need to be updated accordingly to remove old / add new
-
-* Implement logger
-* Implement serializer, and save game methods
 
 * A move is not valid if it puts the king in jeopardy
 * Implement stalemate condition [HOW?]

@@ -65,18 +65,22 @@ module ChessPiece
     valid_moves.include?(coords)
   end
 
-  # Prints all the valid moves for the current position.
+  # Pretty prints all the valid moves for the current position.
   # @board is an instance variable.
   def print_valid_moves(valid_moves)
     puts "Valid moves from #{@board.hash_point(@pos).yellow} (#{@piece}):"
-    # moves = valid_moves.map { |move| @board.hash_point(move) }
-    # puts moves.sort.join(', ')
     moves = valid_moves.map { |move| @board.hash_point(move) }.sort
     moves = moves.map do |move|
       pnt = @board.hash_move(move.to_sym)
       @board.board[pnt[0]][pnt[1]].empty? ? move.green : move.red
     end
     puts moves.join(', ')
+  end
+
+  # Returns the valid moves using chess code formatting, for testing.
+  def valid_moves_testing(valid_moves)
+    moves = valid_moves.map { |move| @board.hash_point(move) }
+    moves.sort.join(', ')
   end
 
   # Filters out tiles where a friendly piece currently sits.

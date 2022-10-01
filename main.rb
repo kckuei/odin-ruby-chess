@@ -2,15 +2,6 @@
 
 require_relative './lib/chess'
 
-# puts ChessPiece.new(1, :pond, :solid).to_s
-# puts ChessPiece.new(2, :pond, :solid).to_s
-
-# board = ChessBoard.new
-# board.draw_board
-
-# board.setup_standard_game
-# board.draw_board
-
 game = ChessGame.new
 game.intro_screen
 game.draw_board
@@ -18,89 +9,45 @@ game.draw_board
 game.setup
 game.draw_board
 
-knight = game.piece_at(:b7)
-puts knight
-knight.print_valid_moves(knight.find_next_valid_moves)
-
+queen2 = game.piece_at(:d7)
+knight2 = game.piece_at(:b7)
+pond1 = game.piece_at(:g1)
+pond2 = game.piece_at(:g6)
 game.force_move([7, 1], [5, 2])
 game.force_move([0, 1], [2, 2])
 game.force_move([6, 4], [4, 4])
 game.force_move('e1', 'e3')
 game.force_move('g7', 'f5')
 game.force_move('g0', 'f2')
-game.draw_board
-
-knight.print_valid_moves(knight.find_next_valid_moves)
-
-bishop = game.piece_at(:f7)
-puts bishop
-bishop.print_valid_moves(bishop.find_next_valid_moves)
-
-king = game.piece_at(:e7)
-puts king
-king.print_valid_moves(king.find_next_valid_moves)
-
-queen = game.piece_at(:d7)
-puts queen
 game.force_move('d7', 'd3')
-game.draw_board
-queen.print_valid_moves(queen.find_next_valid_moves)
-
-pond = game.piece_at(:g6)
-puts pond
-pond.print_valid_moves(pond.find_next_valid_moves)
-
-pond2 = game.piece_at(:g1)
-puts pond2
 game.force_move('g1', 'g4')
 game.draw_board
+queen2.print_valid_moves(queen2.find_next_valid_moves)
+knight2.print_valid_moves(knight2.find_next_valid_moves)
+pond1.print_valid_moves(pond1.find_next_valid_moves)
 pond2.print_valid_moves(pond2.find_next_valid_moves)
 
-# game.board.make_player_pieces_std(1)
-# game.board.make_player_pieces_std(2)
-# game.board.pieces[:p1].each { |key, value| puts "#{key}:#{value}" }
-# game.board.pieces[:p2].each { |key, value| puts "#{key}:#{value}" }
-
-puts 'check test p1- should return false'
-puts game.board.check?(:p1)
-puts 'check test p2- should return false'
-puts game.board.check?(:p2)
+game = ChessGame.new
+game.setup
+queen2 = game.piece_at(:d7)
+knight2 = game.piece_at(:b7)
+pond1 = game.piece_at(:g1)
+pond2 = game.piece_at(:g6)
+game.force_move([7, 1], [5, 2])
+game.force_move([0, 1], [2, 2])
+game.force_move([6, 4], [4, 4])
+game.force_move('e1', 'e3')
+game.force_move('g7', 'f5')
+game.force_move('g0', 'f2')
+game.force_move('d7', 'd3')
+game.force_move('g1', 'g4')
 game.force_move('e0', 'd7')
 game.draw_board
-puts 'check test- should return false'
-puts game.board.check?(:p1)
-puts 'check test- should return true'
-puts game.board.check?(:p2)
-
-# puts 'checkmate test p2- should return false'
-# puts game.board.checkmate?(:p2)
-# puts 'checkmate test p1- should return nil (because not checked)'
-# puts game.board.checkmate?(:p1)
+puts "Player 2 check? #{game.board.check?(:p2)}"
 
 game.force_move('d7', 'c7')
 game.force_move('c7', 'a7')
 game.force_move('c5', 'a4')
 game.force_move('e7', 'c7')
 game.draw_board
-
-queen = game.piece_at(:a7)
-puts queen
-p queen.pos
-queen.print_valid_moves(queen.find_next_valid_moves)
-
-king = game.piece_at(:c7)
-puts king
-p king.pos
-king.print_valid_moves(king.find_next_valid_moves)
-
-p3 = game.piece_at(:b6)
-p3.print_valid_moves(p3.find_next_valid_moves)
-
-puts 'check test p2- should return true'
-puts game.board.check?(:p2)
-
-puts 'checkmate test p1- should return nil'
-puts game.board.checkmate?(:p1)
-
-puts 'checkmate test p2- should return true'
-puts game.board.checkmate?(:p2)
+puts "Player 2 checkmate? #{game.board.checkmate?(:p2)}"
