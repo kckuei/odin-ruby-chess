@@ -90,7 +90,7 @@ module ChessPiece
     current = @board.board[@pos[0]][@pos[1]]
     moves.filter do |move|
       nxt = @board.board[move[0]][move[1]]
-      nxt.empty? || '' || nxt.player != current.player
+      nxt.empty? || nxt.player != current.player
     end
   end
 

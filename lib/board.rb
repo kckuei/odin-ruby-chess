@@ -134,7 +134,10 @@ class ChessBoard
 
     # Dereference/remove the piece at the end tile from the @pieces hash.
     piece_at_end = @board[end_tile[0]][end_tile[1]]
-    @pieces.delete(piece_at_end.to_sym) unless piece_at_end.empty?
+    unless piece_at_end.empty?
+      player_sym = piece_at_end.player == 1 ? :p1 : :p2
+      @pieces[player_sym].delete(piece_at_end.to_sym)
+    end
 
     # Updates the piece @pos and @first_move attributes.
     piece = @board[start_tile[0]][start_tile[1]]

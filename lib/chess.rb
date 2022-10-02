@@ -154,10 +154,8 @@ class ChessGame
     # Evaluate the numbered selections.
     when 1
       puts "Save game hasn't been implemented yet."
-      gameloop_menu
     when 2
       puts "Load game hasn't been implemented yet."
-      gameloop_menu
     when 3
       puts @goodbye.sample(1)[0].yellow
       exit
@@ -174,7 +172,7 @@ class ChessGame
         draw_board
         msg = nxt.empty? ? 'no piece at that location.' : 'piece does not belong to player.'
         puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
-        return gameloop_menu
+        return
       end
 
       # Otherwise it is a user piece, so get the valid moves.
@@ -186,7 +184,7 @@ class ChessGame
         draw_board
         msg = "The piece can't be moved anywhere."
         puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
-        return gameloop_menu
+        return
       end
       # Otherwise show the valid moves
       nxt.print_valid_moves(moves)
@@ -201,7 +199,7 @@ class ChessGame
       input = get_user_input(valid, menu, error)
       if input == 'back'
         draw_board
-        return gameloop_menu
+        return
       end
 
       # move the piece
@@ -215,13 +213,8 @@ class ChessGame
       # Render board.
       draw_board
 
-      # Toggle current player attribute.
+      # Switch players
       switch_players
-
-      # Check end game conditions here, and return if checkmate or stalemate.
-      return if @board.checkmate?(:p1) || @board.checkmate?(:p2)
-
-      gameloop_menu
     end
   end
 
@@ -245,8 +238,13 @@ class ChessGame
   def new_game
     setup
     draw_board
-    gameloop_menu
-    declare_winner
+    loop do
+      gameloop_menu
+      if @board.checkmate?(:p1) || @board.checkmate?(:p2)
+        declare_winner
+        break
+      end
+    end
     reset
     start_menu
   end

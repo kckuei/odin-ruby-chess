@@ -318,3 +318,22 @@ describe ChessBoard do
     end
   end
 end
+
+describe ChessGame do
+  subject(:game) { ChessGame.new }
+  context "checkmate - fool's mate" do
+    before do
+      allow(game).to receive(:puts) # suppresses puts
+      allow(game).to receive(:gets).and_return('1', 'f6', 'f5', 'e1', 'e3', 'g6', 'g4', 'd0', 'h4', 'any key', '5')
+    end
+    xit 'should return Checkmate! Player 2 wins!' do
+      game.start
+      expect(game.board.checkmate?(:p1)).to be true
+      # expect(game).to output(a_string_including('Checkmate!')).to_stdout
+      # expect(game).to receive(:gets).with(a_string_including('Checkmate!'))
+    end
+  end
+end
+
+# Checkmate! Player 1 wins!
+# Press any key to continue.
