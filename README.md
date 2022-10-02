@@ -1,14 +1,17 @@
 # odin-ruby-chess
 Command line chess game implemented in `ruby` for the TOP final `ruby` project.
 
-<img src="imgs/intro.png" width="100">
-
 Implements basic game mechanics (movement and checkmate), but it is still missing a few features:
 * En passant
 * Pond promotion
 * Castling methods not integrated with UI
 * Checking for stalemate conditions
 * Enforcing non-dangerous moves (method for checking is implemented but not integrated)
+
+<img src="imgs/intro.png" width="400">
+<img src="imgs/board-large.png" width="400">
+<img src="imgs/syntax-highlight.png" width="400">
+<img src="imgs/checkmate.png" width="400">
 
 ### Requirements
 * Properly constrained, prevent players from making illegal moves, and declare check or check mate in correct situations
