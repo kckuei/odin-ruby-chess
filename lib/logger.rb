@@ -21,6 +21,7 @@ class Logger
 
   # Print the log.
   def print_log
+    puts ''
     @log.each do |player, piece, from, to|
       player = player == 1 ? "Player #{player}".red : "Player #{player}".blue
       piece = piece.to_s.yellow

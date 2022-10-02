@@ -64,6 +64,7 @@
   * valid patterns shouldn't need to remove moves that put player in check
   * it should just query for a different move until the piece is safe
 
+
 * Integrate casle with valid moves []
 * Implement en passant []
 * Implement pawn promotion []
