@@ -1,21 +1,20 @@
-# odin-ruby-chess
-Command line chess game implemented in `ruby` for the TOP final `ruby` project.
+# Odin: Ruby Chess
+Command line chess game implemented with `ruby` for the TOP `ruby` final project. [👉Live Demo.👈]("")
 
 ### Limitations
-Implements basic game mechanics (movement and checkmate), but it is still missing a few features:
+Implements basic game mechanics (movement and checkmate, etc.), but is still missing a few features:
 * En passant
 * Pond promotion
 * Integrate castling methods with UI
 * Stalemate checking
-* Enforcing safe moves (integrate safe? with valid moves)
 
 ### Requirements
-* Properly constrained, prevent players from making illegal moves, and declare check or check mate in correct situations
-* Save board at any time
-* Write tests for important parts (TDD not required)
-* Keep classes modular and clean, methods each only do one thing; single responsibility principle
-* (Optional) Build a very simple AI computer player
-* (Optional my idea) Chaos/fun mode that scrambles the pieces into ramble positions or enable pieces to do crazy/illegal moves
+- [x] Properly constrained, prevent players from making illegal moves, and declare check or check mate in correct situations
+- [x] Save board at any time
+- [x] Write tests for important parts (TDD not required)
+- [x] Keep classes modular and clean, methods each only do one thing; single responsibility principle
+- [ ] (Optional) Build a very simple AI computer player
+- [ ] (Optional my idea) Chaos/fun mode that scrambles the pieces into ramble positions or enable pieces to do crazy/illegal moves
 
 ### Resources
 * [chess wiki](https://en.wikipedia.org/wiki/Chess)
