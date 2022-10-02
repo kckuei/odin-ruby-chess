@@ -90,7 +90,7 @@ class ChessGame
   # Prints the gameloop menu navigation
   def print_gameloop_menu
     puts "Move a piece by selecting a tile, e.g. #{'b7'.bold}, or make a selection:\n".yellow +
-         "\e[32m[1]\e[0m Save game \e[32m[2]\e[0m Load game \e[32m[3]\e[0m Exit"
+         "\e[32m[1]\e[0m Save game \e[32m[2]\e[0m Load game \e[32m[3]\e[0m Print move log \e[32m[4]\e[0m Exit"
   end
 
   # Prints the rules
@@ -155,7 +155,7 @@ class ChessGame
   # Enters the gameloop menu navigation
   def gameloop_menu
     print_player_turn
-    valid = Set.new(1..3).merge(@valid)
+    valid = Set.new(1..4).merge(@valid)
     input = get_user_input(valid, method(:print_gameloop_menu))
     eval_loop_menu_selection(input)
   end
@@ -169,6 +169,8 @@ class ChessGame
     when 2
       puts "Load game hasn't been implemented yet."
     when 3
+      @log.print_log
+    when 4
       puts @goodbye.sample(1)[0].yellow
       exit
     # Otherwise the user has selected a tile.
@@ -219,7 +221,8 @@ class ChessGame
       force_move(point, dest)
 
       # Log successful move.
-      log_move(nxt.piece, @board.hash_point(point), @board.hash_point(dest))
+      log_move(nxt.player, nxt.piece,
+               @board.hash_point(point), @board.hash_point(dest))
 
       # Render board.
       draw_board
@@ -230,8 +233,8 @@ class ChessGame
   end
 
   # Log successful moves
-  def log_move(piece, from, to, echo: true)
-    @log.add_success([piece, from, to])
+  def log_move(player, piece, from, to, echo: true)
+    @log.add_success([player, piece, from, to])
     puts "Moved #{piece} from #{from.bold} to #{to.bold}\n".green.italic if echo
   end
 

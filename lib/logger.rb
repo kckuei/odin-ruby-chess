@@ -21,7 +21,12 @@ class Logger
 
   # Print the log.
   def print_log
-    # Modify for pretty print.
-    @log.each { |move| puts move }
+    @log.each do |player, piece, from, to|
+      player = player == 1 ? "Player #{player}".red : "Player #{player}".blue
+      piece = piece.to_s.yellow
+      from = from.green
+      to = to.green
+      puts "#{player.bold} moved #{piece} from #{from.bold} to #{to.bold}".italic
+    end
   end
 end

@@ -43,7 +43,17 @@
   * was related to passing silent error. 
   * trying to delete a key from the hash 1 level above, versus the player specific hashes
 * fix piece, pond dependency on 1 on player 1 or 2, or should be defined based on player orientation/board assignment works, but pieces move in wront direction otherwise [SKIP]
+* Implement logger [DONE]
+  * stored as game attribute
+  * passed start, end move
+  * decide on data structure/how data is stored
+  * can be nice for doinga pretty print
 
+* Implement serializer, and save game methods []
+  * mkdir
+  * time/date
+  * note/memo
+* Replay option? [SKIP]
 
 * Declare checks []
   * print check declaration to screen
@@ -53,18 +63,6 @@
 * Integrate safe moves with valid move patterns []
   * valid patterns shouldn't need to remove moves that put player in check
   * it should just query for a different move until the piece is safe
-
-* Implement logger []
-  * stored as game attribute
-  * passed start, end move
-  * decide on data structure/how data is stored
-  * can be nice for doinga pretty print
-* Implement serializer, and save game methods []
-  * mkdir
-  * time/date
-  * note/memo
-* Replay option? [SKIP]
-
 
 * Integrate casle with valid moves []
 * Implement en passant []
