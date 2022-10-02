@@ -61,7 +61,7 @@ class ChessGame
     valid = Set.new(0..saves.length)
     valid.add('back')
     input = get_user_input(valid, menu)
-    return if input == 'back'
+    return draw_board if input == 'back'
 
     # Deserializes state.
     fullpath = saves[input.to_i]
@@ -126,7 +126,7 @@ class ChessGame
     @current_player = @player1
   end
 
-  # Prints the start menu navigation
+  # Prints the start menu navigation.
   def print_start_menu
     puts "\nMake a selection:\n".yellow +
          "\e[32m[1]\e[0m New game\n" +
@@ -136,13 +136,13 @@ class ChessGame
          "\e[32m[5]\e[0m Exit"
   end
 
-  # Prints the gameloop menu navigation
+  # Prints the gameloop menu navigation.
   def print_gameloop_menu
     puts "Move a piece by selecting a tile, e.g. #{'b7'.bold}, or make a selection:\n".yellow +
          "\e[32m[1]\e[0m Save game \e[32m[2]\e[0m Load game \e[32m[3]\e[0m Print move log \e[32m[4]\e[0m Exit"
   end
 
-  # Prints the rules
+  # Prints the rules.
   def print_how_to_play
     puts "\nSummary: Chess How to Play\n".red
     puts RULES_PIECES
@@ -153,7 +153,7 @@ class ChessGame
     puts RULES_OTHERS
   end
 
-  # Prints the current players turn
+  # Prints the current players turn.
   def print_player_turn
     colorized = @current_player.id == 1 ? 'Player 1 turn'.red.bold : 'Player 2 turn'.blue.bold
     puts "\n#{colorized}"
@@ -176,32 +176,39 @@ class ChessGame
     input
   end
 
-  # Enters the start menu navigation
+  # Enters the start menu navigation.
   def start_menu
     valid = Set.new(1..5)
     input = get_user_input(valid, method(:print_start_menu))
     eval_start_menu_selection(input)
   end
 
-  # Evaluates the start menu selection
+  # Evaluates the start menu selection.
   def eval_start_menu_selection(input)
     case input.to_i
+    # Sets up a new board, then enters the game loop.
     when 1
+      setup
       new_game
+    # Loads the game state, then enters the game loop.
     when 2
-      puts "This branch hasn't been implemented yet."
+      load_game
+      new_game
+    # Prints rules of the game, and returns to start menu.
     when 3
       print_how_to_play
       start_menu
+    # Sets gaming options and easter eggs.
     when 4
       puts "This branch hasn't been implemented yet."
+    # Exits with random farewell.
     when 5
       puts @goodbye.sample(1)[0].yellow
       exit
     end
   end
 
-  # Enters the gameloop menu navigation
+  # Enters the gameloop menu navigation.
   def gameloop_menu
     print_player_turn
     valid = Set.new(1..4).merge(@valid)
@@ -209,7 +216,7 @@ class ChessGame
     eval_loop_menu_selection(input)
   end
 
-  # Evaluates the gameloop menu selection
+  # Evaluates the gameloop menu selection.
   def eval_loop_menu_selection(input)
     case input.to_i
     # Evaluate the numbered selections.
@@ -284,13 +291,13 @@ class ChessGame
     end
   end
 
-  # Log successful moves
+  # Logs successful moves to logger.
   def log_move(player, piece, from, to, echo: true)
     @log.add_success([player, piece, from, to])
     puts "Moved #{piece} from #{from.bold} to #{to.bold}\n".green.italic if echo
   end
 
-  # Declares the winner
+  # Declares the winner.
   def declare_winner
     if @board.checkmate?(:p1)
       puts "\nCheckmate! Player 1 wins!".bold.red
@@ -301,14 +308,13 @@ class ChessGame
     gets
   end
 
-  # Toggles/switches the player turn attribute
+  # Toggles/switches the player turn attribute.
   def switch_players
     @current_player = @current_player == @player1 ? @player2 : @player1
   end
 
-  # Start new game
+  # Implements one full game loop.
   def new_game
-    setup
     draw_board
     loop do
       gameloop_menu
@@ -322,13 +328,13 @@ class ChessGame
     start_menu
   end
 
-  # Start the game
+  # Starts the game.
   def start
     intro_screen
     start_menu
   end
 
-  # Returns a set of strings corresponding to all tile locations
+  # Returns a set of strings corresponding to all tile locations.
   def valid_input
     set = Set.new
     ('a'..'h').each { |c| 8.times { |i| set.add(c + i.to_s) } }

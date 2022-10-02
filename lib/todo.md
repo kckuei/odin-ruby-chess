@@ -187,6 +187,6 @@
   * when, implementing, it was very important when simulating the possible move with the original board (vs making copying the board), to 1) remove combatant pieces from the board opponent pieces hash, and 2) to update the positions of the pieces themselves.
     * this is because check? uses the hash for checking all possible moves
     * valid_moves on the pieces also relies on the piece pos to compute new valid moves
-
+* Did not think or implement it this way, but the menu can be thought of a tree or graph. Can be useful for diagramming/designing things in this manner in the future.
 
 
