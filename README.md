@@ -5,9 +5,9 @@ Command line chess game implemented in `ruby` for the TOP final `ruby` project.
 Implements basic game mechanics (movement and checkmate), but it is still missing a few features:
 * En passant
 * Pond promotion
-* Castling methods not integrated with UI
-* Checking for stalemate conditions
-* Enforcing non-dangerous moves (method for checking is implemented but not integrated)
+* Integrate castling methods with UI
+* Stalemate checking
+* Enforcing safe moves (integrate safe? with valid moves)
 
 ### Requirements
 * Properly constrained, prevent players from making illegal moves, and declare check or check mate in correct situations
@@ -23,14 +23,17 @@ Implements basic game mechanics (movement and checkmate), but it is still missin
 * [chess notation](https://en.wikipedia.org/wiki/Chess_notation)
 * [chess unicode characters](https://en.wikipedia.org/wiki/Chess_symbols_in_Unicode)
 * [for colorizing text and shading tiles](https://stackoverflow.com/questions/1489183/how-can-i-use-ruby-to-colorize-the-text-output-to-a-terminal)
-*[some fastest checkmates for testing](https://www.chess.com/article/view/fastest-chess-checkmates)
+* [some checkmate patterns for testing](https://www.chess.com/article/view/fastest-chess-checkmates)
 
 ### Example
-E1. Intro Screen
+**E1. Intro Screen**
 <img src="imgs/intro.png" width="500">
-E2. Board on Setup
+
+**E2. Board on Setup**
 <img src="imgs/board-large.png" width="500">
-E3. Syntax Highlighting
+
+**E3. Syntax Highlighting**
 <img src="imgs/syntax-highlight.png" width="500">
-E4. Checkmate
+
+**E4. Checkmate**
 <img src="imgs/checkmate.png" width="500">
