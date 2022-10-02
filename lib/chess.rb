@@ -8,6 +8,18 @@ require_relative './rules'
 require 'set'
 
 # ChessGame class.
+#
+# Attributes
+#   @intro - pointer to Intro object for intro screen
+#   @board - pointer to ChessBoard object
+#   @player1 - pointer to player 1 Player object
+#   @player2 - pointer to player 2 Player object
+#   @current_player - pointer to current active player
+#   @log - pointer to Log object
+#   @options - hash of options mode
+#   @goodbye - array of goodbyes
+#   @valid - a set representing all valid chess code for the tiles on the board.
+#            could be removed, or moved to board.
 class ChessGame
   attr_reader :board
 
@@ -21,7 +33,7 @@ class ChessGame
     @player2 = Player.new(2, 'human')
     @current_player = @player1
     @log = Logger.new
-    @options = { move_suggest: true }
+    @options = { move_suggest: true, init_mode: 'standard' }
     @goodbye = ['Hasta luego!', 'бакат!', 'Tschüß!', 'さようなら!', 'See ya next time!']
     @valid = valid_input
   end
