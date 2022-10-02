@@ -1,4 +1,4 @@
-## To do
+## Development Notes
 ----
 * Implement pond movements [DONE]
 * Valid moves print pretty prints [DONE]

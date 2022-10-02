@@ -42,10 +42,14 @@ Implements basic game mechanics (movement and checkmate, etc.), but is still mis
 
 <img src="imgs/syntax-highlight.png" width="500">
 
-**E5. Saving/Loading Games**
+**E5. Saving Games**
 
 <img src="imgs/save-game.png" width="500">
 
-**E5. Logging**
+**E5. Loading Games**
+
+<img src="imgs/load-game.png" width="500">
+
+**E6. Logging**
 
 <img src="imgs/log.png" width="500">

@@ -53,7 +53,7 @@ class ChessGame
   def load_game
     # Queries user selection.
     menu = lambda {
-      puts 'Select a game state to load or go return: '.yellow
+      puts 'Select a game state to load or go back: '.yellow
       print_saves
       puts 'back'.cyan
     }
