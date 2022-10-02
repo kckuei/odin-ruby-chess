@@ -55,6 +55,9 @@
 * Replay option? [SKIP]
 
 
+
+* main menu load game, double prints the screen []
+
 * Declare checks []
   * print check declaration to screen
   * checked players move should take them out of check
@@ -63,6 +66,8 @@
 * Integrate safe moves with valid move patterns []
   * valid patterns shouldn't need to remove moves that put player in check
   * it should just query for a different move until the piece is safe
+
+
 
 
 * Integrate casle with valid moves []
@@ -168,6 +173,8 @@
   * for saving the game
 
 ### Design Decision Notes
+* used a composition approach vs inheritance
+  * object contains objects of other classes as data members (has-a relationship)
 * pieces should store a pointer to the board
 * whether to use inheritance with superclasses vs proxy for multi-inheritance with mixins
   * mixins ended up being easier to use

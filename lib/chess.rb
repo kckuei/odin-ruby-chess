@@ -61,7 +61,8 @@ class ChessGame
     valid = Set.new(0..saves.length)
     valid.add('back')
     input = get_user_input(valid, menu)
-    return draw_board if input == 'back'
+    return nil if input == 'back' && @board.pieces.empty?
+    return draw_board if input == 'back' && !@board.pieces.empty?
 
     # Deserializes state.
     fullpath = saves[input.to_i]
@@ -73,6 +74,8 @@ class ChessGame
     @player2 = game_obj.player2
     @current_player = game_obj.current_player
     @note = game_obj.note
+
+    draw_board
   end
 
   # Add game note for saving.
@@ -191,7 +194,7 @@ class ChessGame
     # Loads the game state, then enters the game loop.
     when 2
       load_game
-      new_game
+      @board.pieces.empty? ? start_menu : new_game
     # Prints rules of the game, and returns to start menu.
     when 3
       print_how_to_play
