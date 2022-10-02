@@ -73,8 +73,6 @@ class ChessGame
     @player2 = game_obj.player2
     @current_player = game_obj.current_player
     @note = game_obj.note
-
-    draw_board
   end
 
   # Add game note for saving.
