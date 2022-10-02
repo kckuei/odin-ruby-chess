@@ -24,15 +24,28 @@ Implements basic game mechanics (movement and checkmate, etc.), but is still mis
 * [for colorizing text and shading tiles](https://stackoverflow.com/questions/1489183/how-can-i-use-ruby-to-colorize-the-text-output-to-a-terminal)
 * [some checkmate patterns for testing](https://www.chess.com/article/view/fastest-chess-checkmates)
 
-### Example
+### Example Gameplay
+----
 **E1. Intro Screen**
+
 <img src="imgs/intro.png" width="500">
 
-**E2. Board on Setup**
+**E2. Checkmate**
+
+<img src="imgs/checkmate.png" width="500">
+
+**E3. Board on Setup**
+
 <img src="imgs/board-large.png" width="500">
 
-**E3. Syntax Highlighting**
+**E4. Syntax Highlighting**
+
 <img src="imgs/syntax-highlight.png" width="500">
 
-**E4. Checkmate**
-<img src="imgs/checkmate.png" width="500">
+**E5. Saving/Loading Games**
+
+<img src="imgs/save-game.png" width="500">
+
+**E5. Logging**
+
+<img src="imgs/log.png" width="500">
