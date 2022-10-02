@@ -198,11 +198,11 @@ class ChessGame
         puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
         return
       end
-      # Otherwise show the valid moves
+      # Otherwise show the valid moves.
       nxt.print_valid_moves(moves)
       puts ', back'.cyan.bold
 
-      # Get the user input
+      # Get the user input.
       puts 'Select a move:'
       valid = moves.map { |move| @board.hash_point(move) }
       valid << 'back'
@@ -214,13 +214,12 @@ class ChessGame
         return
       end
 
-      # move the piece
+      # Move the piece.
       dest = @board.hash_move(input.to_sym)
       force_move(point, dest)
 
-      # report success of move
-      # should update logger
-      puts "Moved #{nxt.piece} from #{@board.hash_point(point).bold} to #{@board.hash_point(dest).bold}\n".green.italic
+      # Log successful move.
+      log_move(nxt.piece, @board.hash_point(point), @board.hash_point(dest))
 
       # Render board.
       draw_board
@@ -228,6 +227,12 @@ class ChessGame
       # Switch players
       switch_players
     end
+  end
+
+  # Log successful moves
+  def log_move(piece, from, to, echo: true)
+    @log.add_success([piece, from, to])
+    puts "Moved #{piece} from #{from.bold} to #{to.bold}\n".green.italic if echo
   end
 
   # Declares the winner

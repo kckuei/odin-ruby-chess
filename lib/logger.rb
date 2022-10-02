@@ -14,6 +14,11 @@ class Logger
     @log = []
   end
 
+  # Log successful moves
+  def add_success(move)
+    @log << move
+  end
+
   # Print the log.
   def print_log
     # Modify for pretty print.
