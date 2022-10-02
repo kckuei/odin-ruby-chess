@@ -322,25 +322,6 @@ end
 describe ChessGame do
   subject(:game) { described_class.new }
 
-  context 'checkmate #1' do
-    before do
-      allow(game).to receive(:puts) # suppresses puts
-      allow(game).to receive(:gets).and_return('1', 'f6', 'f5', 'e1', 'e3', 'g6', 'g4', 'd0', 'h4', '5')
-    end
-    xit 'should return true checkmate on player1' do
-      # Haven't figure out how to get this working yet.
-      # expect(game.board.checkmate?(:p1)).to be false
-      # expect(game).to receive(:puts).with(a_string_including('Checkmate! Player 1 wins!')).at_most(1).times
-
-      # expect(game).to receive(:puts).with(a_string_including('Checkmate! Player 1 wins!')).at_most(1).times
-
-      # expect { game.start }.to output(/fuck/).to_stdout
-      # expect { game.start }.not_to output.to_stdout
-      # result = game.board.checkmate?(:p1)
-      # expect(false).to be_true
-    end
-  end
-
   context 'checkmate #1: fool\'s mate' do
     before do
       game.setup
@@ -574,6 +555,25 @@ describe ChessGame do
     end
     it 'should return false checkmate on player2' do
       expect(game.board.checkmate?(:p2)).not_to be true
+    end
+  end
+
+  context 'checkmate ui test' do
+    before do
+      allow(game).to receive(:puts) # suppresses puts
+      allow(game).to receive(:gets).and_return('1', 'f6', 'f5', 'e1', 'e3', 'g6', 'g4', 'd0', 'h4', '5')
+    end
+    xit 'should return checkmate on player1' do
+      # Haven't figure out how to get this working yet.
+      # expect(game.board.checkmate?(:p1)).to be false
+      # expect(game).to receive(:puts).with(a_string_including('Checkmate! Player 1 wins!')).at_most(1).times
+
+      # expect(game).to receive(:puts).with(a_string_including('Checkmate! Player 1 wins!')).at_most(1).times
+
+      # expect { game.start }.to output(/fuck/).to_stdout
+      # expect { game.start }.not_to output.to_stdout
+      # result = game.board.checkmate?(:p1)
+      # expect(false).to be_true
     end
   end
 end

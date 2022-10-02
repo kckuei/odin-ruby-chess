@@ -1,4 +1,5 @@
 ## To do
+----
 * Implement pond movements [DONE]
 * Valid moves print pretty prints [DONE]
   * colorize moves that are combative
@@ -41,8 +42,7 @@
 * fix checkmate gameover errors [DONE]
   * was related to passing silent error. 
   * trying to delete a key from the hash 1 level above, versus the player specific hashes
-
-* fix piece, pond dependency on 1 on player 1 or 2, or should be defined based on player orientation/board assignment works, but pieces move in wront direction otherwise []
+* fix piece, pond dependency on 1 on player 1 or 2, or should be defined based on player orientation/board assignment works, but pieces move in wront direction otherwise [SKIP]
 
 * Implement logger []
   * stored as game attribute
@@ -51,13 +51,11 @@
   * mkdir
   * time/date
   * note/memo
-
-* Replay option?
+* Replay option? [SKIP]
 
 * Implement en passant []
 * Implement pawn promotion []
   * the @pieces hash will need to be updated accordingly to remove old / add new
-* As valid move patterns.
 
 * Implement stalemate condition []
 
@@ -66,155 +64,117 @@
 * Optional implement simple AI [prolly skip]
 * Final Readme and demo page
 
-# checkmate 1 (fool's mate)
-1
-r: f6 f5
-b: e1 e3
-r: g6 g4
-b: d0 h4
-works
 
-# checkmate 2 (reversed fool's mate)
-1
-e6 e4
-f1 f2
-d6 d4
-g1 g3
-d7 h3
-works
+## Notes
+----
+### Initial Brainstorm Notes
+* chess board representation: nested list of chess piece objects
+* move implementation
+  * check movement patterns relative to current position
+  * orhtongal, diaganol, 
+  * filter by distance, friendly/combatants
+  * jumping (knights, ponds)
+* special mechanics/rules:
+  * check, checkmate, stalemate, castling, pond promotion
+  * moves cannot jeapordize the king
+* move specification and display
+  * chess code, 'a1 -> b2'
+  * list feasible moves
+* serialization: Marshall
+* classes
+  * game, player, board, piece, ai, serializer, logger
+  * single responsibilitiy
+* types of tests
+  * check, checkmate, valid move?
+* basic movement patterns
+  * all pieces
+    * can move onto another piece only if opposing
+    * only if it doesn't put king in danger
+    * must remain in board
+  * pond
+    * can move forward 2 square if first move and no combatant
+    * else 1 square if no combatant
+    * diaganoly 1 tile only if attacking
+  * knight
+    * can move/attack in L pattern relative to pos
+  * king
+    * can move/attack ortho/diag within 1 tile
+  * queen
+    * can move/attack ortho/diag to first obstruction
+  * bishop
+    * can move/attack diag to first obstruction
+  * rook 
+    * can move/attack ortho to first obstruction
 
-# checkmate 3 (grob's attack - fool's mate pattern)
-1 
-g6 g4
-e1 e3
-f6 f4
-d0 h4
-works
+### Initial Class and Methods Outline
+* game
+  * for general game logic
+  * intro, turns, winner declaration, new game, saving/loading game
+* player
+  * for players
+  * attributes
+    * pointers to pieces??
+  * methods
+    * color
+    * name
+* board
+  * for chess board
+  * attributes
+    * board
+    * pieces???
+  * methods
+    * make_board
+    * initialize_pieces
+    * scramble_pieces
+    * reset_board
+    * draw_board
+    * move_piece/update_board(piece)
+    * check?(player)
+        * player must and can move out of harms way
+    * checkmate?(player)
+        * player cannot move out king out of harms way
+    * stalmate?(player)
+    * castle(player)
+    * valid_moves(piece)
+        * it's only a valid move if it's a subset of piece valid move, inside the board, and doesn't put the king in harms way
+    * save_board
+* piece
+  * for chess pieces
+  * attributes
+    * player
+    * location
+    * color
+  * methods
+    * valid_move?(board)
+    * set_color(color)
+* log
+  * keeps track of chess history
+  * e.g. 'Black Queen A5 => B2: Takes White Pond' (look at official notation rules)
+* ai
+  * AI algorithm
+* serializer
+  * for saving the game
 
-# checkmate 4 (dutch defense - fool's mate pattern)
-1
-d6 d4
-f1 f3
-c7 g3
-h1 h2
-g3 h4
-g1 g3
-e6 e4
-g3 h4
-d7 h3
-works
-
-# checkmate 5 (bird's opening - fool's mate pattern)
-1
-f6 f4
-e1 e3
-f4 e3
-d1 d2
-e3 d2
-f0 d2
-b7 c5
-d0 h4
-g6 g5
-h4 g5
-h6 g5
-d2 g5
-works!
-
-# checkmate 6 (Caro-kann Defense smothered mate)
-
-1
-e6 e4
-c1 c2
-d6 d4
-d1 d3
-b7 c5
-d3 e4
-b0 d1
-d7 e6
-g0 f2
-e4 d2
-works!
-
-# checkmate 7 (Italian Game Smothered Mate)
-
-1
-e6 e4
-e1 e3
-g7 f5
-b0 c2
-f7 c4
-c2 d4
-f5 e3
-d0 g3
-e3 f1
-g3 g6
-h7 f7
-g6 e4
-c4 e6
-d4 f5
-works
-
-# Checkmate 8 (Owen's Defense - Fool's Mate Pattern)
-
-1
-e6 e4
-b1 b2
-d6 d4
-c0 b1
-f7 d5
-f1 f3
-e4 f3
-b1 g6
-d7 h3
-g1 g2
-f3 g2
-g0 f2
-g2 h1
-f2 h3
-d5 g2
-works!
-
-# Checkmate 9 (Englund Gambit Mate)
-
-1 
-d6 d4
-e1 e3
-d4 e3
-d0 e1
-g7 f5
-b0 c2
-c7 f4
-e1 b4
-f4 d6
-b4 b6
-d6 c5
-f0 b4
-d7 d6
-b4 c5
-d6 c5
-b6 c7
-works!
-
-# Checkmate 10 (Budapest Defense Smothered Mate)
-
-1
-d6 d4
-g0 f2
-c6 c4
-e1 e3
-d4 e3
-f2 g4
-g7 f5
-b0 c2
-c7 f4
-f0 b4
-b7 d6
-d0 e1
-a6 a5
-g4 e3
-a5 b4
-e3 d5
-works!
+### Design Decision Notes
+* pieces should store a pointer to the board
+* whether to use inheritance with superclasses vs proxy for multi-inheritance with mixins
+  * mixins ended up being easier to use
+  * there came a point when i wanted general methods in the superclass to reference methods in the subclass. I couldn't achieve this with inheritance, but modules provide a workaround.
+  * favor general chess piece module for storing common methods, that are included to specific chess pieces versus chess piece super class
+  * mixins also made it easier to include diag or ortho search methods for valid moves as needed. e.g. bishop needs to include diag methods, rook ortho methods, queen ortho and diag methods
+* initially only stored pieces on the board
+  * eventually added a hash with the chess piece object keys so the the board can reference pieces easier
+  * also added a pointer to the chess board on the chess pieces so they could more easily check for valid moves
+* check?
+  * create a hash of all the pieces on the board, then cycle through all of them for a set of all possible moves. 
+  * if the possible moves encompass opposing king, then they are checked.
+* checkmate?
+  * check if there is some move that can be made to get the king out of check
+  * then enumerate over all pieces and possible moves, and evaluate check? until false
+  * possible to create a deep copy of the board for each possible scenario, but wanted to avoid this and use the original board.
+  * when, implementing, it was very important when simulating the possible move with the original board (vs making copying the board), to 1) remove combatant pieces from the board opponent pieces hash, and 2) to update the positions of the pieces themselves.
+    * this is because check? uses the hash for checking all possible moves
+    * valid_moves on the pieces also relies on the piece pos to compute new valid moves
 
 
 
