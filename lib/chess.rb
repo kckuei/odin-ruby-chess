@@ -23,7 +23,7 @@ require 'set'
 #            could be removed, or moved to board.
 #   @note - string for game note tags for saved states
 class ChessGame
-  attr_reader :board, :note
+  attr_reader :board, :player1, :player2, :current_player, :note
 
   include Rules
 
@@ -44,12 +44,37 @@ class ChessGame
 
   # Saves the game state.
   def save_game
+    print 'Add a save note or ENTER to continue: '
+    add_note(gets.chomp)
     @serializer.serialize_game(self)
   end
 
   # Loads the game state.
-  def load_game(filename)
-    @serializer.deserialize_game(filename)
+  def load_game
+    # Queries user selection.
+    menu = lambda {
+      puts 'Select a game state to load or go return: '.yellow
+      print_saves
+      puts 'back'.cyan
+    }
+    saves = @serializer.list_of_saves
+    valid = Set.new(0..saves.length)
+    valid.add('back')
+    input = get_user_input(valid, menu)
+    return if input == 'back'
+
+    # Deserializes state.
+    fullpath = saves[input.to_i]
+    game_obj = @serializer.deserialize_game(fullpath)
+
+    # Transfers state attributes.
+    @board = game_obj.board
+    @player1 = game_obj.player1
+    @player2 = game_obj.player2
+    @current_player = game_obj.current_player
+    @note = game_obj.note
+
+    draw_board
   end
 
   # Add game note for saving.
@@ -164,12 +189,12 @@ class ChessGame
     when 1
       new_game
     when 2
-      puts "Load game hasn't been implemented yet."
+      puts "This branch hasn't been implemented yet."
     when 3
       print_how_to_play
       start_menu
     when 4
-      puts "Options hasn't been implemented yet."
+      puts "This branch hasn't been implemented yet."
     when 5
       puts @goodbye.sample(1)[0].yellow
       exit
@@ -191,7 +216,7 @@ class ChessGame
     when 1
       save_game
     when 2
-      puts "Load game hasn't been implemented yet."
+      load_game
     when 3
       @log.print_log
     when 4

@@ -4,14 +4,6 @@ require_relative './string'
 # require 'date'
 
 # Serializer class for saving and loading chess games.
-#
-# Example usage:
-#   require_relative './lib/chess'
-#   game = ChessGame.new
-#   game.add_note('game 2')
-#   game.save_game
-#   game_copy = game.load_game('2022-10-02_09:52:59.chessbin')
-#   game.print_saves
 class Serializer
   def initialize(dirname: './saves')
     @dirname = dirname
@@ -32,14 +24,15 @@ class Serializer
 
   # Retrieves game state.
   # filename : string, filename of the chess game saved state
-  def deserialize_game(filename)
-    file = File.open("#{@dirname}/#{filename}", 'r')
+  def deserialize_game(full_filename)
+    file = File.open(full_filename, 'r')
   rescue StandardError => e
     puts "Ran into an error with deserializing the chess save file: #{e}".red
   else
     str = file.read
     file.close
     game_state = Marshal.load(str)
+    filename = full_filename.split('/')[-1]
     puts "Loaded chess state: #{filename}".green
     game_state
   end
