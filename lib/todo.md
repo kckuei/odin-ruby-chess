@@ -53,10 +53,7 @@
   * time/date
   * note/memo
 * Replay option? [SKIP]
-
-
-
-* main menu load game, double prints the screen []
+* main menu load game, double prints the screen [DONE]
 
 * Declare checks []
   * print check declaration to screen

@@ -50,6 +50,8 @@ class ChessGame
   end
 
   # Loads the game state.
+  # returns 0 - don't draw anything.
+  # returns 1 - draw board.
   def load_game
     # Queries user selection.
     menu = lambda {
@@ -61,8 +63,8 @@ class ChessGame
     valid = Set.new(0..saves.length)
     valid.add('back')
     input = get_user_input(valid, menu)
-    return nil if input == 'back' && @board.pieces.empty?
-    return draw_board if input == 'back' && !@board.pieces.empty?
+    return 0 if input == 'back' && @board.pieces.empty?
+    return 1 if input == 'back' && !@board.pieces.empty?
 
     # Deserializes state.
     fullpath = saves[input.to_i]
@@ -75,7 +77,8 @@ class ChessGame
     @current_player = game_obj.current_player
     @note = game_obj.note
 
-    draw_board
+    # draw_board
+    1
   end
 
   # Add game note for saving.
@@ -220,13 +223,17 @@ class ChessGame
   # Evaluates the gameloop menu selection.
   def eval_loop_menu_selection(input)
     case input.to_i
-    # Evaluate the numbered selections.
+    # Saves the game.
     when 1
       save_game
+    # Loads a saved game.
     when 2
-      load_game
+      render_flag = load_game
+      draw_board if render_flag == 1
+    # Prints the current state move log.
     when 3
       @log.print_log
+    # Exits the game with random farewell.
     when 4
       puts @goodbye.sample(1)[0].yellow
       exit
