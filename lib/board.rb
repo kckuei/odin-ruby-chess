@@ -9,6 +9,17 @@ require 'set'
 # Chess piece objects are instantiated and stored on the 8x8 chess board.
 # The chess pieces store a pointer to the board to help them decide
 # whether moves are valid by checking adjacent chess objects.
+# Attributes:
+#   @rows - An integer representing number of rows on board.
+#   @columns - An integer representing number of columns on board.
+#   @board - A nested array that is @rows x @columns in size, containing chess
+#            objects or '' for empty spaces.
+#   @pieces - A hash for chess pieces that are in play.
+#             For example, @pieces[:p1][:k1] gets the player 1 knight-1.
+#             Captured pieces are removed from the hash so that they are not
+#             included in check/checkmate evaluations.
+#   @code_hash - A hash for converting chess codes to coordinates
+#   @point_hash - A hash for converting coordinates to chess codes
 class ChessBoard
   attr_reader :rows, :columns, :board, :pieces, :code_hash, :point_hash
 

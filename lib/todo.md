@@ -53,6 +53,10 @@
   * note/memo
 * Replay option? [SKIP]
 
+* Declare checks []
+* Integrate safe moves with valid move patterns[] 
+* Integrate casle with valid moves
+
 * Implement en passant []
 * Implement pawn promotion []
   * the @pieces hash will need to be updated accordingly to remove old / add new
