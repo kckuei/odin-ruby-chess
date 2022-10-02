@@ -320,20 +320,260 @@ describe ChessBoard do
 end
 
 describe ChessGame do
-  subject(:game) { ChessGame.new }
-  context "checkmate - fool's mate" do
+  subject(:game) { described_class.new }
+
+  context 'checkmate #1' do
     before do
       allow(game).to receive(:puts) # suppresses puts
-      allow(game).to receive(:gets).and_return('1', 'f6', 'f5', 'e1', 'e3', 'g6', 'g4', 'd0', 'h4', 'any key', '5')
+      allow(game).to receive(:gets).and_return('1', 'f6', 'f5', 'e1', 'e3', 'g6', 'g4', 'd0', 'h4', '5')
     end
-    xit 'should return Checkmate! Player 2 wins!' do
-      game.start
+    xit 'should return true checkmate on player1' do
+      # Haven't figure out how to get this working yet.
+      # expect(game.board.checkmate?(:p1)).to be false
+      # expect(game).to receive(:puts).with(a_string_including('Checkmate! Player 1 wins!')).at_most(1).times
+
+      # expect(game).to receive(:puts).with(a_string_including('Checkmate! Player 1 wins!')).at_most(1).times
+
+      # expect { game.start }.to output(/fuck/).to_stdout
+      # expect { game.start }.not_to output.to_stdout
+      # result = game.board.checkmate?(:p1)
+      # expect(false).to be_true
+    end
+  end
+
+  context 'checkmate #1: fool\'s mate' do
+    before do
+      game.setup
+      game.force_move('f6', 'f5')
+      game.force_move('e1', 'e3')
+      game.force_move('g6', 'g4')
+      game.force_move('d0', 'h4')
+    end
+    it 'should return true checkmate on player1' do
+      game.draw_board
       expect(game.board.checkmate?(:p1)).to be true
-      # expect(game).to output(a_string_including('Checkmate!')).to_stdout
-      # expect(game).to receive(:gets).with(a_string_including('Checkmate!'))
+    end
+    it 'should return false checkmate on player2' do
+      expect(game.board.checkmate?(:p2)).not_to be true
+    end
+  end
+
+  context 'checkmate #2: reversed fool\'s mate' do
+    before do
+      game.setup
+      game.force_move('e6', 'e4')
+      game.force_move('f1', 'f2')
+      game.force_move('d6', 'd4')
+      game.force_move('g1', 'g3')
+      game.force_move('d7', 'h3')
+    end
+    it 'should return true checkmate on player2' do
+      game.draw_board
+      expect(game.board.checkmate?(:p2)).to be true
+    end
+    it 'should return false checkmate on player1' do
+      expect(game.board.checkmate?(:p1)).not_to be true
+    end
+  end
+
+  context 'checkmate #3: grob\'s attack - fool\'s mate pattern' do
+    before do
+      game.setup
+      game.force_move('g6', 'g4')
+      game.force_move('e1', 'e3')
+      game.force_move('f6', 'f4')
+      game.force_move('d0', 'h4')
+    end
+    it 'should return true checkmate on player1' do
+      game.draw_board
+      expect(game.board.checkmate?(:p1)).to be true
+    end
+    it 'should return false checkmate on player2' do
+      expect(game.board.checkmate?(:p2)).not_to be true
+    end
+  end
+
+  context 'checkmate #4: dutch defense - fool\'s mate pattern' do
+    before do
+      game.setup
+      game.force_move('d6', 'd4')
+      game.force_move('f1', 'f3')
+      game.force_move('c7', 'g3')
+      game.force_move('h1', 'h2')
+      game.force_move('g3', 'h4')
+      game.force_move('g1', 'g3')
+      game.force_move('e6', 'e4')
+      game.force_move('g3', 'h4')
+      game.force_move('d7', 'h3')
+    end
+    it 'should return true checkmate on player2' do
+      game.draw_board
+      expect(game.board.checkmate?(:p2)).to be true
+    end
+    it 'should return false checkmate on player1' do
+      expect(game.board.checkmate?(:p1)).not_to be true
+    end
+  end
+
+  context 'checkmate #5: bird\'s opening - fool\'s mate pattern' do
+    before do
+      game.setup
+      game.force_move('f6', 'f4')
+      game.force_move('e1', 'e3')
+      game.force_move('f4', 'e3')
+      game.force_move('d1', 'd2')
+      game.force_move('e3', 'd2')
+      game.force_move('f0', 'd2')
+      game.force_move('b7', 'c5')
+      game.force_move('d0', 'h4')
+      game.force_move('g6', 'g5')
+      game.force_move('h4', 'g5')
+      game.force_move('h6', 'g5')
+      game.force_move('d2', 'g5')
+    end
+    it 'should return true checkmate on player1' do
+      game.draw_board
+      expect(game.board.checkmate?(:p1)).to be true
+    end
+    it 'should return false checkmate on player2' do
+      expect(game.board.checkmate?(:p2)).not_to be true
+    end
+  end
+
+  context 'checkmate #6: Caro-kann Defense smothered mate' do
+    before do
+      game.setup
+      game.force_move('e6', 'e4')
+      game.force_move('c1', 'c2')
+      game.force_move('d6', 'd4')
+      game.force_move('d1', 'd3')
+      game.force_move('b7', 'c5')
+      game.force_move('d3', 'e4')
+      game.force_move('c5', 'e4')
+      game.force_move('b0', 'd1')
+      game.force_move('d7', 'e6')
+      game.force_move('g0', 'f2')
+      game.force_move('e4', 'd2')
+    end
+    it 'should return true checkmate on player2' do
+      game.draw_board
+      expect(game.board.checkmate?(:p2)).to be true
+    end
+    it 'should return false checkmate on player1' do
+      expect(game.board.checkmate?(:p1)).not_to be true
+    end
+  end
+
+  context 'checkmate #7: Italian Game Smothered Mate' do
+    before do
+      game.setup
+      game.force_move('e6', 'e4')
+      game.force_move('e1', 'e3')
+      game.force_move('g7', 'f5')
+      game.force_move('b0', 'c2')
+      game.force_move('f7', 'c4')
+      game.force_move('c2', 'd4')
+      game.force_move('f5', 'e3')
+      game.force_move('d0', 'g3')
+      game.force_move('e3', 'f1')
+      game.force_move('g3', 'g6')
+      game.force_move('h7', 'f7')
+      game.force_move('g6', 'e4')
+      game.force_move('c4', 'e6')
+      game.force_move('d4', 'f5')
+    end
+    it 'should return true checkmate on player1' do
+      game.draw_board
+      expect(game.board.checkmate?(:p1)).to be true
+    end
+    it 'should return false checkmate on player2' do
+      expect(game.board.checkmate?(:p2)).not_to be true
+    end
+  end
+
+  context 'checkmate #8: Owen\'s Defense - Fool\'s Mate Pattern' do
+    before do
+      game.setup
+      game.force_move('e6', 'e4')
+      game.force_move('b1', 'b2')
+      game.force_move('d6', 'd4')
+      game.force_move('c0', 'b1')
+      game.force_move('f7', 'd5')
+      game.force_move('f1', 'f3')
+      game.force_move('e4', 'f3')
+      game.force_move('b1', 'g6')
+      game.force_move('d7', 'h3')
+      game.force_move('g1', 'g2')
+      game.force_move('f3', 'g2')
+      game.force_move('g0', 'f2')
+      game.force_move('g2', 'h1')
+      game.force_move('f2', 'h3')
+      game.force_move('d5', 'g2')
+    end
+    it 'should return true checkmate on player2' do
+      game.draw_board
+      expect(game.board.checkmate?(:p2)).to be true
+    end
+    it 'should return false checkmate on player2' do
+      expect(game.board.checkmate?(:p1)).not_to be true
+    end
+  end
+
+  context 'checkmate #9: Englund Gambit Mate' do
+    before do
+      game.setup
+      game.force_move('d6', 'd4')
+      game.force_move('e1', 'e3')
+      game.force_move('d4', 'e3')
+      game.force_move('d0', 'e1')
+      game.force_move('g7', 'f5')
+      game.force_move('b0', 'c2')
+      game.force_move('c7', 'f4')
+      game.force_move('e1', 'b4')
+      game.force_move('f4', 'd6')
+      game.force_move('b4', 'b6')
+      game.force_move('d6', 'c5')
+      game.force_move('f0', 'b4')
+      game.force_move('d7', 'd6')
+      game.force_move('b4', 'c5')
+      game.force_move('d6', 'c5')
+      game.force_move('b6', 'c7')
+    end
+    it 'should return true checkmate on player1' do
+      game.draw_board
+      expect(game.board.checkmate?(:p1)).to be true
+    end
+    it 'should return false checkmate on player2' do
+      expect(game.board.checkmate?(:p2)).not_to be true
+    end
+  end
+
+  context 'checkmate #10: Budapest Defense Smothered Mate' do
+    before do
+      game.setup
+      game.force_move('d6', 'd4')
+      game.force_move('g0', 'f2')
+      game.force_move('c6', 'c4')
+      game.force_move('e1', 'e3')
+      game.force_move('d4', 'e3')
+      game.force_move('f2', 'g4')
+      game.force_move('g7', 'f5')
+      game.force_move('b0', 'c2')
+      game.force_move('c7', 'f4')
+      game.force_move('f0', 'b4')
+      game.force_move('b7', 'd6')
+      game.force_move('d0', 'e1')
+      game.force_move('a6', 'a5')
+      game.force_move('g4', 'e3')
+      game.force_move('a5', 'b4')
+      game.force_move('e3', 'd5')
+    end
+    it 'should return true checkmate on player1' do
+      game.draw_board
+      expect(game.board.checkmate?(:p1)).to be true
+    end
+    it 'should return false checkmate on player2' do
+      expect(game.board.checkmate?(:p2)).not_to be true
     end
   end
 end
-
-# Checkmate! Player 1 wins!
-# Press any key to continue.
