@@ -564,16 +564,10 @@ describe ChessGame do
       allow(game).to receive(:gets).and_return('1', 'f6', 'f5', 'e1', 'e3', 'g6', 'g4', 'd0', 'h4', '5')
     end
     xit 'should return checkmate on player1' do
-      # Haven't figure out how to get this working yet.
-      # expect(game.board.checkmate?(:p1)).to be false
-      # expect(game).to receive(:puts).with(a_string_including('Checkmate! Player 1 wins!')).at_most(1).times
-
-      # expect(game).to receive(:puts).with(a_string_including('Checkmate! Player 1 wins!')).at_most(1).times
-
-      # expect { game.start }.to output(/fuck/).to_stdout
-      # expect { game.start }.not_to output.to_stdout
-      # result = game.board.checkmate?(:p1)
-      # expect(false).to be_true
+      # game.start
+      # expect(game.board.checkmate?(:p1)).to be false # Returns true when it should be false.
+      # expect(game).to receive(:puts).with(a_string_including('Checkmate! Player 1 wins!')).at_least(2).times # Returns true when it should be false.
+      # expect { game.start }.not_to output.to_stdout # Returns true when it should be false.
     end
   end
 end

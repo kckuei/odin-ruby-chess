@@ -5,6 +5,7 @@ require_relative './board'
 require_relative './player'
 require_relative './logger'
 require_relative './rules'
+require_relative './serializer'
 require 'set'
 
 # ChessGame class.
@@ -20,8 +21,9 @@ require 'set'
 #   @goodbye - array of goodbyes
 #   @valid - a set representing all valid chess code for the tiles on the board.
 #            could be removed, or moved to board.
+#   @note - string for game note tags for saved states
 class ChessGame
-  attr_reader :board
+  attr_reader :board, :note
 
   include Rules
 
@@ -33,9 +35,31 @@ class ChessGame
     @player2 = Player.new(2, 'human')
     @current_player = @player1
     @log = Logger.new
+    @serializer = Serializer.new
     @options = { move_suggest: true, init_mode: 'standard' }
     @goodbye = ['Hasta luego!', 'бакат!', 'Tschüß!', 'さようなら!', 'See ya next time!']
     @valid = valid_input
+    @note = ''
+  end
+
+  # Saves the game state.
+  def save_game
+    @serializer.serialize_game(self)
+  end
+
+  # Loads the game state.
+  def load_game(filename)
+    @serializer.deserialize_game(filename)
+  end
+
+  # Add game note for saving.
+  def add_note(string)
+    @note = string
+  end
+
+  # Print saves
+  def print_saves
+    @serializer.print_saves
   end
 
   # Displays the game intro screen.
@@ -165,7 +189,7 @@ class ChessGame
     case input.to_i
     # Evaluate the numbered selections.
     when 1
-      puts "Save game hasn't been implemented yet."
+      save_game
     when 2
       puts "Load game hasn't been implemented yet."
     when 3
@@ -216,6 +240,9 @@ class ChessGame
         return
       end
 
+      # ADD SAFE? CHECK HERE
+      # Invalid selection. It's not safe for the King!
+
       # Move the piece.
       dest = @board.hash_move(input.to_sym)
       force_move(point, dest)
@@ -260,10 +287,11 @@ class ChessGame
     draw_board
     loop do
       gameloop_menu
-      if @board.checkmate?(:p1) || @board.checkmate?(:p2)
-        declare_winner
-        break
-      end
+      next unless @board.checkmate?(:p1) || @board.checkmate?(:p2)
+
+      declare_winner
+      break
+      # POSSIBLE CHECK DECLARATION HERE
     end
     reset
     start_menu

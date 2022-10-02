@@ -48,12 +48,12 @@
   * passed start, end move
   * decide on data structure/how data is stored
   * can be nice for doinga pretty print
-
-* Implement serializer, and save game methods []
+* Implement serializer, and save game methods [DONE]
   * mkdir
   * time/date
   * note/memo
 * Replay option? [SKIP]
+
 
 * Declare checks []
   * print check declaration to screen
@@ -64,16 +64,14 @@
   * valid patterns shouldn't need to remove moves that put player in check
   * it should just query for a different move until the piece is safe
 
-
 * Integrate casle with valid moves []
 * Implement en passant []
 * Implement pawn promotion []
   * the @pieces hash will need to be updated accordingly to remove old / add new
 
+* scramble mode
 * Implement stalemate condition []
 
-* Tidy/refine interface, user input and move UI scheme
-* Tidy Readme
 * Optional implement simple AI [prolly skip]
 * Final Readme and demo page
 
