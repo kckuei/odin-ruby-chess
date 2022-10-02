@@ -1,6 +1,8 @@
 # odin-ruby-chess
 Command line chess game implemented in `ruby` for the TOP final `ruby` project.
 
+<img src="imgs/intro.png" width="100">
+
 Implements basic game mechanics (movement and checkmate), but it is still missing a few features:
 * En passant
 * Pond promotion
