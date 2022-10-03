@@ -571,3 +571,61 @@ describe ChessGame do
     end
   end
 end
+
+describe ChessBoard do
+  describe '#promote_any?' do
+    subject(:board) { described_class.new }
+
+    context 'When a pond reaches the end of the board' do
+      before do
+        board.new_game
+        board.force_move([6, 7], [0, 7])
+      end
+      it 'it should return true' do
+        board.draw_board
+        expect(board.promote_any?).to be true
+      end
+    end
+  end
+
+  describe '#ponds_to_promote?' do
+    subject(:board) { described_class.new }
+
+    context 'When a pond reaches the end of the board' do
+      before do
+        board.new_game
+        board.force_move([6, 7], [0, 7])
+      end
+      it 'it should return that pond at the end' do
+        pond = board.board[0][7]
+        expect(board.ponds_to_promote[0]).to eql pond
+      end
+    end
+  end
+
+  describe '#promote?' do
+    subject(:board) { described_class.new }
+
+    context 'When a pond is promoted' do
+      before do
+        board.new_game
+        board.force_move([6, 7], [0, 7])
+        allow(board).to receive(:gets).and_return('queen')
+      end
+      it 'should return a different object than a pond' do
+        before = board.ponds_to_promote[0]
+        board.promote(before)
+        after = board.board[0][7]
+        board.draw_board
+        expect(after).not_to eql before
+      end
+      it 'should replace the pond with a queen' do
+        before = board.ponds_to_promote[0]
+        board.promote(before)
+        after = board.board[0][7]
+        board.draw_board
+        expect(after.piece).to eq :queen
+      end
+    end
+  end
+end
