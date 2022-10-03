@@ -14,7 +14,7 @@ Implements basic game mechanics (movement and checkmate, etc.), but is still mis
 - [x] Write tests for important parts (TDD not required)
 - [x] Keep classes modular and clean, methods each only do one thing; single responsibility principle
 - [ ] (Optional) Build a very simple AI computer player
-- [x] (Optional my idea) Chaos/fun mode that scrambles the pieces into ramble positions or enable pieces to do crazy/illegal moves
+- [x] (Optional my idea) Chaos/fun mode that scrambles the pieces into random positions or enable pieces to do crazy/illegal moves
 
 ### Resources
 * [chess wiki](https://en.wikipedia.org/wiki/Chess)

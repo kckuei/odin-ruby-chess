@@ -3,6 +3,7 @@
 require_relative './string'
 require_relative './piece'
 require_relative './chaos'
+require_relative './promote'
 require 'set'
 
 # ChessBoard class representing a chess board with chess pieces.
@@ -25,6 +26,7 @@ class ChessBoard
   attr_reader :rows, :columns, :board, :pieces, :code_hash, :point_hash
 
   include Chaos
+  include Promote
 
   # Initializes a ChessBoard instance.
   def initialize
