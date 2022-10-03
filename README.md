@@ -4,7 +4,7 @@ Command line chess game implemented with `ruby` for the TOP `ruby` final project
 
 ### Video Demo
 <a href="https://www.youtube.com/watch?v=W-tnn7g5kRQ">
-<img alt="demo" src="imgs/demo.png" width="600">
+<img alt="demo" src="imgs/demo.png" width="800">
 </a>
 
 ### Limitations
