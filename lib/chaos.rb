@@ -14,7 +14,7 @@ module Chaos
   def sample_chaos(from, to)
     grid = []
     (from..to).each { |i| @columns.times { |j| grid << [i, j] } }
-    samples = (0..grid.length-1).to_a.sample(grid.length)
+    samples = (0..grid.length - 1).to_a.sample(grid.length)
     samples.map { |i| grid[i] }
   end
 
@@ -32,24 +32,33 @@ module Chaos
     end
   end
 
-  # Scrambles the chess pieces for player 1 and 2!
+  # Scrambles the chess pieces within their own muster lines until a
+  # safe random arrangement is obtained. Use this one for minor chaos!
   # Should be applied right after board setup.
-  def scramble_board
-    # scramble_rows_from(6, 7, :p1)
-    # scramble_rows_from(0, 1, :p2)
-
-    coords = sample_chaos(6, 7)
-    @pieces[:p1].each_with_index do |(_key, piece), i|
-      m, n = coords[i]
-      piece.update_position([m, n])
-      @board[m][n] = piece
+  def scramble_muster
+    loop do
+      scramble_rows_from(6, 7, :p1)
+      scramble_rows_from(0, 1, :p2)
+      break if !check?(:p1) && !check?(:p2)
     end
+  end
 
-    coords = sample_chaos(0, 1)
-    @pieces[:p2].each_with_index do |(_key, piece), i|
-      m, n = coords[i]
-      piece.update_position([m, n])
-      @board[m][n] = piece
+  # Scrambles the chess pieces across the entire board until a safe
+  # random arrangement is obtained. Use this one for maximum chaos!
+  # Should be applied right after board setup.
+  def scramble_battlefield
+    loop do
+      @board = make_gameboard
+      coords = sample_chaos(0, 7)
+      samples = (0..@columns * @columns - 1).to_a.sample(@columns * 4)
+      coords = samples.map { |i| coords[i] }
+      pieces = @pieces[:p1].values + @pieces[:p2].values
+      pieces.each_with_index do |piece, i|
+        m, n = coords[i]
+        piece.update_position([m, n])
+        @board[m][n] = piece
+      end
+      break if !check?(:p1) && !check?(:p2)
     end
   end
 end

@@ -64,6 +64,7 @@
 * Implement helper methods for chaos/scramble mode [DONE]
 
 * Integrate scramble/chaos mode methods [] 
+  * Need to sample until setup is safe.
 
 * Implement pawn promotion []
   * the @pieces hash need to remove old and add new

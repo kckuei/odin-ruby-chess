@@ -196,7 +196,8 @@ class ChessGame
     # Sets up a new board, then enters the game loop.
     when 1
       setup
-      # @board.scramble_board
+      # @board.scramble_muster
+      # @board.scramble_battlefield
       new_game
     # Loads the game state, then enters the game loop.
     when 2
