@@ -160,6 +160,14 @@ class ChessGame
     puts RULES_OTHERS
   end
 
+  # Prints the options.
+  def print_options_menu
+    puts "\nMake a selection:\n".yellow +
+         "\e[32m[1]\e[0m Standard\n" +
+         "\e[32m[2]\e[0m Standard Chaos\n" +
+         "\e[32m[3]\e[0m Chaos²"
+  end
+
   # Prints the current players turn.
   def print_player_turn
     colorized = @current_player.id == 1 ? 'Player 1 turn'.red.bold : 'Player 2 turn'.blue.bold
@@ -196,8 +204,8 @@ class ChessGame
     # Sets up a new board, then enters the game loop.
     when 1
       setup
-      # @board.scramble_muster
-      # @board.scramble_battlefield
+      @board.scramble_muster if options[:init_mode] == 'standard chaos'
+      @board.scramble_battlefield if options[:init_mode] == 'chaos'
       new_game
     # Loads the game state, then enters the game loop.
     when 2
@@ -209,11 +217,31 @@ class ChessGame
       start_menu
     # Sets gaming options and easter eggs.
     when 4
-      puts "This branch hasn't been implemented yet."
+      options_menu
+      start_menu
     # Exits with random farewell.
     when 5
       puts @goodbye.sample(1)[0].yellow
       exit
+    end
+  end
+
+  # Enters options menu navigation.
+  def options_menu
+    valid = Set.new(1..3)
+    input = get_user_input(valid, method(:print_options_menu))
+    eval_options_menu(input)
+  end
+
+  # Evaluates the options menu selection
+  def eval_options_menu(input)
+    case input.to_i
+    when 1
+      @options[:init_mode] = 'standard'
+    when 2
+      @options[:init_mode] = 'standard chaos'
+    when 3
+      @options[:init_mode] = 'chaos'
     end
   end
 

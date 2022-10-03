@@ -62,9 +62,9 @@
   * We won't filter valid moves to be safe; simply loop on querying a different move until condition is satisfied
   * maybe integrate via while loop?
 * Implement helper methods for chaos/scramble mode [DONE]
-
-* Integrate scramble/chaos mode methods [] 
+* Integrate scramble/chaos mode methods [DONE] 
   * Need to sample until setup is safe.
+  * Two levels of chaos, muster and full battlefield
 
 * Implement pawn promotion []
   * the @pieces hash need to remove old and add new

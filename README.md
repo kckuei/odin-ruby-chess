@@ -34,22 +34,34 @@ Implements basic game mechanics (movement and checkmate, etc.), but is still mis
 
 <img src="imgs/checkmate.png" width="500">
 
-**E3. Board on Setup**
+**E3. Check (Protect the King! Safe Move Enforcement)**
+
+<img src="imgs/check.png" width="500">
+
+**E4. Board on Setup**
 
 <img src="imgs/board-large.png" width="500">
 
-**E4. Syntax Highlighting**
+**E5. Syntax Highlighting**
 
 <img src="imgs/syntax-highlight.png" width="500">
 
-**E5. Saving Games**
+**E6. Saving Games**
 
 <img src="imgs/save-game.png" width="500">
 
-**E5. Loading Games**
+**E7. Loading Games**
 
 <img src="imgs/load-game.png" width="500">
 
-**E6. Logging**
+**E8. Standard Chaos Mode**
+
+<img src="imgs/standard-chaos.png" width="500">
+
+**E9. Chaos² Mode**
+
+<img src="imgs/chao.png" width="500">
+
+**E10. Logging**
 
 <img src="imgs/log.png" width="500">
