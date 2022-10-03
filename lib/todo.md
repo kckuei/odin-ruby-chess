@@ -65,14 +65,13 @@
 * Integrate scramble/chaos mode methods [DONE] 
   * Need to sample until setup is safe.
   * Two levels of chaos, muster and full battlefield
-
-* Implement pawn promotion []
+* Implement pawn promotion [DONE]
   * the @pieces hash need to remove old and add new
 
 * Integrate casle with valid moves []
-* Implement naive/simple AI [optional]
 * Implement en passant []
-* Implement stalemate condition []
+* Implement naive/simple AI [optional]
+* Implement stalemate condition [SKIP]
 * Finalize readme and demo []
 
 
