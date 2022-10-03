@@ -69,9 +69,14 @@ module Promote
   def promote_to_piece(piece, player, letter)
     obj_hash = { 'n' => Knight, 'b' => Bishop, 'q' => Queen, 'r' => Rook }
     obj = obj_hash[letter]
+    # Instantiate a new piece.
     num = highest_index_of_piece(player, letter)
     new_piece = obj.new(piece.player, self, piece.pos, num + 1)
+    # Update the board.
     @board[piece.pos[0]][piece.pos[1]] = new_piece
+    # Update the piece hash.
+    @pieces[player]["#{letter}#{num + 1}".to_sym] = new_piece
+    @pieces[player].delete(piece.key)
   end
 
   # Gets the highest index/rank on a specific piece for a given player.

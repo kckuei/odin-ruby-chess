@@ -68,12 +68,12 @@
 
 * Implement pawn promotion []
   * the @pieces hash need to remove old and add new
-* Integrate casle with valid moves []
-* Implement en passant []
 
-* Implement stalemate condition []
+* Integrate casle with valid moves []
 * Implement naive/simple AI [optional]
-* Final Readme and demo page []
+* Implement en passant []
+* Implement stalemate condition []
+* Finalize readme and demo []
 
 
 ## Notes
