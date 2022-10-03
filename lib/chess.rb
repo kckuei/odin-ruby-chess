@@ -23,7 +23,7 @@ require 'set'
 #            could be removed, or moved to board.
 #   @note - string for game note tags for saved states
 class ChessGame
-  attr_reader :board, :player1, :player2, :current_player, :note
+  attr_reader :board, :player1, :player2, :current_player, :log, :serializer, :options, :note
 
   include Rules
 
@@ -70,11 +70,14 @@ class ChessGame
     fullpath = saves[input.to_i]
     game_obj = @serializer.deserialize_game(fullpath)
 
-    # Transfers state attributes.
+    # Transfers the mutable state attributes.
     @board = game_obj.board
     @player1 = game_obj.player1
     @player2 = game_obj.player2
     @current_player = game_obj.current_player
+    @log = game_obj.log
+    @serializer = game_obj.serializer
+    @options = game_obj.options
     @note = game_obj.note
 
     # draw_board

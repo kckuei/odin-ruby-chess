@@ -52,8 +52,13 @@
   * mkdir
   * time/date
   * note/memo
-* Replay option? [SKIP]
 * main menu load game, double prints the screen [DONE]
+* Print move log from loaded state doesn't seem to work. Am I pulling the logger out. [DONE]
+  * need to transfer the logger 
+
+
+* Replay option? [SKIP]
+
 
 * Declare checks []
   * print check declaration to screen
@@ -192,5 +197,3 @@
     * this is because check? uses the hash for checking all possible moves
     * valid_moves on the pieces also relies on the piece pos to compute new valid moves
 * Did not think or implement it this way, but the menu can be thought of a tree or graph. Can be useful for diagramming/designing things in this manner in the future.
-
-
