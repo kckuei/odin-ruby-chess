@@ -61,18 +61,18 @@
   * Can use safe? method as safe?(move) == true implies king is safe
   * We won't filter valid moves to be safe; simply loop on querying a different move until condition is satisfied
   * maybe integrate via while loop?
+* Implement helper methods for chaos/scramble mode [DONE]
 
+* Integrate scramble/chaos mode methods [] 
 
 * Implement pawn promotion []
+  * the @pieces hash need to remove old and add new
 * Integrate casle with valid moves []
 * Implement en passant []
-  * the @pieces hash will need to be updated accordingly to remove old / add new
 
-* scramble mode
 * Implement stalemate condition []
-
-* Optional implement simple AI [prolly skip]
-* Final Readme and demo page
+* Implement naive/simple AI [optional]
+* Final Readme and demo page []
 
 
 ## Notes

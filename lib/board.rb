@@ -2,6 +2,7 @@
 
 require_relative './string'
 require_relative './piece'
+require_relative './chaos'
 require 'set'
 
 # ChessBoard class representing a chess board with chess pieces.
@@ -22,6 +23,8 @@ require 'set'
 #   @point_hash - A hash for converting coordinates to chess codes
 class ChessBoard
   attr_reader :rows, :columns, :board, :pieces, :code_hash, :point_hash
+
+  include Chaos
 
   # Initializes a ChessBoard instance.
   def initialize
