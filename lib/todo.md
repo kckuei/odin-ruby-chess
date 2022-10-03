@@ -55,26 +55,17 @@
 * main menu load game, double prints the screen [DONE]
 * Print move log from loaded state doesn't seem to work. Am I pulling the logger out. [DONE]
   * need to transfer the logger 
-
-
 * Replay option? [SKIP]
+* Declare checks [DONE]
+
+* Checked players must move to protect the king []
+  * Can use safe? method as safe?(move) == true implies king is safe
+  * We won't filter valid moves to be safe; simply loop on querying a different move until condition is satisfied
 
 
-* Declare checks []
-  * print check declaration to screen
-  * checked players move should take them out of check
-    * Can use the safe? method for this as safe?(move) == true, means that the kind is no longer in check. 
-    * query until this condition is satisfied.
-* Integrate safe moves with valid move patterns []
-  * valid patterns shouldn't need to remove moves that put player in check
-  * it should just query for a different move until the piece is safe
-
-
-
-
+* Implement pawn promotion []
 * Integrate casle with valid moves []
 * Implement en passant []
-* Implement pawn promotion []
   * the @pieces hash will need to be updated accordingly to remove old / add new
 
 * scramble mode

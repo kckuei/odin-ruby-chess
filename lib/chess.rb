@@ -319,6 +319,16 @@ class ChessGame
     gets
   end
 
+  # Declares check.
+  def declare_check(symbol)
+    case symbol
+    when :p1
+      puts "\nPlayer 1 check! Protect the King!".bold.red
+    when :p2
+      puts "\nPlayer 2 check! Protect the King".bold.blue
+    end
+  end
+
   # Toggles/switches the player turn attribute.
   def switch_players
     @current_player = @current_player == @player1 ? @player2 : @player1
@@ -329,11 +339,14 @@ class ChessGame
     draw_board
     loop do
       gameloop_menu
-      next unless @board.checkmate?(:p1) || @board.checkmate?(:p2)
-
-      declare_winner
-      break
-      # POSSIBLE CHECK DECLARATION HERE
+      if @board.checkmate?(:p1) || @board.checkmate?(:p2)
+        declare_winner
+        break
+      elsif @board.check?(:p1)
+        declare_check(:p1)
+      elsif @board.check?(:p2)
+        declare_check(:p2)
+      end
     end
     reset
     start_menu
