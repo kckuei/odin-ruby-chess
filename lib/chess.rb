@@ -377,7 +377,10 @@ class ChessGame
     draw_board
     loop do
       gameloop_menu
-      @board.ponds_to_promote.each { |piece| @board.promote(piece) } if @board.promote_any?
+      if @board.promote_any?
+        @board.ponds_to_promote.each { |piece| @board.promote(piece) } 
+        draw_board
+      end
       if @board.checkmate?(:p1) || @board.checkmate?(:p2)
         declare_winner
         break
