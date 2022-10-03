@@ -57,10 +57,10 @@
   * need to transfer the logger 
 * Replay option? [SKIP]
 * Declare checks [DONE]
-
-* Checked players must move to protect the king []
+* Checked players must move to protect the king [DONE]
   * Can use safe? method as safe?(move) == true implies king is safe
   * We won't filter valid moves to be safe; simply loop on querying a different move until condition is satisfied
+  * maybe integrate via while loop?
 
 
 * Implement pawn promotion []

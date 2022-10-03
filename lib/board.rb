@@ -259,11 +259,12 @@ class ChessBoard
     start = start.instance_of?(String) ? hash_move(start.to_sym) : start
     move = move.instance_of?(String) ? hash_move(move.to_sym) : move
 
-    return unless inside?(start) && inside?(move)
+    return false unless inside?(start) && inside?(move)
 
     # Get the piece and player
     piece = piece_at(hash_point(start).to_sym)
     player = piece.player == 1 ? :p1 : :p2
+    opposing = player == :p1 ? :p2 : :p1
 
     # Save pointers to objects at start and move.
     i, j = piece.pos

@@ -256,8 +256,7 @@ class ChessGame
         return
       end
 
-      # Otherwise it is a user piece, so get the valid moves.
-      # *need integrate, safe move logic.
+      # Otherwise it is a user piece, so get the valid moves (ignoring safety).
       moves = nxt.find_next_valid_moves
 
       # If the piece can't be moved anywhere, start over.
@@ -271,20 +270,29 @@ class ChessGame
       nxt.print_valid_moves(moves)
       puts ', back'.cyan.bold
 
-      # Get the user input.
-      puts 'Select a move:'
-      valid = moves.map { |move| @board.hash_point(move) }
-      valid << 'back'
-      menu = -> {}
-      error = -> { puts 'Invalid selection. Select a different move:'.magenta.italic }
-      input = get_user_input(valid, menu, error)
-      if input == 'back'
-        draw_board
-        return
+      # The user must either pick a valid move which does not put the
+      # king in danger or go back.
+      move_is_safe = false
+      until move_is_safe
+        # Get the user input.
+        puts 'Select a move:'
+        valid = moves.map { |move| @board.hash_point(move) }
+        valid << 'back'
+        menu = -> {}
+        error = -> { puts 'Invalid selection. Select a different move:'.magenta.italic }
+        input = get_user_input(valid, menu, error)
+        if input == 'back'
+          draw_board
+          return
+        end
+        from = nxt.pos
+        to = @board.hash_move(input.to_sym)
+        if @board.safe?(from, to)
+          move_is_safe = true
+        else
+          puts 'Invalid selection. The King must be protected!'.magenta.italic
+        end
       end
-
-      # ADD SAFE? CHECK HERE
-      # Invalid selection. It's not safe for the King!
 
       # Move the piece.
       dest = @board.hash_move(input.to_sym)
