@@ -349,9 +349,9 @@ class ChessGame
   # Declares the winner.
   def declare_winner
     if @board.checkmate?(:p1)
-      puts "\nCheckmate! Player 1 wins!".bold.red
+      puts "\nCheckmate! Player 2 wins!".bold.blue
     elsif @board.checkmate?(:p2)
-      puts "\nCheckmate! Player 2 wins".bold.blue
+      puts "\nCheckmate! Player 1 wins".bold.red
     end
     puts 'Press any key to continue.'
     gets
