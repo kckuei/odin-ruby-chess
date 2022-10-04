@@ -10,7 +10,6 @@ Command line chess game implemented with `ruby` for the TOP `ruby` final project
 ### Limitations
 Implements basic game mechanics (movement and checkmate, etc.), but is still missing a few features:
 * En passant
-* Pond promotion
 * Castling
 * Stalemate checking
 

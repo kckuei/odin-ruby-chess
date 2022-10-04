@@ -69,6 +69,7 @@
   * the @pieces hash need to remove old and add new
 
 * Integrate casle with valid moves []
+
 * Implement en passant []
 * Implement naive/simple AI [optional]
 * Implement stalemate condition [SKIP]
