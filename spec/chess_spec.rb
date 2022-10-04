@@ -629,3 +629,48 @@ describe ChessBoard do
     end
   end
 end
+
+describe ChessBoard do
+  describe '#castle?' do
+    subject(:board) { described_class.new }
+
+    context 'When player 1 can castle but not player 2' do
+      before do
+        board.new_game
+        board.force_move([7, 6], [7, 1])
+        board.force_move([7, 5], [7, 2])
+      end
+      it 'should return true for player 1' do
+        board.draw_board
+        expect(board.castle?(:p1)).to be true
+      end
+      it 'should return false for player 2' do
+        expect(board.castle?(:p2)).not_to be true
+      end
+    end
+  end
+
+  describe '#castle' do
+    subject(:board) { described_class.new }
+
+    context 'When player 1 castles' do
+      before do
+        board.new_game
+        board.force_move([7, 6], [7, 1])
+        board.force_move([7, 5], [7, 2])
+      end
+      it 'should move the rook to f7' do
+        board.draw_board
+        rook = board.piece_at(:h7)
+        board.castle(:p1)
+        expect(board.piece_at(:f7)).to eql rook
+        board.draw_board
+      end
+      it 'should move the king to g7' do
+        king = board.piece_at(:e7)
+        board.castle(:p1)
+        expect(board.piece_at(:g7)).to eql king
+      end
+    end
+  end
+end

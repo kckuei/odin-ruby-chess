@@ -1,5 +1,5 @@
 # Odin: Ruby Chess
-Command line chess game implemented with `ruby` for the TOP `ruby` final project. [👉Live Demo.👈]("")
+Command line chess game implemented with `ruby` for the TOP `ruby` final project. [👉Live Demo.👈](https://replit.com/@KevinKuei/Odin-Ruby-Chess#main.rb)
 
 
 ### Video Demo

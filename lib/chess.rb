@@ -298,7 +298,7 @@ class ChessGame
       end
       # Otherwise show the valid moves.
       nxt.print_valid_moves(moves)
-      puts ', back'.cyan.bold
+      puts ", #{'back'.cyan.bold}"
 
       # The user must either pick a valid move which does not put the
       # king in danger or go back.
@@ -378,7 +378,7 @@ class ChessGame
     loop do
       gameloop_menu
       if @board.promote_any?
-        @board.ponds_to_promote.each { |piece| @board.promote(piece) } 
+        @board.ponds_to_promote.each { |piece| @board.promote(piece) }
         draw_board
       end
       if @board.checkmate?(:p1) || @board.checkmate?(:p2)
