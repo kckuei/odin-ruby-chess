@@ -5,7 +5,9 @@ module Promote
   # Checks if a piece should be promoted regardless of player.
   # A pond promote when it reaches the edge of the board.
   def promote?(piece)
-    piece.piece == :pond && (piece.pos[0].zero? || piece.pos[0] == @rows - 1)
+    piece.piece == :pond &&
+      ((piece.pos[0].zero? && piece.player == 1) ||
+        (piece.pos[0] == @rows - 1 && piece.player == 2))
   end
 
   # Returns true if there are ponds to promote regardless of player.
