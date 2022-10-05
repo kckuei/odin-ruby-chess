@@ -37,7 +37,7 @@ Because who doesn't like ascii art?
 <img src="imgs/intro.png" width="500">
 
 #### Checkmate
-Yes, it works! You can test it yourself by loading one of the ten saved states!
+Yes, it works! You can test it yourself with one of the demos!
 
 <img src="imgs/checkmate.png" width="500">
 
@@ -54,7 +54,7 @@ Castle from your rook/king!
 #### Pond Promotion
 Give that hardworking pond that long overdue promotion!
 
-<img src="imgs/promote.png" width="500">
+<img src="imgs/promotion.png" width="500">
 
 #### Syntax Highlighting
 Feeling lazy? Let syntax highlighting assist. you. Just pick the red moves!
