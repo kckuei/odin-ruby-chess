@@ -3,12 +3,12 @@ Toy command line chess game implemented with `ruby` for the TOP `ruby` final pro
 
 [👉Live Demo.👈](https://replit.com/@KevinKuei/Odin-Ruby-Chess#main.rb)
 
-### Demonstration
+## Demonstration
 <a href="https://www.youtube.com/watch?v=W-tnn7g5kRQ">
 <img alt="demo" src="imgs/demo.png" width="800">
 </a>
 
-### Requirements
+## Requirements
 - [x] Properly constrained, prevent players from making illegal moves, and declare check or check mate in correct situations
 - [x] Save board at any time
 - [x] Write tests for important parts
@@ -16,12 +16,12 @@ Toy command line chess game implemented with `ruby` for the TOP `ruby` final pro
 - [x] (Optional)(my idea) Chaos/fun mode that scrambles the pieces into random positions
 - [ ] (Optional) Build a very simple AI computer player
 
-### Limitations
+## Limitations
 Implements most of the basic game mechanics (i.e., movement, check, checkmate, castling, pond promotion, etc.), but is still missing a few features:
 * En passant
 * Stalemate checking
 
-### Resources
+## Resources
 * [Chess Wiki](https://en.wikipedia.org/wiki/Chess)
 * [Illustrated rules of chess](http://www.chessvariants.org/d.chess/chess.html)
 * [Chess Notation](https://en.wikipedia.org/wiki/Chess_notation)
@@ -29,24 +29,24 @@ Implements most of the basic game mechanics (i.e., movement, check, checkmate, c
 * [Colorizing Text](https://stackoverflow.com/questions/1489183/how-can-i-use-ruby-to-colorize-the-text-output-to-a-terminal)
 * [Checkmate Patterns for Testing](https://www.chess.com/article/view/fastest-chess-checkmates)
 
-### Example Gameplay
-----
-#### Splash Screen
+## Example Gameplay
+====
+### Splash Screen
 Because who doesn't like ascii art?
 
 <img src="imgs/intro.png" width="500">
 
-#### Checkmate
+### Checkmate
 Yes, it works! You can test it yourself with one of the demos!
 
 <img src="imgs/checkmate.png" width="500">
 
-#### Check (Safe Move Enforcement)
+### Check (Safe Move Enforcement)
 Where's the Kinguard? Protect the King!
 
 <img src="imgs/check.png" width="500">
 
-#### Castling
+### Castling
 Castle from your rook/king!
 
 <img src="imgs/castle.png" width="500">
@@ -56,7 +56,7 @@ Give that hardworking pond that long overdue promotion! ...and uh, sex change?!
 
 <img src="imgs/promotion.png" width="500">
 
-#### Syntax Highlighting
+### Syntax Highlighting
 Feeling lazy? Let syntax highlighting assist. you. Just pick the red moves!
 
 <img src="imgs/syntax-highlight.png" width="500">
@@ -66,27 +66,27 @@ Have other things to do like eating cereal? No problem, we can serialize your ga
 
 <img src="imgs/save-game.png" width="500">
 
-#### Loading Games
+### Loading Games
 Pick up from where you left off! (Try some of the demos to verify the game functionality ofr yourself!)
 
 <img src="imgs/load-game.png" width="500">
 
-#### Standard Mode
+### Standard Mode
 Play your standard chess game...
 
 <img src="imgs/board-large.png" width="500">
 
-#### Standard Chaos Mode
+### Standard Chaos Mode
 Or if your feeling adventurous, mix the pieces up a bit...
 
 <img src="imgs/standard-chaos.png" width="500">
 
-#### Chaos² Mode
+### Chaos² Mode
 Or if you're feeling **extra** adventurous, spice up your life with Chaos².
 
 <img src="imgs/chaos.png" width="500">
 
-#### Logging
+### Logging
 Ever wonder you did/were doing a minute ago? No worries, we got you covered with logging. :)
 
 <img src="imgs/log.png" width="500">
