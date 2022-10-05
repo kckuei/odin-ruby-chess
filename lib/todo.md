@@ -67,19 +67,18 @@
   * Two levels of chaos, muster and full battlefield
 * Implement pawn promotion [DONE]
   * the @pieces hash need to remove old and add new
-
-* Integrate casle with valid moves []
+* Integrate casle with valid moves [DONE]
   * king/rook will need castle added to their valid moves so peices need access @board
   * additional conditional required to differentiate 'castle' moves...
   * challenge is that valid moves is currently a nested array of integers, so can't just store "castle" as a move...
   * maybe it is best to have to check for it in ChessGame and ChessBoard
      * Manually checking for 'castle' condition and inserting it as an option, then checking the menu callback again for the string.
 
+* Implement naive/simple AI [optional]
+* Implement stalemate condition [SKIP]
 * Implement en passant [SKIP]
   * would need access @board and other pieces first_move flag for combatant ponds
   * additional conditional would be required to remove the combatant piece if en-passant type grid move detected
-* Implement naive/simple AI [optional]
-* Implement stalemate condition [SKIP]
 * Finalize readme and demo []
 
 
