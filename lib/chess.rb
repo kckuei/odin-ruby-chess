@@ -286,8 +286,10 @@ class ChessGame
         return
       end
 
-      # Otherwise it is a user piece, so get the valid moves (ignoring safety).
+      # Otherwise it is a user piece, so get the valid moves (ignoring safety),
+      # and the player symbol.
       moves = nxt.find_next_valid_moves
+      sym = nxt.player == 1 ? :p1 : :p2
 
       # If the piece can't be moved anywhere, start over.
       if moves.empty?
@@ -297,7 +299,9 @@ class ChessGame
         return
       end
       # Otherwise show the valid moves.
+      # Amend with castle (if applicable) and back option.
       nxt.print_valid_moves(moves)
+      print ", #{'castle'.green.bold}" if @board.include_castle?(nxt, sym)
       puts ", #{'back'.cyan.bold}"
 
       # The user must either pick a valid move which does not put the
@@ -307,6 +311,7 @@ class ChessGame
         # Get the user input.
         puts 'Select a move:'
         valid = moves.map { |move| @board.hash_point(move) }
+        valid << 'castle' if @board.include_castle?(nxt, sym)
         valid << 'back'
         menu = -> {}
         error = -> { puts 'Invalid selection. Select a different move:'.magenta.italic }
@@ -315,6 +320,9 @@ class ChessGame
           draw_board
           return
         end
+        # NEED A METHOD TO CHECK THAT CASTLING IS SAFE.
+        # CHECK CASTLING SAFETY if input == 'castle'
+        # OTHERWISE, PROCEED WITH STD FROM-TO PATTERN
         from = nxt.pos
         to = @board.hash_move(input.to_sym)
         if @board.safe?(from, to)
@@ -323,6 +331,11 @@ class ChessGame
           puts 'Invalid selection. The King must be protected!'.magenta.italic
         end
       end
+
+      # MODIFY TO MOVE PEICE OR PERFORM CASTLE.
+      # CASTLE SHOULD LOG TWO MOVES FOR IT.
+      # @board.castle(sym) if input == 'castle'
+      # OTHERWISE PROCEED WITH STD FROM-TO PATTERN
 
       # Move the piece.
       dest = @board.hash_move(input.to_sym)

@@ -45,6 +45,9 @@ module Castle
 
     # Coerce from integer to symbol
     player = player == 1 ? :p1 : :p2 if player.instance_of?(Integer)
+
+    # Since castling cannot capture combatant piece, and
+    # movement locations must be empty, the @pieces hash is not modified.
     case player
     # If player 1 (top position)
     when :p1
@@ -54,6 +57,8 @@ module Castle
       @board[rook.pos[0]][rook.pos[1]] = ''
       @board[7][6] = king
       @board[7][5] = rook
+      king.update_position([7, 6])
+      rook.update_position([7, 5])
     # If player 2 (bottom position)
     when :p2
       king = piece_at(:e0)
@@ -62,6 +67,71 @@ module Castle
       @board[rook.pos[0]][rook.pos[1]] = ''
       @board[0][6] = king
       @board[0][5] = rook
+      king.update_position([0, 6])
+      rook.update_position([0, 5])
     end
+  end
+
+  # Returns true if the piece being moved is a king or rook,
+  # and castling is feasible.
+  # nxt : next piece that is being moved to a new tile
+  # sym : symbol representing the player, :p1, or :p2
+  def include_castle?(nxt, sym)
+    (nxt.piece == :king || nxt.piece == :rook) && castle?(sym)
+  end
+
+  # Undoes castling for a player, if applicable.
+  # player : symbol representing player :p1, :p2
+  #     or integer 1, 2 representing the player number
+  def undo_castle(player)
+    # Coerce from integer to symbol
+    player = player == 1 ? :p1 : :p2 if player.instance_of?(Integer)
+
+    # Since castling cannot capture combatant piece, and
+    # movement locations must be empty, the @pieces hash is not modified,
+    # nor does it need to be modified during the undo.
+    case player
+    when :p1
+      king = piece_at(:g7)
+      rook = piece_at(:f7)
+      @board[7][6] = ''
+      @board[7][5] = ''
+      @board[7][4] = king
+      @board[7][7] = rook
+      king.update_position([7, 4])
+      rook.update_position([7, 7])
+    when :p2
+      king = piece_at(:g0)
+      rook = piece_at(:f0)
+      @board[0][6] = ''
+      @board[0][5] = ''
+      @board[0][4] = king
+      @board[0][7] = rook
+      king.update_position([0, 4])
+      rook.update_position([0, 7])
+    end
+  end
+
+  # Checks if castling is safe move for a player.
+  # player : symbol representing player :p1, :p2
+  #     or integer 1, 2 representing the player number
+  def castle_safe?(player)
+    # Coerce from integer to symbol
+    player = player == 1 ? :p1 : :p2 if player.instance_of?(Integer)
+
+    # Exit if castling is not a valid move for player.
+    return false unless castle?(player)
+
+    # Proceed with castling.
+    castle(player)
+
+    # If castling result in an unsafe move, undo it, and return false.
+    if check?(player)
+      undo_castle(player)
+      return false
+    end
+    # Otherwise, undo it, and return true.
+    undo_castle(player)
+    true
   end
 end
