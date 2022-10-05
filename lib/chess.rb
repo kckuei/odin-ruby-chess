@@ -320,9 +320,7 @@ class ChessGame
           draw_board
           return
         end
-        # NEED A METHOD TO CHECK THAT CASTLING IS SAFE.
-        # CHECK CASTLING SAFETY if input == 'castle'
-        # OTHERWISE, PROCEED WITH STD FROM-TO PATTERN
+        # Check if the move (standard or castle) is safe, exit if true.
         if input == 'castle'
           if @board.castle_safe?(sym)
             move_is_safe = true
@@ -340,21 +338,14 @@ class ChessGame
         end
       end
 
-      # MODIFY TO MOVE PEICE OR PERFORM CASTLE.
-      # CASTLE SHOULD LOG TWO MOVES FOR IT.
-      # @board.castle(sym) if input == 'castle'
-      # OTHERWISE PROCEED WITH STD FROM-TO PATTERN
+      # Finally, commit to the move (standard or castle), and log the move as a success.
       if input == 'castle'
         # Perform a hard castle (updates the first_move attribute on pieces).
         @board.castle(sym, true)
 
-        # Log successful move.. need to differentiate between player 1 and 2 logs.
-        # log_move(nxt.player, nxt.piece,
-        #   @board.hash_point(point), @board.hash_point(dest))
-        # log_move(nxt.player, nxt.piece,
-        #          @board.hash_point(point), @board.hash_point(dest))
+        # Log successful move.
+        log_castle(player, echo: true)
       else
-
         # Move the piece.
         dest = @board.hash_move(input.to_sym)
         force_move(point, dest)
@@ -376,6 +367,20 @@ class ChessGame
   def log_move(player, piece, from, to, echo: true)
     @log.add_success([player, piece, from, to])
     puts "Moved #{piece} from #{from.bold} to #{to.bold}\n".green.italic if echo
+  end
+
+  # Log a castling event.
+  # The event is saved to the log as two moves.
+  def log_castle(player, echo: true)
+    case player
+    when 1
+      @log.add_success([player, :king, 'h7', 'f7'])
+      @log.add_success([player, :rook, 'e7', 'g7'])
+    when 2
+      @log.add_success([player, :king, 'h0', 'f0'])
+      @log.add_success([player, :rook, 'e0', 'g0'])
+    end
+    puts "Castled\n".green.italic if echo
   end
 
   # Declares the winner.

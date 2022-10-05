@@ -41,7 +41,7 @@ module Castle
   # player : symbol representing player :p1, :p2
   #     or integer 1, 2 representing the player number
   # hard_castle : if true, updates the first_move flags on the pieces.
-  def castle(player, hard_castle = false)
+  def castle(player, hard_castle: false)
     return unless castle?(player)
 
     # Coerce from integer to symbol
