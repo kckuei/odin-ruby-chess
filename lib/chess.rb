@@ -323,12 +323,20 @@ class ChessGame
         # NEED A METHOD TO CHECK THAT CASTLING IS SAFE.
         # CHECK CASTLING SAFETY if input == 'castle'
         # OTHERWISE, PROCEED WITH STD FROM-TO PATTERN
-        from = nxt.pos
-        to = @board.hash_move(input.to_sym)
-        if @board.safe?(from, to)
-          move_is_safe = true
+        if input == 'castle'
+          if @board.castle_safe?(sym)
+            move_is_safe = true
+          else
+            puts 'Invalid selection. The King must be protected!'.magenta.italic
+          end
         else
-          puts 'Invalid selection. The King must be protected!'.magenta.italic
+          from = nxt.pos
+          to = @board.hash_move(input.to_sym)
+          if @board.safe?(from, to)
+            move_is_safe = true
+          else
+            puts 'Invalid selection. The King must be protected!'.magenta.italic
+          end
         end
       end
 
@@ -336,14 +344,25 @@ class ChessGame
       # CASTLE SHOULD LOG TWO MOVES FOR IT.
       # @board.castle(sym) if input == 'castle'
       # OTHERWISE PROCEED WITH STD FROM-TO PATTERN
+      if input == 'castle'
+        # Perform a hard castle (updates the first_move attribute on pieces).
+        @board.castle(sym, true)
 
-      # Move the piece.
-      dest = @board.hash_move(input.to_sym)
-      force_move(point, dest)
+        # Log successful move.. need to differentiate between player 1 and 2 logs.
+        # log_move(nxt.player, nxt.piece,
+        #   @board.hash_point(point), @board.hash_point(dest))
+        # log_move(nxt.player, nxt.piece,
+        #          @board.hash_point(point), @board.hash_point(dest))
+      else
 
-      # Log successful move.
-      log_move(nxt.player, nxt.piece,
-               @board.hash_point(point), @board.hash_point(dest))
+        # Move the piece.
+        dest = @board.hash_move(input.to_sym)
+        force_move(point, dest)
+
+        # Log successful move.
+        log_move(nxt.player, nxt.piece,
+                 @board.hash_point(point), @board.hash_point(dest))
+      end
 
       # Render board.
       draw_board

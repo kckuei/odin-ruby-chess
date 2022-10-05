@@ -40,7 +40,8 @@ module Castle
   # first move, and there are not pieces in-between them.
   # player : symbol representing player :p1, :p2
   #     or integer 1, 2 representing the player number
-  def castle(player)
+  # hard_castle : if true, updates the first_move flags on the pieces.
+  def castle(player, hard_castle = false)
     return unless castle?(player)
 
     # Coerce from integer to symbol
@@ -53,8 +54,8 @@ module Castle
     when :p1
       king = piece_at(:e7)
       rook = piece_at(:h7)
-      @board[king.pos[0]][king.pos[1]] = ''
-      @board[rook.pos[0]][rook.pos[1]] = ''
+      @board[7][4] = ''
+      @board[7][7] = ''
       @board[7][6] = king
       @board[7][5] = rook
       king.update_position([7, 6])
@@ -63,13 +64,16 @@ module Castle
     when :p2
       king = piece_at(:e0)
       rook = piece_at(:h0)
-      @board[king.pos[0]][king.pos[1]] = ''
-      @board[rook.pos[0]][rook.pos[1]] = ''
+      @board[0][4] = ''
+      @board[0][7] = ''
       @board[0][6] = king
       @board[0][5] = rook
       king.update_position([0, 6])
       rook.update_position([0, 5])
     end
+    # hard_castle == true is a permanent castle
+    king.update_first_move if hard_castle
+    rook.update_first_move if hard_castle
   end
 
   # Returns true if the piece being moved is a king or rook,
@@ -122,7 +126,8 @@ module Castle
     # Exit if castling is not a valid move for player.
     return false unless castle?(player)
 
-    # Proceed with castling.
+    # Proceed with a soft castle.
+    # Soft castles do not update first_move flags, and can basically be undone.
     castle(player)
 
     # If castling result in an unsafe move, undo it, and return false.
