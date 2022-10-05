@@ -341,10 +341,10 @@ class ChessGame
       # Finally, commit to the move (standard or castle), and log the move as a success.
       if input == 'castle'
         # Perform a hard castle (updates the first_move attribute on pieces).
-        @board.castle(sym, true)
+        @board.castle(sym, hard_castle: true)
 
         # Log successful move.
-        log_castle(player, echo: true)
+        log_castle(player)
       else
         # Move the piece.
         dest = @board.hash_move(input.to_sym)
