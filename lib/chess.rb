@@ -344,7 +344,7 @@ class ChessGame
         @board.castle(sym, hard_castle: true)
 
         # Log successful move.
-        log_castle(player)
+        log_castle(nxt.player)
       else
         # Move the piece.
         dest = @board.hash_move(input.to_sym)
