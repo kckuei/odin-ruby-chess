@@ -30,7 +30,7 @@ Implements most of the basic game mechanics (i.e., movement, check, checkmate, c
 * [Checkmate Patterns for Testing](https://www.chess.com/article/view/fastest-chess-checkmates)
 
 ## Example Gameplay
-====
+
 ### Splash Screen
 Because who doesn't like ascii art?
 
