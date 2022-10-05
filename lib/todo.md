@@ -79,7 +79,7 @@
 * Implement en passant [SKIP]
   * would need access @board and other pieces first_move flag for combatant ponds
   * additional conditional would be required to remove the combatant piece if en-passant type grid move detected
-* Finalize readme and demo []
+* Finalize readme and demo [DONE]
 
 
 ## Notes
