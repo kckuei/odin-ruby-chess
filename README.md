@@ -1,9 +1,9 @@
 # Odin: Ruby Chess
 Toy command line chess game implemented with `ruby` for the TOP `ruby` final project. Uses a composition-ish object-oriented programming approach to it's implementation.
 
-[👉Live Demo👈](https://replit.com/@KevinKuei/Odin-Ruby-Chess#main.rb)
+[👉Live Demo.👈](https://replit.com/@KevinKuei/Odin-Ruby-Chess#main.rb)
 
-#### Demonstration
+### Demonstration
 <a href="https://www.youtube.com/watch?v=W-tnn7g5kRQ">
 <img alt="demo" src="imgs/demo.png" width="800">
 </a>
