@@ -52,7 +52,7 @@ Castle from your rook/king!
 <img src="imgs/castle.png" width="500">
 
 #### Pond Promotion
-Give that hardworking pond that long overdue promotion!
+Give that hardworking pond that long overdue promotion! ...and uh, sex change?!
 
 <img src="imgs/promotion.png" width="500">
 
