@@ -36,7 +36,7 @@ class ChessGame
     @current_player = @player1
     @log = Logger.new
     @serializer = Serializer.new
-    @options = { move_suggest: true, init_mode: 'standard' }
+    @options = { move_suggest: true, init_mode: 'standard', human_opponent: true }
     @goodbye = ['Hasta luego!', 'бакат!', 'Tschüß!', 'さようなら!', 'See ya next time!']
     @valid = valid_input
     @note = ''
@@ -162,10 +162,12 @@ class ChessGame
 
   # Prints the options.
   def print_options_menu
+    opponent = @options[:human_opponent] ? 'Human' : 'Computer'
     puts "\nMake a selection:\n".yellow +
          "\e[32m[1]\e[0m Standard\n" +
          "\e[32m[2]\e[0m Standard Chaos\n" +
-         "\e[32m[3]\e[0m Chaos²"
+         "\e[32m[3]\e[0m Chaos²\n" +
+         "\e[32m[4]\e[0m #{opponent} Opponent"
   end
 
   # Prints the current players turn.
@@ -228,7 +230,7 @@ class ChessGame
 
   # Enters options menu navigation.
   def options_menu
-    valid = Set.new(1..3)
+    valid = Set.new(1..4)
     input = get_user_input(valid, method(:print_options_menu))
     eval_options_menu(input)
   end
@@ -242,6 +244,8 @@ class ChessGame
       @options[:init_mode] = 'standard chaos'
     when 3
       @options[:init_mode] = 'chaos'
+    when 4
+      @options[:human_opponent] = @options[:human_opponent] ? false : true
     end
   end
 
