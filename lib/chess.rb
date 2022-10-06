@@ -6,6 +6,7 @@ require_relative './player'
 require_relative './logger'
 require_relative './rules'
 require_relative './serializer'
+require_relative './computer'
 require 'set'
 
 # ChessGame class.
@@ -26,6 +27,7 @@ class ChessGame
   attr_reader :board, :player1, :player2, :current_player, :log, :serializer, :options, :note
 
   include Rules
+  include Computer
 
   # Initializes a Chess Game.
   def initialize
@@ -307,6 +309,16 @@ class ChessGame
       nxt.print_valid_moves(moves)
       print ", #{'castle'.green.bold}" if @board.include_castle?(nxt, sym)
       puts ", #{'back'.cyan.bold}"
+
+      # ## TESTING FOR COMPUTER
+      # # Returns a single move randomly (naive approach)
+      # array = pick_random_move(sym)
+      # pc, mv, flg, nx = array
+      # # Returns all possible moves, but ranked by target (should randomy sample from this)
+      # arrays = all_moves(sym)
+      # ranked = rank_moves(arrays)
+      # # killing = killing_moves(arrays)
+      # ## END TESTING
 
       # The user must either pick a valid move which does not put the
       # king in danger or go back.
