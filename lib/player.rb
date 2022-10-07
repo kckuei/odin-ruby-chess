@@ -6,7 +6,8 @@
 #   @id : integer representing the player id, 1 or 2
 #   @type : string describing type of player, 'human' or 'computer'
 class Player
-  attr_reader :id, :name, :type
+  attr_reader :id, :name
+  attr_accessor :type
 
   def initialize(id, type)
     @id = id
