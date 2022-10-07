@@ -248,6 +248,7 @@ class ChessGame
       @options[:init_mode] = 'chaos'
     when 4
       @options[:human_opponent] = @options[:human_opponent] ? false : true
+      @options[:human_opponent] ? @player2.set_human : @player2.set_computer
     end
   end
 
@@ -279,36 +280,17 @@ class ChessGame
     # Otherwise the user has selected a tile.
     else
 
-      # Get the tile, indices and contents.
-      point = @board.hash_move(input.to_sym)
-      i, j = point
-      nxt = @board.board[i][j]
-
-      # Start over if the tile is empty or the piece belongs to the component.
-      if nxt.empty? || nxt.player != @current_player.id
-        draw_board
-        msg = nxt.empty? ? 'no piece at that location.' : 'piece does not belong to player.'
-        puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
-        return
-      end
-
-      # Otherwise it is a user piece, so get the valid moves (ignoring safety),
-      # and the player symbol.
-      moves = nxt.find_next_valid_moves
-      sym = nxt.player == 1 ? :p1 : :p2
-
-      # If the piece can't be moved anywhere, start over.
-      if moves.empty?
-        draw_board
-        msg = "The piece can't be moved anywhere."
-        puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
-        return
-      end
-      # Otherwise show the valid moves.
-      # Amend with castle (if applicable) and back option.
-      nxt.print_valid_moves(moves)
-      print ", #{'castle'.green.bold}" if @board.include_castle?(nxt, sym)
-      puts ", #{'back'.cyan.bold}"
+      # It all begins with `input`
+      # Consider bifurfacting code between computer and player
+      # Computer must:
+      #   1 ) pick a piece to move
+      #   2 ) and choose a move for that piece 
+      #         (1 and 2 can be done in 1 step by considering all possible moves)
+      #   3) 
+      # For computer player, we can do less checks by automatically by
+      #   picking moves/pieces directly.
+      # Modularize functions for human player before implementing computer
+      #   branch.
 
       # ## TESTING FOR COMPUTER
       # # Returns a single move randomly (naive approach)
@@ -320,6 +302,48 @@ class ChessGame
       # # killing = killing_moves(arrays)
       # ## END TESTING
 
+      #------------is_player_piece?-------------#
+      #### return unless is_player_piece?
+      # Get the tile, indices and contents.
+      point = @board.hash_move(input.to_sym)
+      i, j = point
+      nxt = @board.board[i][j]
+
+      # Start over if the tile is empty or the piece belongs to the opponent.
+      if nxt.empty? || nxt.player != @current_player.id
+        draw_board
+        msg = nxt.empty? ? 'no piece at that location.' : 'piece does not belong to player.'
+        puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
+        return
+      end
+      #------------is_player_piece?-------------#
+
+      # Otherwise it is a user piece, so get the valid moves (ignoring safety),
+      # and the player symbol.
+      moves = nxt.find_next_valid_moves
+      sym = nxt.player == 1 ? :p1 : :p2
+
+      #------------cant_move?-------------#
+      #### return if cant_move?
+      # If the piece can't be moved anywhere, start over.
+      if moves.empty?
+        draw_board
+        msg = "The piece can't be moved anywhere."
+        puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
+        return
+      end
+      #------------cant_move?-------------#
+      #------------show_moves-------------#
+      #### show_moves
+      # Otherwise show the valid moves.
+      # Amend with castle (if applicable) and back option.
+      nxt.print_valid_moves(moves)
+      print ", #{'castle'.green.bold}" if @board.include_castle?(nxt, sym)
+      puts ", #{'back'.cyan.bold}"
+      #------------show_moves-------------#
+
+      #------------player_move_selection-------------#
+      ####
       # The user must either pick a valid move which does not put the
       # king in danger or go back.
       move_is_safe = false
@@ -353,7 +377,10 @@ class ChessGame
           end
         end
       end
+      #------------player_move_selection-------------#
 
+      #------------player_commit_move-------------#
+      ####
       # Finally, commit to the move (standard or castle), and log the move as a success.
       if input == 'castle'
         # Perform a hard castle (updates the first_move attribute on pieces).
@@ -370,6 +397,7 @@ class ChessGame
         log_move(nxt.player, nxt.piece,
                  @board.hash_point(point), @board.hash_point(dest))
       end
+      #------------player_commit_move-------------#
 
       # Render board.
       draw_board
