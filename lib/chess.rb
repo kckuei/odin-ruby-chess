@@ -428,6 +428,8 @@ class ChessGame
       puts "\nCheckmate! Player 2 wins!".bold.blue
     elsif @board.checkmate?(:p2)
       puts "\nCheckmate! Player 1 wins".bold.red
+    elsif @board.stalemate?
+      puts "\nStalemate!".bold.yellow
     end
     puts 'Press any key to continue.'
     gets
@@ -460,7 +462,7 @@ class ChessGame
         end
         draw_board
       end
-      if @board.checkmate?(:p1) || @board.checkmate?(:p2)
+      if @board.checkmate?(:p1) || @board.checkmate?(:p2) || @board.stalemate?
         declare_winner
         break
       elsif @board.check?(:p1)

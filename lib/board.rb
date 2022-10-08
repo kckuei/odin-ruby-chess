@@ -306,6 +306,12 @@ class ChessBoard
     true
   end
 
+  # Simple stalemate check.
+  # Returns true if only two pieces left on the board.
+  def stalemate?
+    @board.flatten.length - @board.flatten.count('') <= 2
+  end
+
   # Draw the board and pieces.
   def draw_board
     k = 0
