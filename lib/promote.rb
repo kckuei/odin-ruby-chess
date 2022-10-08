@@ -42,7 +42,7 @@ module Promote
       hash = {q: 'queen', b: 'bishop', n: 'knight', r: 'rook'}
       choice = %w[q q q q q q b n r].sample(1)[0]
       promote_to_piece(piece, player_sym, choice)
-      puts "Player 1 #{piece.player} chose a #{hash[choice.to_sym].bold}".blue
+      puts "Player 1 #{piece.player} chose a".blue << hash[choice.to_sym].bold.white
       return
     end
 

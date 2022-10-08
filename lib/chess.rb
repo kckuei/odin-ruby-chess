@@ -394,7 +394,7 @@ class ChessGame
       force_move(point, dest)
 
       # Log successful move.
-      log_move(nxt.player, nxt.piece,
+      log_move(nxt.player, nxt,
                @board.hash_point(point), @board.hash_point(dest))
     end
     #------------player_commit_move-------------#
@@ -403,7 +403,7 @@ class ChessGame
   # Logs successful moves to logger.
   def log_move(player, piece, from, to, echo: true)
     @log.add_success([player, piece, from, to])
-    puts "Moved #{piece} from #{from.bold} to #{to.bold}\n".green.italic if echo
+    puts "Moved #{piece}".green.italic << " from #{from.bold} to #{to.bold}\n".green.italic if echo
   end
 
   # Log a castling event.
