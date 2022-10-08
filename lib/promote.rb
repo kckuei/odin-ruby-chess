@@ -39,10 +39,10 @@ module Promote
     # Evaluate and exit immediately for computer player.
     if player.type == 'computer'
       # 75% chance of picking a queen
-      hash = {q: 'queen', b: 'bishop', n: 'knight', r: 'rook'}
+      hash = { q: 'queen', b: 'bishop', n: 'knight', r: 'rook' }
       choice = %w[q q q q q q b n r].sample(1)[0]
       promote_to_piece(piece, player_sym, choice)
-      puts "Player 1 #{piece.player} chose a".blue << hash[choice.to_sym].bold.white
+      puts "Player 1 #{piece.player} chose a".blue << hash[choice.to_sym].bold
       return
     end
 

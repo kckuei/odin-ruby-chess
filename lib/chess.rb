@@ -163,12 +163,14 @@ class ChessGame
 
   # Prints the options.
   def print_options_menu
-    opponent = @options[:human_opponent] ? 'Computer' : 'Human'
+    p1_type = @player1.type == 'human' ? 'Computer' : 'Human'
+    p2_type = @player2.type == 'human' ? 'Computer' : 'Human'
     puts "\nMake a selection:\n".yellow +
          "\e[32m[1]\e[0m Standard\n" +
          "\e[32m[2]\e[0m Standard Chaos\n" +
          "\e[32m[3]\e[0m Chaos²\n" +
-         "\e[32m[4]\e[0m #{opponent} Opponent"
+         "\e[32m[4]\e[0m Player 1 #{p1_type}\n" +
+         "\e[32m[5]\e[0m Player 2 #{p2_type}"
   end
 
   # Prints the current players turn.
@@ -231,7 +233,7 @@ class ChessGame
 
   # Enters options menu navigation.
   def options_menu
-    valid = Set.new(1..4)
+    valid = Set.new(1..5)
     input = get_user_input(valid, method(:print_options_menu))
     eval_options_menu(input)
   end
@@ -246,8 +248,9 @@ class ChessGame
     when 3
       @options[:init_mode] = 'chaos'
     when 4
-      @options[:human_opponent] = @options[:human_opponent] ? false : true
-      @options[:human_opponent] ? @player2.set_human : @player2.set_computer
+      @player1.type == 'human' ? @player1.set_computer : @player1.set_human
+    when 5
+      @player2.type == 'human' ? @player2.set_computer : @player2.set_human
     end
   end
 
@@ -262,6 +265,7 @@ class ChessGame
       # Pass any valid board location to skip numbered menu selections.
       # The input will be chosen automatically.
       input = 'a0'
+      sleep(0.25)
     end
     eval_loop_menu_selection(input)
   end
