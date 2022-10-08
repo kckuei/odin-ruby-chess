@@ -20,7 +20,6 @@ require 'set'
 #   @current_player - pointer to current active player
 #   @log - pointer to Log object
 #   @options - hash of options mode
-#   @goodbye - array of goodbyes
 #   @valid - a set representing all valid chess code for the tiles on the board.
 #            could be removed, or moved to board.
 #   @note - string for game note tags for saved states
@@ -40,7 +39,6 @@ class ChessGame
     @log = Logger.new
     @serializer = Serializer.new
     @options = { move_suggest: true, init_mode: 'standard', human_opponent: true }
-    @goodbye = ['Hasta luego!', 'бакат!', 'Tschüß!', 'さようなら!', 'See ya next time!']
     @valid = valid_input
     @note = ''
   end
@@ -226,7 +224,7 @@ class ChessGame
       start_menu
     # Exits with random farewell.
     when 5
-      puts @goodbye.sample(1)[0].yellow
+      goodbye
       exit
     end
   end
@@ -283,7 +281,7 @@ class ChessGame
       @log.print_log
     # Exits the game with random farewell.
     when 4
-      puts @goodbye.sample(1)[0].yellow
+      goodbye
       exit
     # Otherwise the user has selected a tile.
     else
@@ -475,6 +473,12 @@ class ChessGame
   def start
     intro_screen
     start_menu
+  end
+
+  # Say goodbye.
+  def goodbye
+    goodbyes = ['Hasta luego!', 'бакат!', 'Tschüß!', 'さようなら!', 'See ya next time!']
+    puts goodbyes.sample(1)[0].yellow
   end
 
   # Returns a set of strings corresponding to all tile locations.
