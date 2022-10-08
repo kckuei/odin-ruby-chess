@@ -27,12 +27,23 @@ module Promote
 
   # Promotes a piece and updates the hash pieces.
   # piece : chess piece object
-  def promote(piece)
-    # Get the player
-    player = piece.player == 1 ? :p1 : :p2
-    case player
+  # player_type
+  def promote(piece, player)
+    # Get the player.
+    player_sym = piece.player == 1 ? :p1 : :p2
+    case player_sym
     when :p1 then puts 'Player 1 Pond Promotion!'.red
     when :p2 then puts 'Player 2 Pond Promotion!'.blue
+    end
+
+    # Evaluate and exit immediately for computer player.
+    if player.type == 'computer'
+      # 75% chance of picking a queen
+      hash = {q: 'queen', b: 'bishop', n: 'knight', r: 'rook'}
+      choice = %w[q q q q q q b n r].sample(1)[0]
+      promote_to_piece(piece, player_sym, choice)
+      puts "Player 1 #{piece.player} chose a #{hash[choice.to_sym].bold}".blue
+      return
     end
 
     ## Consider moving into seperate function.
@@ -51,10 +62,10 @@ module Promote
     end
 
     case input
-    when 'knight' then promote_to_piece(piece, player, 'n')
-    when 'bishop' then promote_to_piece(piece, player, 'b')
-    when 'rook' then promote_to_piece(piece, player, 'r')
-    when 'queen' then promote_to_piece(piece, player, 'q')
+    when 'knight' then promote_to_piece(piece, player_sym, 'n')
+    when 'bishop' then promote_to_piece(piece, player_sym, 'b')
+    when 'rook' then promote_to_piece(piece, player_sym, 'r')
+    when 'queen' then promote_to_piece(piece, player_sym, 'q')
     end
   end
 

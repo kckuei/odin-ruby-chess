@@ -452,7 +452,10 @@ class ChessGame
     loop do
       gameloop_menu
       if @board.promote_any?
-        @board.ponds_to_promote.each { |piece| @board.promote(piece) }
+        @board.ponds_to_promote.each do |piece|
+          player = piece.player == 1 ? @player1 : @player2
+          @board.promote(piece, player)
+        end
         draw_board
       end
       if @board.checkmate?(:p1) || @board.checkmate?(:p2)
