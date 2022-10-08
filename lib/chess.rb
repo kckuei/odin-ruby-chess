@@ -7,6 +7,7 @@ require_relative './logger'
 require_relative './rules'
 require_relative './serializer'
 require_relative './computer'
+require_relative './exceptions'
 require 'set'
 
 # ChessGame class.
@@ -164,7 +165,7 @@ class ChessGame
 
   # Prints the options.
   def print_options_menu
-    opponent = @options[:human_opponent] ? 'Human' : 'Computer'
+    opponent = @options[:human_opponent] ? 'Computer' : 'Human'
     puts "\nMake a selection:\n".yellow +
          "\e[32m[1]\e[0m Standard\n" +
          "\e[32m[2]\e[0m Standard Chaos\n" +
@@ -256,7 +257,14 @@ class ChessGame
   def gameloop_menu
     print_player_turn
     valid = Set.new(1..4).merge(@valid)
-    input = get_user_input(valid, method(:print_gameloop_menu))
+    case current_player.type
+    when 'human'
+      input = get_user_input(valid, method(:print_gameloop_menu))
+    when 'computer'
+      # Need to pass a dummy tile now for it to pass
+      input = 'a0'
+      sleep(0.20)
+    end
     eval_loop_menu_selection(input)
   end
 
@@ -280,124 +288,14 @@ class ChessGame
     # Otherwise the user has selected a tile.
     else
 
-      # It all begins with `input`
-      # Consider bifurfacting code between computer and player
-      # Computer must:
-      #   1 ) pick a piece to move
-      #   2 ) and choose a move for that piece 
-      #         (1 and 2 can be done in 1 step by considering all possible moves)
-      #   3) 
-      # For computer player, we can do less checks by automatically by
-      #   picking moves/pieces directly.
-      # Modularize functions for human player before implementing computer
-      #   branch.
-
-      # ## TESTING FOR COMPUTER
-      # # Returns a single move randomly (naive approach)
-      # array = pick_random_move(sym)
-      # pc, mv, flg, nx = array
-      # # Returns all possible moves, but ranked by target (should randomy sample from this)
-      # arrays = all_moves(sym)
-      # ranked = rank_moves(arrays)
-      # # killing = killing_moves(arrays)
-      # ## END TESTING
-
-      #------------is_player_piece?-------------#
-      #### return unless is_player_piece?
-      # Get the tile, indices and contents.
-      point = @board.hash_move(input.to_sym)
-      i, j = point
-      nxt = @board.board[i][j]
-
-      # Start over if the tile is empty or the piece belongs to the opponent.
-      if nxt.empty? || nxt.player != @current_player.id
-        draw_board
-        msg = nxt.empty? ? 'no piece at that location.' : 'piece does not belong to player.'
-        puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
-        return
+      # Evaluate player move.
+      case current_player.type
+      when 'human'
+        eval_player_move(input)
+      when 'computer'
+        sym = current_player.id == 1 ? :p1 : :p2
+        eval_computer_move(sym)
       end
-      #------------is_player_piece?-------------#
-
-      # Otherwise it is a user piece, so get the valid moves (ignoring safety),
-      # and the player symbol.
-      moves = nxt.find_next_valid_moves
-      sym = nxt.player == 1 ? :p1 : :p2
-
-      #------------cant_move?-------------#
-      #### return if cant_move?
-      # If the piece can't be moved anywhere, start over.
-      if moves.empty?
-        draw_board
-        msg = "The piece can't be moved anywhere."
-        puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
-        return
-      end
-      #------------cant_move?-------------#
-      #------------show_moves-------------#
-      #### show_moves
-      # Otherwise show the valid moves.
-      # Amend with castle (if applicable) and back option.
-      nxt.print_valid_moves(moves)
-      print ", #{'castle'.green.bold}" if @board.include_castle?(nxt, sym)
-      puts ", #{'back'.cyan.bold}"
-      #------------show_moves-------------#
-
-      #------------player_move_selection-------------#
-      ####
-      # The user must either pick a valid move which does not put the
-      # king in danger or go back.
-      move_is_safe = false
-      until move_is_safe
-        # Get the user input.
-        puts 'Select a move:'
-        valid = moves.map { |move| @board.hash_point(move) }
-        valid << 'castle' if @board.include_castle?(nxt, sym)
-        valid << 'back'
-        menu = -> {}
-        error = -> { puts 'Invalid selection. Select a different move:'.magenta.italic }
-        input = get_user_input(valid, menu, error)
-        if input == 'back'
-          draw_board
-          return
-        end
-        # Check if the move (standard or castle) is safe, exit if true.
-        if input == 'castle'
-          if @board.castle_safe?(sym)
-            move_is_safe = true
-          else
-            puts 'Invalid selection. The King must be protected!'.magenta.italic
-          end
-        else
-          from = nxt.pos
-          to = @board.hash_move(input.to_sym)
-          if @board.safe?(from, to)
-            move_is_safe = true
-          else
-            puts 'Invalid selection. The King must be protected!'.magenta.italic
-          end
-        end
-      end
-      #------------player_move_selection-------------#
-
-      #------------player_commit_move-------------#
-      ####
-      # Finally, commit to the move (standard or castle), and log the move as a success.
-      if input == 'castle'
-        # Perform a hard castle (updates the first_move attribute on pieces).
-        @board.castle(sym, hard_castle: true)
-
-        # Log successful move.
-        log_castle(nxt.player)
-      else
-        # Move the piece.
-        dest = @board.hash_move(input.to_sym)
-        force_move(point, dest)
-
-        # Log successful move.
-        log_move(nxt.player, nxt.piece,
-                 @board.hash_point(point), @board.hash_point(dest))
-      end
-      #------------player_commit_move-------------#
 
       # Render board.
       draw_board
@@ -405,6 +303,101 @@ class ChessGame
       # Switch players
       switch_players
     end
+  end
+
+  # Given an input, evaluates the player move.
+  # input : string representing a board tile/position, e.g. e6
+  def eval_player_move(input)
+    # Get the tile, indices and contents.
+    point = @board.hash_move(input.to_sym)
+    i, j = point
+    nxt = @board.board[i][j]
+    #------------is_player_piece?-------------#
+    # Start over if the tile is empty or the piece belongs to the opponent.
+    if nxt.empty? || nxt.player != @current_player.id
+      draw_board
+      msg = nxt.empty? ? 'no piece at that location.' : 'piece does not belong to player.'
+      puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
+      return
+    end
+    #------------is_player_piece?-------------#
+    # Otherwise it is a user piece, so get the valid moves (ignoring safety),
+    # and the player symbol.
+    moves = nxt.find_next_valid_moves
+    sym = nxt.player == 1 ? :p1 : :p2
+
+    #------------cant_move?-------------#
+    # If the piece can't be moved anywhere, start over.
+    if moves.empty?
+      draw_board
+      msg = "The piece can't be moved anywhere."
+      puts "\nInvalid input: #{@board.hash_point(point)}: #{msg}".magenta.italic
+      return
+    end
+    #------------cant_move?-------------#
+
+    #------------show_moves-------------#
+    # Otherwise show the valid moves.
+    # Amend with castle (if applicable) and back option.
+    nxt.print_valid_moves(moves)
+    print ", #{'castle'.green.bold}" if @board.include_castle?(nxt, sym)
+    puts ", #{'back'.cyan.bold}"
+    #------------show_moves-------------
+    #------------player_move_selection-------------#
+    ####
+    # The user must either pick a valid move which does not put the
+    # king in danger or go back.
+    move_is_safe = false
+    until move_is_safe
+      # Get the user input.
+      puts 'Select a move:'
+      valid = moves.map { |move| @board.hash_point(move) }
+      valid << 'castle' if @board.include_castle?(nxt, sym)
+      valid << 'back'
+      menu = -> {}
+      error = -> { puts 'Invalid selection. Select a different move:'.magenta.italic }
+      input = get_user_input(valid, menu, error)
+      if input == 'back'
+        draw_board
+        return
+      end
+      # Check if the move (standard or castle) is safe, exit if true.
+      if input == 'castle'
+        if @board.castle_safe?(sym)
+          move_is_safe = true
+        else
+          puts 'Invalid selection. The King must be protected!'.magenta.italic
+        end
+      else
+        from = nxt.pos
+        to = @board.hash_move(input.to_sym)
+        if @board.safe?(from, to)
+          move_is_safe = true
+        else
+          puts 'Invalid selection. The King must be protected!'.magenta.italic
+        end
+      end
+    end
+    #------------player_move_selection-------------#
+
+    #------------player_commit_move-------------#
+    # Finally, commit to the move (standard or castle), and log the move as a success.
+    if input == 'castle'
+      # Perform a hard castle (updates the first_move attribute on pieces).
+      @board.castle(sym, hard_castle: true)
+
+      # Log successful move.
+      log_castle(nxt.player)
+    else
+      # Move the piece.
+      dest = @board.hash_move(input.to_sym)
+      force_move(point, dest)
+
+      # Log successful move.
+      log_move(nxt.player, nxt.piece,
+               @board.hash_point(point), @board.hash_point(dest))
+    end
+    #------------player_commit_move-------------#
   end
 
   # Logs successful moves to logger.

@@ -4,6 +4,8 @@
 #
 # https://en.wikipedia.org/wiki/Algebraic_notation_(chess)#:~:text=Each%20piece%20type%20(other%20than,a%20silent%20letter%20in%20knight).
 class Logger
+  attr_reader :log
+
   # Initialize Logger instance.
   def initialize
     @log = clear

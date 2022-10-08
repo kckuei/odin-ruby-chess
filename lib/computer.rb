@@ -1,6 +1,7 @@
 # frozen_string_literal: false
 
 # Computer module for computer component/AI methods.
+# Methods will be mixedin with ChessGame class.
 module Computer
   # Gets all moves for a player, regardless of safety.
   # Returns not just he move, but a nested array of moves:
@@ -68,17 +69,37 @@ module Computer
     end
     return_from_to ? from_to : ranked
   end
-end
 
-# Thoughts:
-# Assuming we've picked a piece:
-#   Ponds - must advance forward.
-#         - prefer to jump 2
-#         - or prioritize to safe
-#   Knight, Rook, Queen - can target any piece.
-#          - knight's travails algorithm is applicable/usable here
-#   Bishop - can only reach pieces that are on its same color
-#   King - should protect itself
-#
-#
-#
+  # Given a player symbol, evaluates and returns a computer input/choice,
+  # even if the player is type human.
+  #
+  #
+  #   Ponds - must advance forward.
+  #         - prefer to jump 2
+  #         - or prioritize safey
+  #   Knight, Rook, Queen - can target any piece.
+  #          - knight's travails algorithm is applicable/usable here
+  #   Bishop - can only reach pieces that are on its same color
+  #   King - should protect itself, stay out of harms way
+  #
+  # player_sym : symbol representing the player, e.g. :p1, :p2
+  def eval_computer_move(player_sym)
+    # Returns a single move randomly (naive approach)
+    move_array = pick_random_move(player_sym)
+    piece, move, flag, next_tile = move_array
+
+    # Move the piece.
+    point = piece.pos
+    dest = move
+    force_move(point, dest)
+
+    # Log successful move.
+    log_move(@current_player, piece,
+             @board.hash_point(point), @board.hash_point(dest))
+
+    # # Returns all possible moves, but ranked by target (should randomy sample from this)
+    # arrays = all_moves(sym)
+    # ranked = rank_moves(arrays)
+    # # killing = killing_moves(arrays)
+  end
+end

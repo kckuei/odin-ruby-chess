@@ -195,3 +195,10 @@
     * this is because check? uses the hash for checking all possible moves
     * valid_moves on the pieces also relies on the piece pos to compute new valid moves
 * Did not think or implement it this way, but the menu can be thought of a tree or graph. Can be useful for diagramming/designing things in this manner in the future.
+* re comptuer player implementation, 
+  * It all begins with `input`.
+  * The easiest way to implement computer player:
+  * In gameloop_menu
+    * If player_turn is computer - evaluate an input automatically
+    * If humany player - evaluate input manually
+  * No modification to eval_loop_menu_selection required.
