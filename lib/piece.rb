@@ -311,3 +311,38 @@ class King
     filter_more_than_one_away(filter_combatant(filter_inside_board(moves)))
   end
 end
+
+# Chancellor class for representing the chancellor chess piece.
+#
+# A chancellor combines the moves of the rook and knight.
+class Chancellor
+  attr_reader :player, :piece, :avatar, :pos, :key, :first_move
+
+  include ChessPiece
+  include OrthoSearch
+
+  # Initializes a Chancellor instance.
+  def initialize(player, board, position, key, style = :solid)
+    @player = player
+    @board = board
+    @pos = position
+    @key = key
+    @first_move = true
+    @piece = :chancellor
+    @avatar = style == :solid ? '♛' : '♕'
+  end
+
+  # Finds the next valid moves.
+  def find_next_valid_moves
+    # Knight moves
+    relative_moves = [[2, -1], [2, 1], [-2, 1], [-2, -1],
+                      [1, 2], [1, -2], [-1, 2], [-1, -2]]
+    moves = []
+    relative_moves.each do |dx_dy|
+      moves << [@pos[0] + dx_dy[0], @pos[1] + dx_dy[1]]
+    end
+    # Rook moves
+    moves.concat(search_moves_ortho(self))
+    filter_combatant(filter_inside_board(moves))
+  end
+end

@@ -69,3 +69,16 @@ module Computer
     return_from_to ? from_to : ranked
   end
 end
+
+# Thoughts:
+# Assuming we've picked a piece:
+#   Ponds - must advance forward.
+#         - prefer to jump 2
+#         - or prioritize to safe
+#   Knight, Rook, Queen - can target any piece.
+#          - knight's travails algorithm is applicable/usable here
+#   Bishop - can only reach pieces that are on its same color
+#   King - should protect itself
+#
+#
+#
