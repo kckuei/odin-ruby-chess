@@ -261,9 +261,9 @@ class ChessGame
     when 'human'
       input = get_user_input(valid, method(:print_gameloop_menu))
     when 'computer'
-      # Need to pass a dummy tile now for it to pass
+      # Pass any valid board location to skip numbered menu selections.
+      # The input will be chosen automatically.
       input = 'a0'
-      sleep(0.20)
     end
     eval_loop_menu_selection(input)
   end

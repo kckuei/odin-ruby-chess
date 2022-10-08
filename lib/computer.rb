@@ -18,6 +18,15 @@ module Computer
     array
   end
 
+  # Gets all safe moves for a player.
+  def all_safe_moves(player)
+    array_moves = all_moves(player)
+    array_moves.filter do |array|
+      piece, move, _flag, _nxt = array
+      @board.safe?(piece.pos, move)
+    end
+  end
+
   # Given two pieces, returns true if they belong to opposing players.
   # piece : piece representing object to be moved
   # nxt : object (piece or '') at the next tile
@@ -25,22 +34,13 @@ module Computer
     !nxt.empty? && piece.player != nxt.player
   end
 
-  # Naively picks and returns the first safe move for a player.
-  def pick_random_move(player)
-    array = all_moves(player)
+  # Naively picks a random move from an array of moves.
+  def pick_random_move(array)
     i = rand(0..array.length - 1)
-    loop do
-      piece = array[i][0]
-      move = array[i][1]
-      break if @board.safe?(piece.pos, move)
-
-      array.delete_at(i)
-      i = rand(0..array.length - 1)
-    end
     array[i]
   end
 
-  # Gets moves that capture enemy pieces.
+  # Filters for moves that capture enemy pieces.
   def killing_moves(moves_arr)
     moves_arr.filter { |array| array[2] }
   end
@@ -73,20 +73,37 @@ module Computer
   # Given a player symbol, evaluates and returns a computer input/choice,
   # even if the player is type human.
   #
+  #   Pieces should weigh self-preservation versus value gained.
   #
-  #   Ponds - must advance forward.
-  #         - prefer to jump 2
-  #         - or prioritize safey
-  #   Knight, Rook, Queen - can target any piece.
-  #          - knight's travails algorithm is applicable/usable here
-  #   Bishop - can only reach pieces that are on its same color
-  #   King - should protect itself, stay out of harms way
+  #   Ponds
+  #     - must advance forward.
+  #     - prefer to jump 2
+  #     - or prioritize safety/coverage net
+  #   Knight, Rook, Queen, Bishop
+  #     - can target any piece.
+  #     - knight's travails algorithm is applicable/usable here
+  #     - prefer pieces of equal or higher value, otherwise attempt to preserve
+  #     - bishops can only reach pieces that are on its same color
+  #     - can evaluate shortest distance to any enemy piece, lord, or king
+  #   King
+  #     - stay out of harms way, but can be aggressive otherwise
   #
   # player_sym : symbol representing the player, e.g. :p1, :p2
   def eval_computer_move(player_sym)
-    # Returns a single move randomly (naive approach)
-    move_array = pick_random_move(player_sym)
-    piece, move, flag, next_tile = move_array
+    # Get all safe moves
+    moves = all_safe_moves(player_sym)
+
+    # Pick a strategy randomly
+    method = rand(0..1)
+    case method
+    when 0
+      # Returns a single move randomly (naive approach)
+      piece, move, _flag, _next = pick_random_move(moves)
+    when 1
+      # Returns a ranked move (slightly less naive, but guessable)
+      ranked = rank_moves(moves)
+      piece, move, _flag, _next = ranked[0]
+    end
 
     # Move the piece.
     point = piece.pos
@@ -96,10 +113,5 @@ module Computer
     # Log successful move.
     log_move(@current_player, piece,
              @board.hash_point(point), @board.hash_point(dest))
-
-    # # Returns all possible moves, but ranked by target (should randomy sample from this)
-    # arrays = all_moves(sym)
-    # ranked = rank_moves(arrays)
-    # # killing = killing_moves(arrays)
   end
 end
