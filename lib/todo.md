@@ -73,14 +73,37 @@
   * challenge is that valid moves is currently a nested array of integers, so can't just store "castle" as a move...
   * maybe it is best to have to check for it in ChessGame and ChessBoard
      * Manually checking for 'castle' condition and inserting it as an option, then checking the menu callback again for the string.
-
-* Implement naive/simple AI [optional]
-* Implement stalemate condition [SKIP]
+* Implement naive/simple AI [DONE]
+* Implement stalemate condition [DONE]
 * Implement en passant [SKIP]
   * would need access @board and other pieces first_move flag for combatant ponds
   * additional conditional would be required to remove the combatant piece if en-passant type grid move detected
 * Finalize readme and demo [DONE]
 
+* There seems to be a bug that can happen with two computer opponents
+  * computer.rb:109:in `eval_computer_move': undefined method `pos' for nil:NilClass (NoMethodError)
+  * piece.rb:93:in `block in filter_combatant': undefined method `player' for "":String (NoMethodError)
+
+      nxt.empty? || nxt.player != current.player
+                                         ^^^^^^^
+	from /home/kckuei/Desktop/repos/odin-ruby-chess/lib/piece.rb:91:in `filter'
+	from /home/kckuei/Desktop/repos/odin-ruby-chess/lib/piece.rb:91:in `filter_combatant'
+  *      3: from /home/runner/Odin-Ruby-Chess/lib/piece.rb:194:in `find_next_valid_moves'
+     2: from /home/runner/Odin-Ruby-Chess/lib/piece.rb:91:in `filter_combatant'
+     1: from /home/runner/Odin-Ruby-Chess/lib/piece.rb:91:in `filter'
+/home/runner/Odin-Ruby-Chess/lib/piece.rb:93:in `block in filter_combatant': undefined method `player' for "":String (NoMethodError)
+  * `block in filter_combatant': undefined method `player' for "":String (NoMethodError)
+
+      nxt.empty? || nxt.player != current.player
+                                         ^^^^^^^
+	from /home/kckuei/Desktop/repos/odin-ruby-chess/lib/piece.rb:91:in `filter'
+	from /home/kckuei/Desktop/repos/odin-ruby-chess/lib/piece.rb:91:in `filter_combatant'
+	from /home/kckuei/Desktop/repos/odin-ruby-chess/lib/piece.rb:280:in `find_next_valid_moves'
+	from /home/kckuei/Desktop/repos/odin-ruby-chess/lib/board.rb:190:in `block in check?'
+  * 
+
+* Add replay feature []
+* Finish tweaking computer AI []
 
 ## Notes
 ----
