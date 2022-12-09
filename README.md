@@ -44,9 +44,9 @@ The game is implemented with the following classes and modules:
 
 ## Design
 
-The basic design of the game revolves around the `ChessGame`, `ChessBoard`, and various implemented chess piece classes, e.g. `Pond`, `Knight`, `Bishop`, etc. A composition-based OOP approach was adopted, wherein objects are referenced by, or passed to other objects. 
+The basic design of the game revolves around the `ChessGame`, `ChessBoard`, and various implemented chess piece classes, i.e. the `Pond`, `Knight`, `Bishop`, etc. A composition-based OOP approach was adopted, wherein objects are referenced by, or passed to other objects.
 
-A `ChessGame` requires `Players`  that interact with a `ChessBoard`, perhaps also a `Serializer` to save the state of the game, and `Logger` to record move history. A `ChessBoard` contains various chess piece objects (e.g., the `Pond`, `Knight`, `Bishop`, etc.). The board is represented as a nested array, where blank strings represent empty spaces, or otherwise are filled by chess piece objects. Each chess piece has attributes or knowledge of which `Player` it belongs to, it's position/location on the `ChessBoard`, its visual avatar when printed, etc. Each chess piece also has its own methods/rules defined for how it's able to move about the playing field.
+A `ChessGame` requires `Players`  that interact with a `ChessBoard`, perhaps also a `Serializer` to save the state of the game, and `Logger` to record move history. A `ChessBoard` contains various chess piece objects (e.g., the `Pond`, `Knight`, `Bishop`, etc.). The board is represented as a nested array, where blank strings represent empty spaces, or otherwise are filled by chess piece objects. Each chess piece has instances variab les (attributes) or knowledge of which `Player` it belongs to, it's position/location on the `ChessBoard`, its visual avatar when printed, etc. Each chess piece also has its own methods/rules defined for how it's able to move about the playing field.
 
 A guiding principle was to implement **Classes** for objects, where roles were concretely defined, and unambiguous. **Modules** were used in contrast, to collect or group functions that had similar behaviors or functionality, but did not necessarily represent clearly defined objects on their own in an umambiguous manner.
 
