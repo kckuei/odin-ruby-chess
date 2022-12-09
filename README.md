@@ -65,9 +65,9 @@ A `ChessGame` requires `Players`  that interact with a `ChessBoard`, perhaps als
 
 A guiding principle was to implement **Classes** for objects, where roles were concretely defined, and unambiguous. **Modules** were used in contrast, to collect or group functions that had similar behaviors or functionality, but did not necessarily represent clearly defined objects on their own in an umambiguous manner.
 
-Modules were used for mixins with classes as a form of class inheritance and to add special or desired functioanlity. For example, all chess piece have a `include ChessPiece` statement in their definition to include generic chess piece functionality. Some chess piece classes include modules that give it the ability to move orthogonally, or diaganolly. For example, the `Bishop` class uses a `include DiagSearch` statement, the `Rook` class a `include OrthoSearch`  statement, while the `Queen` class includes both.
+Modules were used for mixins with classes as a form of class inheritance and to add special or desired functionality. For example, all chess piece have a `include ChessPiece` statement in their definition to include generic chess piece functionality. Some chess piece classes include modules that give it the ability to move orthogonally, or diaganolly. For example, the `Bishop` class uses a `include DiagSearch` statement, the `Rook` class a `include OrthoSearch`  statement, while the `Queen` class includes both.
 
-The game uses a naive implementation to check whether a player is in check, or checkmate. For a given player, it simply enumerates over all pieces to see if it any of the valid moves contains the opposing King for a check condition. Similarly, to evaluate a checkmate condition, all of a checked player's moves are enumerated to check whether there exists a move that eliminates a check condition. 
+The game uses a naive implementation to check whether a player is in check, or checkmate. For a given player, it simply enumerates over all pieces to see if it any of the valid moves contains the opposing King's position for a check condition. Similarly, to evaluate a checkmate condition, all of a checked player's moves are enumerated to check whether there exists a move that eliminates a checked condition. 
 
 ## Resources
 * [Chess Wiki](https://en.wikipedia.org/wiki/Chess)
