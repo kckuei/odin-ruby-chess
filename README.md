@@ -10,21 +10,6 @@ Implements most of the basic game mechanics (i.e., movement, check, checkmate, c
 <img alt="demo" src="imgs/demo.png" width="800">
 </a>
 
-## Requirements
-- [x] Properly constrained, prevent players from making illegal moves, and declare check or check mate in correct situations
-- [x] Save board at any time
-- [x] Write tests for important parts
-- [x] Keep classes modular and clean, methods each only do one thing; single responsibility principle
-- [x] (Optional) Build a very simple AI computer player
-- [x] (Optional) Chaos/fun mode that scrambles the pieces into random positions
-
-## Limitations
-* [En passant](https://en.wikipedia.org/wiki/En_passant) move for ponds not implemented.
-* Replay mode not yet implemented.
-
-command line interface
-
-
 ## Classes and Modules
 
 The game is implemented with the following classes and modules:
@@ -49,7 +34,7 @@ The game is implemented with the following classes and modules:
 ### Modules
 
 * Chaos - Module containing methods related to chaos mode play.
-* Promote - Module containing methods related to pond promotion. Used as a mixin for the Pond class.
+* Promote - Module containing methods related to pond promotion.
 * Castle - Module containing methods related to castling between a king and rook. Used as mixin for Rook and King classes.
 * Computer - Module containing methods related to computer AI.
 * ChessPiece - Module containing common functionality to all chess pieces. Used as a mixin for chess piece classes.
@@ -68,6 +53,18 @@ A guiding principle was to implement **Classes** for objects, where roles were c
 Modules were used for mixins with classes as a form of class inheritance and to add special or desired functionality. For example, all chess piece have a `include ChessPiece` statement in their definition to include generic chess piece functionality. Some chess piece classes include modules that give it the ability to move orthogonally, or diaganolly. For example, the `Bishop` class uses a `include DiagSearch` statement, the `Rook` class a `include OrthoSearch`  statement, while the `Queen` class includes both.
 
 The game uses a naive implementation to check whether a player is in check, or checkmate. For a given player, it simply enumerates over all pieces to see if it any of the valid moves contains the opposing King's position for a check condition. Similarly, to evaluate a checkmate condition, all of a checked player's moves are enumerated to check whether there exists a move that eliminates a checked condition. 
+
+## Requirements
+- [x] Properly constrained, prevent players from making illegal moves, and declare check or check mate in correct situations
+- [x] Save board at any time
+- [x] Write tests for important parts
+- [x] Keep classes modular and clean, methods each only do one thing; single responsibility principle
+- [x] (Optional) Build a very simple AI computer player
+- [x] (Optional) Chaos/fun mode that scrambles the pieces into random positions
+
+## Limitations
+* [En passant](https://en.wikipedia.org/wiki/En_passant) move for ponds not implemented.
+* Replay mode not yet implemented.
 
 ## Resources
 * [Chess Wiki](https://en.wikipedia.org/wiki/Chess)
